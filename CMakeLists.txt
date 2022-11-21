@@ -1,6 +1,6 @@
 set(CPP_VERSION 20)
 
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.21)
 project(NP_Semesterprojekt)
 
 set(CMAKE_CXX_STANDARD ${CPP_VERSION})
