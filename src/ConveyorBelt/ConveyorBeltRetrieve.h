@@ -1,0 +1,18 @@
+/*
+ * This ConveyorBelt is used only for retrieving Containers from the TransferPoints.
+*/
+
+#ifndef NP_SEMESTERPROJEKT_CONVEYORBELTRETRIEVE_H
+#define NP_SEMESTERPROJEKT_CONVEYORBELTRETRIEVE_H
+
+
+#include "ConveyorBelt.h"
+
+class ConveyorBeltRetrieve : public ConveyorBelt {
+public:
+    ConveyorBeltRetrieve();
+    Container& transportContainer(TransferPoint&, Timer&);
+};
+
+
+#endif //NP_SEMESTERPROJEKT_CONVEYORBELTRETRIEVE_H
