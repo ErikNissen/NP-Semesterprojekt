@@ -268,6 +268,12 @@ key, char value){
 /// \param path The path to the file
 /// \return The path to the file
 string PersistentFileManagement::create(const string& name){
+	//Check if directory exists
+	if (!filesystem::exists(PersistentFileManagement::basePath)) {
+		//Directory does not exist
+		//Create directory
+		filesystem::create_directory(PersistentFileManagement::basePath);
+	}
 	//Create file
 	std::ofstream file(PersistentFileManagement::basePath + name + ".json");
 	//Check if file exists
