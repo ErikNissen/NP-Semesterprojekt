@@ -37,9 +37,10 @@ nlohmann::json PersistentFileManagement::load(const std::string&
 name){
 	// Check if the directory exists
 	if (!filesystem::exists(basePath)) {
-		throw runtime_error("No data directory found");
+		// Create the directory
+		std::filesystem::create_directory(basePath);
 	}else if(!filesystem::exists(basePath + name + ".json")){
-		throw runtime_error("No config file found called " + name);
+		throw runtime_error("No data file found called " + name);
 	}
 	std::ifstream f(PersistentFileManagement::basePath + name + ".json");
 	json data = json::parse(f);
