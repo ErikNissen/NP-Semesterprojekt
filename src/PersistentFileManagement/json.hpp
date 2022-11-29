@@ -6,46 +6,68 @@
 #define NP_SEMESTERPROJEKT_JSON_HPP
 
 #include <nlohmann/json.hpp>
+#include <fstream>
 
 class PersistentFileManagement {
 public:
-	static void save(nlohmann::json &json, const std::string& path);
-	static nlohmann::json load(const std::string& path);
-	static nlohmann::json get(nlohmann::json &dict, std::string
+	// Constructor
+	/// Creates a new PersistentFileManagement object
+	/// \param path The path to the file (optional)
+	PersistentFileManagement(const std::string& name);
+
+	PersistentFileManagement();
+
+	// Destructor
+	~PersistentFileManagement();
+
+	void save(const std::string& name);
+	void save();
+	nlohmann::json load(const std::string& path);
+	nlohmann::json get(std::string
 	key);
-	static void add(nlohmann::json &dict, const std::string& key,
+	void add(const std::string& key,
 						const std::string& value);
-	static void add(nlohmann::json &dict, const std::string& key,
+	void add(const std::string& key,
 						int value);
-	static void add(nlohmann::json &dict, const std::string& key, bool
+	void add(const std::string& key, bool
 	value);
-	static void add(nlohmann::json &dict, const std::string& key,
+	void add(const std::string& key,
 						double value);
-	static void add(nlohmann::json &dict, const std::string& key,
+	void add(const std::string& key,
 						float value);
-	static void add(nlohmann::json &dict, const std::string& key,
+	void add(const std::string& key,
 						char value);
 
-	static void remove(nlohmann::json &dict, const std::string& key);
+	void remove(const std::string& key);
 
-	static void update(nlohmann::json &dict, const std::string& key,
+	void update(const std::string& key,
 						const std::string& value);
-	static void update(nlohmann::json &dict, const std::string& key,
+	void update(const std::string& key,
 						int value);
-	static void update(nlohmann::json &dict, const std::string& key,
+	void update(const std::string& key,
 						bool value);
-	static void update(nlohmann::json &dict, const std::string& key,
+	void update(const std::string& key,
 					   double value);
-	static void update(nlohmann::json &dict, const std::string& key,
+	void update(const std::string& key,
 						float value);
-	static void update(nlohmann::json &dict, const std::string&
+	void update(const std::string&
 	key,    char value);
 
-	static std::string create(const std::string& path);
+	void create(const std::string& name);
+
+	void create();
+
+	//Getter
+	nlohmann::json getData();
+
+	//Setter
+	void setName(const std::string& name);
 
 protected:
 	nlohmann::json data;
-	static const std::string basePath;
+private:
+	std::string name;
+	std::string basePath;
 };
 
 #endif //NP_SEMESTERPROJEKT_JSON_HPP
