@@ -5,12 +5,12 @@ project(NP_Semesterprojekt)
 
 set(CMAKE_CXX_STANDARD ${CPP_VERSION})
 
-add_subdirectory(src/Inventory/inventoryLib)
-add_subdirectory(src/Inventory/messagesLib)
-add_subdirectory(src/Inventory/itemLib)
+#add_subdirectory(src/Inventory/inventoryLib)
+#add_subdirectory(src/Inventory/messagesLib)
+#add_subdirectory(src/Inventory/itemLib)
 
-include_directories(src/Inventory/inventoryLib src/Inventory/messagesLib src/Inventory/itemLib)
-link_libraries(src/Inventory/inventoryLib src/Inventory/messagesLib src/Inventory/itemLib)
+#include_directories(src/Inventory/inventoryLib src/Inventory/messagesLib src/Inventory/itemLib)
+#link_libraries(src/Inventory/inventoryLib src/Inventory/messagesLib src/Inventory/itemLib)
 
 include_directories(src src/ConveyorBelt)
 
