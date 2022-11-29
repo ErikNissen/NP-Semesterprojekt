@@ -16,16 +16,32 @@ const std::string PersistentFileManagement::basePath = "data/";
 /// Saves a json object to a file
 /// \param json The json object to save
 /// \param path The path to the file
-void PersistentFileManagement::save(json &json, const std::string& path){
-	ofstream file(path);
+void PersistentFileManagement::save(json &json, const std::string&
+name){
+	// Check if the directory exists
+	if (!filesystem::exists(basePath)) {
+		// Create the directory
+		std::filesystem::create_directory(basePath);
+	}else if(!filesystem::exists(basePath + name + ".json")){
+		throw std::runtime_error("File does not exist.\nFirst "
+								 "create the file with the create function.");
+	}
+	ofstream file(PersistentFileManagement::basePath + name + ".json");
 	file << json.dump(4);
 	file.close();
 }
 
 /// Loads a json object from a file
-/// \param path The path to the file
-nlohmann::json PersistentFileManagement::load(const std::string& path){
-	std::ifstream f(path);
+/// \param name The name of the file
+nlohmann::json PersistentFileManagement::load(const std::string&
+name){
+	// Check if the directory exists
+	if (!filesystem::exists(basePath)) {
+		throw runtime_error("No data directory found");
+	}else if(!filesystem::exists(basePath + name + ".json")){
+		throw runtime_error("No config file found called " + name);
+	}
+	std::ifstream f(PersistentFileManagement::basePath + name + ".json");
 	json data = json::parse(f);
 	return data;
 }
@@ -277,7 +293,8 @@ string PersistentFileManagement::create(const string& name){
 	//Create file
 	std::ofstream file(PersistentFileManagement::basePath + name + ".json");
 	//Check if file exists
-	if (file.is_open()) {
+	if (!filesystem::exists(PersistentFileManagement::basePath +
+	name + ".json")) {
 		//File exists
 		//Create file
 		file << "{}";
