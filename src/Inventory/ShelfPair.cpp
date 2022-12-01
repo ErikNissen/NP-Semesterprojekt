@@ -51,6 +51,7 @@ double ShelfPair::getShelfDepthInMeters(){
 }
 
 //!!! For Debugging!!!
+/*
 void ShelfPair::setSegment(const unsigned int shelfNumber, const unsigned long long int row, const unsigned long long int column, const int value) {
     //auto &shelf{getShelfByShelfNumber(shelfNumber)};
 
@@ -60,6 +61,7 @@ void ShelfPair::setSegment(const unsigned int shelfNumber, const unsigned long l
     //shelf.setSegment(row, column, value);
     getShelfByShelfNumber(shelfNumber).setSegment(row, column, value);
 }
+*/
 
 // methods
 
@@ -104,10 +106,11 @@ void ShelfPair::printShelfSegments() {
 }
 
 //!!! Implementierung von currentSegment als {0,0,0} überarbeiten !!!
+/*
 void ShelfPair::fillBasedOnFastestToReachSegments(const int value) {
     auto fastestToReachEmptyContainer{getFastestToReachEmptyContainer({1,0,0})};
     getShelfByShelfNumber(fastestToReachEmptyContainer.getShelfNumber()).setSegment(fastestToReachEmptyContainer.getRow(), fastestToReachEmptyContainer.getColumn(), value);
-}
+}*/
 
 //!!! Methode so modifizieren, dass sie einen Fehler wirft, wenn beide Regalnummern nicht zutreffen !!!
 Shelf& ShelfPair::getShelfByShelfNumber(const int shelfNumber) {

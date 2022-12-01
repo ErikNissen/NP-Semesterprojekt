@@ -3,10 +3,11 @@
 //
 
 #include "Shelf.h"
-#include "../messagesLib/TimeSegmentMessage.h"
+#include "../Messages/TimeSegmentMessage.h"
 #include <cmath>
 #include <algorithm>
 #include <iomanip>
+#include <vector>
 
 
 using namespace inventoryLib;
@@ -32,19 +33,21 @@ Shelf::Shelf(const unsigned int shelfNumber, const unsigned long long int rowsPe
     //!!! Muss eigenen Vector erstellen. Die Üblichen können nur Standard-Datentypen beinhalten!!! Alternativ einen Vector of Pointer (unique oder shared. Eher unique)
     // https://www.geeksforgeeks.org/program-to-create-custom-vector-class-in-c/
     // https://www.programiz.com/cpp-programming/vectors
-    //matrix = {rowsPerShelf, vector<Container>(segmentsPerRow)};
-    matrix = {rowsPerShelf, std::vector<int>(segmentsPerRow)};
+    matrix = {rowsPerShelf, std::vector<std::shared_ptr<Container>>(segmentsPerRow)};
+    //matrix = {rowsPerShelf, std::vector<int>(segmentsPerRow)};
 
     //!!! Später durch Zuweisungen der Container mit jeweiliger Prioritätenzuordnung in die Segmente ersetzen !!!
     // initiation to 0 for each segment
+
+    /*
     for(unsigned long long i = 0; i < rowsPerShelf; ++i)
     {
         for(int j = 0; j < segmentsPerRow; ++j)
         {
-            // matrix[i][j].setPriority(Priority::Three);
             matrix[i][j] = 0;
         }
     }
+    */
 
     // counts
     this->rowsPerShelf = rowsPerShelf;
@@ -227,16 +230,33 @@ TimeSegmentMessage Shelf::getFastestToReachEmptyContainerAlt(const SegmentDataMe
     return *segmentWithFastestWay; //!!! Fehler werfen oder null_ptr zurückgeben und an aufrufenden Stellen auf null_ptr abfragen, falls kein Element gefunden wird und die Liste ergo leer ist
 }
 
-void Shelf::setSegment(const unsigned long long int row, const unsigned long long int column, const int value) {
+/*void Shelf::setSegment(const unsigned long long int row, const unsigned long long int column, const int value) {
     //!!! FOR DEBUGGING !!!
     std::cout << "SETSEGMENT IN SHELF" << std::endl;
     matrix.at(row).at(column) = value; // Zuweisung wird irgendwie nicht umgesetzt, obwohl debugging bis hier kommt!
+}*/
+
+void Shelf::setSegmentsPriority(const unsigned long long int row, const unsigned long long int column, const Priority& priority) {
+    //!!! FOR DEBUGGING !!!
+    std::cout << "SETSEGMENT IN SHELF" << std::endl;
+    matrix.at(row).at(column)->setPriority(priority); // Zuweisung wird irgendwie nicht umgesetzt, obwohl debugging bis hier kommt!
 }
 
+
+void Shelf::setSegmentPrioritiesBasedOnFastestToReachSegments(){
+    //for(Priority priority: Priority.)
+    // https://stackoverflow.com/questions/34199724/c-11-how-to-get-enum-class-value-by-int-value
+    //!!! Die Manuelle Eingabe von 1 und 3 macht die Funktion der enum-Klasse als Beschränkung in diesem Fall kaputt
+        for ( unsigned int priorityValue = 1; priorityValue <= 3; priorityValue++){
+            auto priority = static_cast<Priority>(priorityValue);
+        }
+}
+
+/*
 void Shelf::fillBasedOnFastestToReachSegments(const int value) {
     auto fastestToReachEmptyContainer{getFastestToReachEmptyContainer({shelfNumber,0,0})};
     setSegment(fastestToReachEmptyContainer.getRow(), fastestToReachEmptyContainer.getColumn(), value);
-}
+}*/
 
 
 

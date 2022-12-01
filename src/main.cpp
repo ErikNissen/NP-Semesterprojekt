@@ -4,8 +4,8 @@
 #include "ConveyorBeltStore.h"
 #include "ConveyorBeltRetrieve.h"
 
-//using namespace inventoryLib;
-//using namespace messagesLib;
+//using namespace Inventory;
+//using namespace Messages;
 
 int main (int argc, char *argv[]) {
     // Initialize objects

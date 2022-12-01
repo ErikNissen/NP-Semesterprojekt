@@ -5,9 +5,9 @@
 #ifndef NUPPROJECT_CONTAINER_H
 #define NUPPROJECT_CONTAINER_H
 
-#include "../itemLib/Priority.h"
+#include "../Item/Priority.h"
 
-#include "../itemLib/Item.h"
+#include "../Item/Item.h"
 
 
 // container for containing items with amounts and priorities in a shelf segment per container

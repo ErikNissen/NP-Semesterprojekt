@@ -90,7 +90,7 @@ namespace inventoryLib {
         ShelfPair& getShelfPairByShelfNumber(unsigned int shelfNumber);
         static int getShelfPairNumberByShelfNumber(unsigned int shelfNumber);
 
-        void setSegment(unsigned int shelfNumber, unsigned long long int row, unsigned long long int column, int value);
+        //void setSegment(unsigned int shelfNumber, unsigned long long int row, unsigned long long int column, int value);
 
         // methods
         //!!! Dafür benötigte Zeiten für Fahrt zwischen den Regalpaaren zu den benötigten Zeiten innerhalb der Regalpaare addieren und dann den Weg mit kürzester benötigter Gesamtzeit wählen!!! Dabei Regaltiefen berücksichtigen!

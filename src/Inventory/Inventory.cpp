@@ -80,10 +80,12 @@ int Inventory::getShelfPairNumberByShelfNumber(const unsigned int shelfNumber) {
 }
 
 //!!! For Debugging !!!
+/*
 void Inventory::setSegment(const unsigned int shelfNumber, const unsigned long long int row, const unsigned long long int column, const int value) {
     ShelfPair& shelfPair{getShelfPairByShelfNumber(shelfNumber)};
     shelfPair.setSegment(shelfNumber, row, column, value);
 }
+*/
 
 
 // methods
@@ -156,8 +158,10 @@ void Inventory::fillBasedOnFastestToReachSegments(const int value) {
         auto shelfNumberFromFastestToReachSegment{fastestToReachEmptyContainer.getShelfNumber()};
         ShelfPair& shelfPair{getShelfPairByShelfNumber(shelfNumberFromFastestToReachSegment)};
         //shelfPair.fillBasedOnFastestToReachSegments(value);  //!!! Änderung für Kommentar oben in dieser Zeile!!!
-        shelfPair.getShelfByShelfNumber(fastestToReachEmptyContainer.getShelfNumber()).setSegment(fastestToReachEmptyContainer.getRow(), fastestToReachEmptyContainer.getColumn(), value); //!!! Methoden hier besser aufeinander abstützen. Z.B. eine SetSegmentValue-Methode in Shelfpair integrieren, die auf der von Shelf abgestützt ist.
+        //shelfPair.getShelfByShelfNumber(fastestToReachEmptyContainer.getShelfNumber()).setSegment(fastestToReachEmptyContainer.getRow(), fastestToReachEmptyContainer.getColumn(), value); //!!! Methoden hier besser aufeinander abstützen. Z.B. eine SetSegmentValue-Methode in Shelfpair integrieren, die auf der von Shelf abgestützt ist.
 
+        //!!! Methode so erweitern, dass ein bestimmter Bruchteil aller Regale mit den jeweiligen Prioritäten gefüllt wird, der noch nicht belegt ist. Dafür -1 Prio o.ä. einführen, um eine leere Prio darzustellen!!!
+        //shelfPair.getShelfByShelfNumber(fastestToReachEmptyContainer.getShelfNumber()).setSegmentsPriority(fastestToReachEmptyContainer.getRow(), fastestToReachEmptyContainer.getColumn(), priority); //
         //!!! FOR DEBUGGING !!!
         fastestToReachEmptyContainer.print();
 
