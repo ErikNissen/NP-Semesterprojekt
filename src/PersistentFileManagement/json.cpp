@@ -83,79 +83,10 @@ key){
 /// Adds a value to a json object
 /// \param key The key of the value
 /// \param value The value
-void PersistentFileManagement::add(const std::string& key,
-                const std::string& value){
-	// Check if the key already exists
-	if (this->data.contains(key)) {
-		throw runtime_error("Key already exists");
-	}else{
-		this->data[key] = value;
-	}
-}
-
-/// Adds a value to a json object
-/// \param key The key of the value
-/// \param value The value
-void PersistentFileManagement::add(const std::string& key,
-                int value){
-	// Check if the key already exists
-	if (this->data.contains(key)) {
-		throw runtime_error("Key already exists");
-	}else{
-		this->data[key] = value;
-	}
-}
-
-/// Adds a value to a json object
-/// \param key The key of the value
-/// \param value The value
-void PersistentFileManagement::add(const std::string& key,
-								   bool value){
-	// Check if the key already exists
-	if (this->data.contains(key)) {
-		throw runtime_error("Key already exists");
-	}else{
-		this->data[key] = value;
-	}
-}
-
-/// Adds a value to a json object
-/// \param key The key of the value
-/// \param value The value
-void PersistentFileManagement::add(const std::string& key,
-                double value){
-	// Check if the key already exists
-	if (this->data.contains(key)) {
-		throw runtime_error("Key already exists");
-	}else{
-		this->data[key] = value;
-	}
-}
-
-/// Adds a value to a json object
-/// \param key The key of the value
-/// \param value The value
-void PersistentFileManagement::add(const std::string& key,
-                float value){
-	// Check if the key already exists
-	if (this->data.contains(key)) {
-		throw runtime_error("Key already exists");
-	}else{
-		this->data[key] = value;
-	}
-}
-
-/// Adds a value to a json object
-/// \param key The key of the value
-/// \param value The value
-void PersistentFileManagement::add(const std::string& key,
-                char value){
-	// Check if the key already exists
-	if (this->data.contains(key)) {
-		throw runtime_error("Key already exists");
-	}else{
-		this->data[key] = value;
-	}
+template<typename T> void
+PersistentFileManagement::add( const std::string& key, const T
+&value ) {
+	this->data[key] = value;
 }
 
 /// Deletes a key from a json object
@@ -172,80 +103,16 @@ void PersistentFileManagement::remove(const std::string& key){
 /// Updates a value in a json object
 /// \param key The key of the value
 /// \param value The new value
-void PersistentFileManagement::update(const std::string& key,
-                   const std::string& value){
+template<typename T> void
+PersistentFileManagement::update( const std::string& key, const T &value ) {
 	// Check if the key exists
-	if ( this->data.contains(key)) {
+	if (this->data.contains(key)) {
 		this->data[key] = value;
 	}else{
 		throw runtime_error("Key does not exist");
 	}
 }
 
-/// Updates a value in a json object
-/// \param key The key of the value
-/// \param value The new value
-void PersistentFileManagement::update(const std::string& key,
-                   int value){
-	// Check if the key exists
-	if ( this->data.contains(key)) {
-		this->data[key] = value;
-	}else{
-		throw runtime_error("Key does not exist");
-	}
-}
-
-/// Updates a value in a json object
-/// \param key The key of the value
-/// \param value The new value
-void PersistentFileManagement::update(const std::string& key,
-                   bool value){
-	// Check if the key exists
-	if ( this->data.contains(key)) {
-		this->data[key] = value;
-	}else{
-		throw runtime_error("Key does not exist");
-	}
-}
-
-/// Updates a value in a json object
-/// \param key The key of the value
-/// \param value The new value
-void PersistentFileManagement::update(const std::string& key,
-				   double value){
-	// Check if the key exists
-	if ( this->data.contains(key)) {
-		this->data[key] = value;
-	}else{
-		throw runtime_error("Key does not exist");
-	}
-}
-
-/// Updates a value in a json object
-/// \param key The key of the value
-/// \param value The new value
-void PersistentFileManagement::update(const std::string& key,
-                   float value){
-	// Check if the key exists
-	if ( this->data.contains(key)) {
-		this->data[key] = value;
-	}else{
-		throw runtime_error("Key does not exist");
-	}
-}
-
-/// Updates a value in a json object
-/// \param key The key of the value
-/// \param value The new value
-void PersistentFileManagement::update(const std::string&
-key, char value){
-	// Check if the key exists
-	if ( this->data.contains(key)) {
-		this->data[key] = value;
-	}else{
-		throw runtime_error("Key does not exist");
-	}
-}
 
 /// Creates a new json file
 /// \param name The name of the file
@@ -313,3 +180,5 @@ void PersistentFileManagement::create(){
 nlohmann::json PersistentFileManagement::getData() {
 	return this->data;
 }
+
+

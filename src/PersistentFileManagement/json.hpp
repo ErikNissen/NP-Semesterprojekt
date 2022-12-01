@@ -25,33 +25,12 @@ public:
 	nlohmann::json load(const std::string& path);
 	nlohmann::json get(std::string
 	key);
-	void add(const std::string& key,
-						const std::string& value);
-	void add(const std::string& key,
-						int value);
-	void add(const std::string& key, bool
-	value);
-	void add(const std::string& key,
-						double value);
-	void add(const std::string& key,
-						float value);
-	void add(const std::string& key,
-						char value);
+
+	template <typename T> void add(const std::string& key, const T& value);
 
 	void remove(const std::string& key);
 
-	void update(const std::string& key,
-						const std::string& value);
-	void update(const std::string& key,
-						int value);
-	void update(const std::string& key,
-						bool value);
-	void update(const std::string& key,
-					   double value);
-	void update(const std::string& key,
-						float value);
-	void update(const std::string&
-	key,    char value);
+	template <typename T> void update(const std::string& key, const T& value);
 
 	void create(const std::string& name);
 
