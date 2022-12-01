@@ -86,7 +86,13 @@ key){
 template<typename T> void
 PersistentFileManagement::add( const std::string& key, const T
 &value ) {
-	this->data[key] = value;
+	// Check if the key already exists
+	if(this->data.contains(key)){
+		throw std::runtime_error("Key already exists. Use the update function to "
+								 "update the value.");
+	}else{
+		this->data[key] = value;
+	}
 }
 
 /// Deletes a key from a json object
