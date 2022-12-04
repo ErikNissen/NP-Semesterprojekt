@@ -81,7 +81,7 @@ key){
 /// \param key The key of the value
 /// \param value The value
 template<typename T> void
-PersistentFileManagement::add( const string& key, const T
+PersistentFileManagement::add( const string& key, T
 &value ) {
 	// Check if the key already exists
 	if(this->data.contains(key)){
@@ -107,7 +107,7 @@ void PersistentFileManagement::remove(const string& key){
 /// \param key The key of the value
 /// \param value The new value
 template<typename T> void
-PersistentFileManagement::update( const string& key, const T &value ) {
+PersistentFileManagement::update( const string& key, T &value ) {
 	// Check if the key exists
 	if (this->data.contains(key)) {
 		this->data[key] = value;
@@ -188,7 +188,7 @@ nlohmann::json PersistentFileManagement::getData() {
 
 /// Searches for a value in a json object
 /// \param key The key of the value (must be a string or a regular expression)
-template<typename T> void PersistentFileManagement::search(const T search) {
+template<typename T> void PersistentFileManagement::search(T search) {
 	assert(typeid(search) == typeid(string) || typeid(search) == typeid(regex));
 
 	int counter = 0;

@@ -27,17 +27,17 @@ public:
 	nlohmann::json get(std::string
 	key);
 
-	template <typename T> void add(const std::string& key, const T& value);
+	template <typename T> void add(const std::string& key, T& value);
 
 	void remove(const std::string& key);
 
-	template <typename T> void update(const std::string& key, const T& value);
+	template <typename T> void update(const std::string& key, T& value);
 
 	void create(const std::string& name);
 
 	void create();
 
-	template<typename T> void search(const T search);
+	template<typename T> void search(T search);
 
 	//Getter
 	nlohmann::json getData();
