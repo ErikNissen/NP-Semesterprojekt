@@ -2,11 +2,8 @@
 // Created by erikn on 29.11.2022.
 //
 
-#include <nlohmann/json.hpp>
 #include "json.hpp"
-#include <fstream>
 #include <iostream>
-#include <utility>
 
 using namespace std;
 using json = nlohmann::json;
@@ -30,14 +27,14 @@ PersistentFileManagement::PersistentFileManagement() {
 
 /// Saves a json object to a file
 /// \param path The path to the file
-void PersistentFileManagement::save(const std::string&
+void PersistentFileManagement::save(const string&
 name){
 	// Check if the directory exists
 	if (!filesystem::exists( this->basePath)) {
 		// Create the directory
-		std::filesystem::create_directory(this->basePath);
+		filesystem::create_directory(this->basePath);
 	}else if(!filesystem::exists(this->basePath + name + ".json")){
-		throw std::runtime_error("File does not exist.\nFirst "
+		throw runtime_error("File does not exist.\nFirst "
 								 "create the file with the create function.");
 	}
 	ofstream file(this->basePath + name + ".json");
@@ -48,19 +45,19 @@ name){
 /// Saves a json object to a file
 void PersistentFileManagement::save() {
 	if(this->name.empty()){
-		throw std::runtime_error("No name was given.\nFirst set a name with the "
+		throw runtime_error("No name was given.\nFirst set a name with the "
 								 "constructor or the setName function.");
 	}
 	this->save(this->name);
 }
 
-void PersistentFileManagement::setName( const std::string &name ) {
+void PersistentFileManagement::setName(const string_view &name ) {
 	this->name = name;
 }
 
 /// Loads a json object from a file
 /// \param name The name of the file
-nlohmann::json PersistentFileManagement::load(const std::string&
+json PersistentFileManagement::load(const string&
 name){
 	// Check if the directory exists
 	if (!filesystem::exists(basePath)) {
@@ -70,12 +67,12 @@ name){
 		throw runtime_error("No data file found called " + name);
 	}
 	std::ifstream f(PersistentFileManagement::basePath + name + ".json");
-	this->data = json::parse(f);
+	return json::parse(f);
 }
 
 /// Gets a value from a json object
 /// \param key The key of the value
-nlohmann::json PersistentFileManagement::get(std::string
+nlohmann::json PersistentFileManagement::get(string
 key){
 	return this->data[std::move(key)];
 }
@@ -84,7 +81,7 @@ key){
 /// \param key The key of the value
 /// \param value The value
 template<typename T> void
-PersistentFileManagement::add( const std::string& key, const T
+PersistentFileManagement::add( const string& key, const T
 &value ) {
 	// Check if the key already exists
 	if(this->data.contains(key)){
@@ -97,7 +94,7 @@ PersistentFileManagement::add( const std::string& key, const T
 
 /// Deletes a key from a json object
 /// \param key The key to delete
-void PersistentFileManagement::remove(const std::string& key){
+void PersistentFileManagement::remove(const string& key){
 	// Check if the key exists
 	if (this->data.contains(key)) {
 		this->data.erase(key);
@@ -110,7 +107,7 @@ void PersistentFileManagement::remove(const std::string& key){
 /// \param key The key of the value
 /// \param value The new value
 template<typename T> void
-PersistentFileManagement::update( const std::string& key, const T &value ) {
+PersistentFileManagement::update( const string& key, const T &value ) {
 	// Check if the key exists
 	if (this->data.contains(key)) {
 		this->data[key] = value;
@@ -131,7 +128,7 @@ void PersistentFileManagement::create(const string& name){
 		filesystem::create_directory(this->basePath);
 	}
 	//Create file
-	std::ofstream _file( this->basePath + name + ".json");
+	ofstream _file( this->basePath + name + ".json");
 	//Check if file exists
 	if (!filesystem::exists(this->basePath +
 	name + ".json")) {
@@ -145,7 +142,7 @@ void PersistentFileManagement::create(const string& name){
 	} else {
 		//File exists
 		//Throw error
-		throw std::invalid_argument("File already exists");
+		throw invalid_argument("File already exists");
 	}
 }
 
@@ -160,11 +157,11 @@ void PersistentFileManagement::create(){
 	if (this->name.empty()) {
 		//Name is empty
 		//Throw error
-		throw std::invalid_argument("Name is empty. Please set a "
+		throw invalid_argument("Name is empty. Please set a "
 									"name with the setName() method");
 	}else{
 		//Create file
-		std::ofstream _file( this->basePath + this->name + ".json");
+		ofstream _file( this->basePath + this->name + ".json");
 		//Check if file exists
 		if (!filesystem::exists(this->basePath +
 		this->name + ".json")) {
@@ -178,13 +175,45 @@ void PersistentFileManagement::create(){
 		} else {
 			//File exists
 			//Throw error
-			throw std::invalid_argument("File already exists");
+			throw invalid_argument("File already exists");
 		}
 	}
 }
 
+/// Returns the json object of this instance.
 nlohmann::json PersistentFileManagement::getData() {
 	return this->data;
 }
 
 
+/// Searches for a value in a json object
+/// \param key The key of the value (must be a string or a regular expression)
+template<typename T> void PersistentFileManagement::search(const T search) {
+	assert(typeid(search) == typeid(string) || typeid(search) == typeid(regex));
+
+	int counter = 0;
+
+	if(typeid(search) == typeid(string)){
+		for (auto& element : this->data.items()) {
+			if(element.value() == search){
+				cout << "[Found] " << element.key() << " : " << element.value()
+				<< endl;
+				counter++;
+			}
+		}
+	}else if(typeid(search) == typeid(regex)){
+		for (auto& element : this->data.items()) {
+			if(regex_search(element.value(), search)){
+				cout << "[Found] " << element.key() << " : " << element.value()
+				<< endl;
+				counter++;
+			}
+		}
+	}else{
+		throw runtime_error("Invalid search type");
+	}
+
+	if(counter == 0){
+		cout << "No results found" << endl;
+	}
+}
