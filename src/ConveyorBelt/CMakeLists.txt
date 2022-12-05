@@ -1,9 +1,7 @@
 add_library(ConveyorBelt
-        Container.cpp
         ConveyorBelt.cpp
         ConveyorBeltRetrieve.cpp
         ConveyorBeltStore.cpp
-        Timer.cpp
         TransferPoint.cpp
         )
 

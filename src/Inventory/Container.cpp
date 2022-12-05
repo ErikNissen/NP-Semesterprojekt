@@ -4,11 +4,21 @@
 
 #include "Container.h"
 
+#include <utility>
+
 
 // constructors
 Container::Container(const Priority& priority) {
     this->priority = priority;
     item = Item(priority);
+    timer = Timer();
+}
+
+Container::Container(const Priority& priority, std::string name) {
+    this->priority = priority;
+    this->name = std::move(name);
+    item = Item(priority);
+    timer = Timer();
 }
 
 // getters and setters

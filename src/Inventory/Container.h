@@ -6,8 +6,8 @@
 #define NUPPROJECT_CONTAINER_H
 
 #include "../Item/Priority.h"
-
 #include "../Item/Item.h"
+#include "Timer.h"
 
 
 // container for containing items with amounts and priorities in a shelf segment per container
@@ -23,9 +23,17 @@ class Container {
     unsigned int currentAmountOfItem{};
     unsigned int reservedToAddAmount{}; // reserved amounts to add are not yet added and therefore are not allowed to leave the inventory but the have to be reserved for not overbooking the space limited by a maximum amount
     unsigned int reservedToGetAmount{}; // reserved amounts to get have not left the inventory therefore are using limited space. Also they are not allowed to be booked twice
+public:
+    Timer timer; // Tracks the time a Container is getting transported
+    constexpr static float length = 0.4;
+    constexpr static float width = 0.6;
+    constexpr static float height = 0.4;
+    std::string name = "Container";
 
     // constructors
-public: explicit Container(const Priority& priority);
+public:
+    explicit Container(const Priority& priority);
+    explicit Container(const Priority& priority, std::string name);
 
     // getters and setters
 public:
@@ -34,6 +42,7 @@ public:
     void setPriority(const Priority& priority);
     void appendItemType(const Item& item);
     void ifEmptyDeleteItemType();
+
 
 private:
     [[nodiscard]] bool containsAmountToGet(unsigned int amount) const;

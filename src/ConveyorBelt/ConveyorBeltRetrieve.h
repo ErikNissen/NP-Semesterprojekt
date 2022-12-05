@@ -11,7 +11,7 @@
 class ConveyorBeltRetrieve : public ConveyorBelt {
 public:
     ConveyorBeltRetrieve();
-    Container& transportContainer(TransferPoint&, Timer&);
+    Container& transportContainer(TransferPoint&);
 };
 
 
