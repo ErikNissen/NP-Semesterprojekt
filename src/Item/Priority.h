@@ -7,7 +7,7 @@
 
 namespace itemLib {
     enum class Priority {
-        One = 1, Two = 2, Three = 3
+        N = 0, A = 1, B = 2, C = 3
     };
 
 }

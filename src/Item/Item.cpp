@@ -7,8 +7,7 @@
 using namespace  itemLib;
 
 // constructors
-Item::Item()
-{}
+
 
 Item::Item(const Priority& priority) { // used by container in inventory lib
     this->priority = priority;
@@ -34,12 +33,35 @@ unsigned int Item::getMaxAmountPerContainer() const {
     return maxAmountPerContainer;
 }
 
+// methods
 void Item::print() {
 
     std::cout << "item ID: " << itemID << std::endl;
     //!!! https://www.delftstack.com/howto/cpp/how-to-convert-enum-to-string-cpp/#:~:text=Use%20Custom%20Defined%20Function%20to%20Convert%20an%20Enum,char%2A%20value%20from%20enum_str%20array%20inside%20the%20function.
-    //std::cout << "priority: " << std::static_cast<string>(Priority::priority) << std::endl;
+
+    printPriority();
     std::cout << "max. amount per container: " << maxAmountPerContainer << std::endl;
+}
+
+// https://stackoverflow.com/questions/66488850/how-to-print-the-enum-value-from-its-index
+void Item::printPriority() {
+    switch (this->priority) {
+        case Priority::A:
+            std::cout << "Priority: A" << std::endl;
+            break;
+        case Priority::B:
+            std::cout << "Priority: B" << std::endl;
+            break;
+
+        case Priority::C:
+            std::cout << "Priority: C" << std::endl;
+            break;
+
+        default:
+            std::cout << "Priority not available" << std::endl;
+            //code to be executed, if the expression doesn't matched to  any constant_1(case 1)
+            break;
+    }
 }
 
 

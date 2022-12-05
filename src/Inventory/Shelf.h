@@ -7,7 +7,8 @@
 #include <memory>
 #include "../Messages/SegmentDataMessage.h"
 #include "../Messages/TimeSegmentMessage.h"
-#include "Container.h"
+#include "ShelfContainer.h"
+#include "ContainerUse.h"
 
 #ifndef NUPPROJECT_SHELF_H
 #define NUPPROJECT_SHELF_H
@@ -26,7 +27,7 @@ class Shelf {
         // https://riptutorial.com/cplusplus/example/17463/matrices-using-vectors
         // https://iamsorush.com/posts/shared-pointer-cpp/
         //!!! Evtl. von shared_pointer zu unique_pointer wechseln und dafür Move-Konstruktor für Container-Klasse schreiben
-        std::vector<std::vector<std::shared_ptr<Container>>> matrix;
+        std::vector<std::vector<std::shared_ptr<ShelfContainer>>> matrix;
         //std::vector<std::vector<int>> matrix;
 
         //!!! Log-Data bzw. Daten zum Berechnen entweder nur hier initialisieren, oder in extra Klasse, die zum Verrechnen genutzt wird oder in Inventar oder zusammengesetzt jeweils ergänzend in umklammernder Klasse, mit jeweils objektorientierter Zuteilung !!!
@@ -107,7 +108,7 @@ class Shelf {
         //!!! Später mit Prioritätsreservierung überarbeitern und ggf. mit Waren-Container !!! //!!! Später zu std::vector<ItemContainer> ändern
         std::vector<SegmentDataMessage> getListOfFreeContainers();
         // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
-
+        std::vector<SegmentDataMessage> getListOfFreeContainersWithoutPriority();
 
         double calculateWayTimeToSegmentInSeconds(const SegmentDataMessage& currentSegment, const SegmentDataMessage& goalSegment);
 
@@ -145,11 +146,14 @@ class Shelf {
         void printShelfSegments();
 
         //!!! Vernünftige Handhabe einführen, wenn das Regal keinen freien Container hat, ohne dass es den Aufruf von ShelfPair insgesamt blockiert, weil ja ein anderes Regal einen passenden Platz haben kann!!!
-        TimeSegmentMessage getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment);
+        TimeSegmentMessage getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse);
+    TimeSegmentMessage getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment);
         TimeSegmentMessage getFastestToReachEmptyContainerAlt(const SegmentDataMessage& currentSegment);
 
         // getNextContainerOfProductKindWithSpace(const Item& item); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
         void setSegmentPrioritiesBasedOnFastestToReachSegments();
+
+    std::vector<SegmentDataMessage> getListOfContainersBasedOnUse(const ContainerUse &containerUse);
 };
 }
 

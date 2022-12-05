@@ -7,6 +7,7 @@
 
 
 #include "Shelf.h"
+#include "ContainerUse.h"
 #include <exception>
 #include <iostream>
 
@@ -47,7 +48,10 @@ namespace inventoryLib {
         double getShelfDepthInMeters();
 
         //!!! For Debugging !!!
-        void setSegment(unsigned int shelfNumber, unsigned long long int row, unsigned long long int column, int value);
+        //void setSegment(unsigned int shelfNumber, unsigned long long int row, unsigned long long int column, int value);
+
+        void setSegmentsPriority(unsigned int shelfNumber, unsigned long long int row,
+                                 unsigned long long int column, const Priority &priority);
 
         // methods
     public:
@@ -59,6 +63,7 @@ namespace inventoryLib {
 
         //!!! Vernünftige Handhabe einführen, wenn das Regalpaar keinen freien Container hat, ohne dass es den Aufruf von Inventory insgesamt blockiert, weil ja ein anderes Regalpaar einen passenden Platz haben kann!!!
         TimeSegmentMessage getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
+        TimeSegmentMessage getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
 
 
         // getWayToNextMatchingContainer()

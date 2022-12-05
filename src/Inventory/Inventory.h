@@ -6,12 +6,22 @@
 #define NUPPROJECT_INVENTORY_H
 
 # include "ShelfPair.h"
+#include "ContainerUse.h"
 
 namespace inventoryLib {
+    /*
+     * The class inventory represents the whole inventory containing several shelfpairs which contain two shelves per pair.
+     * The class provides methods to store or restore items.
+     * The class uses methods to calculate the fastest possible ways to shelf segments for storation processes.
+     * The storage positions are based on three different levels of priority of items.
+     */
+
+    //!!! Segment und Container nicht synonym verwenden. Für Methoden Entscheidung für eins der beiden Treffen und Bezeichner überarbeiten !!!
     class Inventory {
 
         //attributes
     private:
+
 
         //!!! Public for Debugging. Hinterher wieder private machen !!!
     public:
@@ -25,10 +35,10 @@ namespace inventoryLib {
 
         // counts
         unsigned int amountOfShelves;
-        /*
+
         int rowsPerShelf;
         int segmentsPerRow;
-        */
+
 
         // measurements
 
@@ -47,6 +57,10 @@ namespace inventoryLib {
         */
         // inventory
         double distanceBetweenShelves;
+
+        unsigned int percentageOfPriorityA;
+        unsigned int percentageOfPriorityB;
+        unsigned int percentageOfPriorityC;
 
         /*
         // shelf
@@ -74,7 +88,7 @@ namespace inventoryLib {
     public:
         //Inventory() = default;
 
-        Inventory(double conveyorBeltVelocity, unsigned int numberOfShelfPairs, unsigned long long int rowsPerShelf,
+        Inventory(unsigned int percentageOfPriorityA, unsigned int percentageOfPriorityB, unsigned int percentageOfPriorityC, double conveyorBeltVelocity, unsigned int numberOfShelfPairs, unsigned long long int rowsPerShelf,
                   unsigned long long int segmentsPerRow,
                   double verticalMaxVelocityInMetersPerSecond, double verticalAccelerationInMetersPerSquareSeconds,
                   double horizontalMaxVelocityInMetersPerSecond, double horizontalAccelerationInMetersPerSquareSeconds,
@@ -91,6 +105,9 @@ namespace inventoryLib {
         static int getShelfPairNumberByShelfNumber(unsigned int shelfNumber);
 
         //void setSegment(unsigned int shelfNumber, unsigned long long int row, unsigned long long int column, int value);
+        void setSegmentsPriority(const SegmentDataMessage &segmentDataMessage, const Priority &priority);
+        void setSegmentsPriority(unsigned int shelfNumber, unsigned long long int row, unsigned long long int column, const Priority& priority);
+
 
         // methods
         //!!! Dafür benötigte Zeiten für Fahrt zwischen den Regalpaaren zu den benötigten Zeiten innerhalb der Regalpaare addieren und dann den Weg mit kürzester benötigter Gesamtzeit wählen!!! Dabei Regaltiefen berücksichtigen!
@@ -99,22 +116,34 @@ namespace inventoryLib {
         // getWayToNextMatchingContainer()
         // getNeededTimeForWayToNextMatchingContainer() // !!! Dafür Geschwindigkeiten und Beschleunigungen der Bediengeräte berücksichtigen !!!
 
+    private:
+
+        void initiateContainerPriorities();
+
+        void setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages();
+
+        void initiateContainerPriorities(const unsigned int amountOfSegmentsReservedForPrio, const Priority &priority);
     public:
+
         //addToInventory(ItemKind item);
 
         //!!! Methode und Zusammenhängende auf für Prioritäten reservierte Bereiche anpassen und das aktuelle Segment hier auslesen (Allerdings muss für die Einlagerung die Bedienhilfe am Ausgangspunkt sein. Dafür müssten dann auch die Dauern für Rückfahrten der Bedienhilfen vom vorherigen (Ziel)Segment bestimmt werden. Die Strecke des vorher wartenden Containers wird also immer doppelt gefahren. Dazu kommt noch, dass ggf. auf gleichem Weg noch eine Auslieferung getätigt wird.) !!!
         //!!! Wo wird das aktuelle Segment gespeichert und wo ist dessen Abfrage relevant ??? !!!
+        // The method gets the TimeSegmentMessage which contain the Segments coordinates and the time needed for the way (waiting time in queues excluded)
         TimeSegmentMessage getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
+
+        TimeSegmentMessage getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
+
 
         //!!! For Debugging!!!
         std::vector<TimeSegmentMessage> getListOfFastestToReachEmptyContainersWithoutConveyorBeltForAllShelfPairs(const SegmentDataMessage& currentSegment);
+
         void printListOfFastestToReachEmptyContainersWithoutConveyorBeltForAllShelfPairs(const SegmentDataMessage& currentSegment);
 
         void printShelfSegments();
 
         //!!! Später für Füllen der Regale mit Containern bestimmter Prioritäten nutzen!!!
         void fillBasedOnFastestToReachSegments(int value);
-
     };
 }
 

@@ -13,13 +13,13 @@ namespace itemLib {
         // attributes
     private:
         unsigned int itemID{};
-        Priority priority;
+        Priority priority{Priority::N};
         unsigned int maxAmountPerContainer{};
 
 
         // constructors
     public:
-        Item();
+        Item() = default;
         explicit Item(const Priority& priority);
         Item(unsigned int itemId, Priority priority, unsigned int maxAmountPerContainer);
 
@@ -34,6 +34,8 @@ namespace itemLib {
         // methods
     public:
         void print();
+
+        void printPriority();
     };
 }
 

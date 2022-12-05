@@ -63,7 +63,25 @@ void ShelfPair::setSegment(const unsigned int shelfNumber, const unsigned long l
 }
 */
 
+void ShelfPair::setSegmentsPriority(const unsigned int shelfNumber, const unsigned long long int row, const unsigned long long int column, const Priority& priority) {
+    getShelfByShelfNumber(shelfNumber).setSegmentsPriority(row, column, priority);
+}
+
 // methods
+
+TimeSegmentMessage ShelfPair::getFastestToReachContainerBasedOnUse(const SegmentDataMessage &currentSegment,
+                                                                   const ContainerUse &containerUse) {
+    TimeSegmentMessage timeSegmentMessageOfFastestWayToSegmentShelfLeft{shelfLeft.getFastestToReachEmptyContainer(currentSegment, containerUse)};
+    TimeSegmentMessage timeSegmentMessageOfFastestWayToSegmentShelfRight{shelfRight.getFastestToReachEmptyContainer(currentSegment, containerUse)};
+
+    if(timeSegmentMessageOfFastestWayToSegmentShelfLeft.getNeededTimeWithoutWaitingInQueueInSeconds() <= timeSegmentMessageOfFastestWayToSegmentShelfRight.getNeededTimeWithoutWaitingInQueueInSeconds()){
+        return timeSegmentMessageOfFastestWayToSegmentShelfLeft;
+    }
+    else{
+        return timeSegmentMessageOfFastestWayToSegmentShelfRight;
+    }
+}
+
 
 //!!! Methode und Zusammenhängende auf für Prioritäten reservierte Bereiche anpassen und das aktuelle Segment hier auslesen (Allerdings muss für die Einlagerung die Bedienhilfe am Ausgangspunkt sein. Dafür müssten dann auch die Dauern für Rückfahrten der Bedienhilfen vom vorherigen (Ziel)Segment bestimmt werden. Die Strecke des vorher wartenden Containers wird also immer doppelt gefahren. Dazu kommt noch, dass ggf. auf gleichem Weg noch eine Auslieferung getätigt wird.) !!!
 TimeSegmentMessage ShelfPair::getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment) {
@@ -123,6 +141,8 @@ Shelf& ShelfPair::getShelfByShelfNumber(const int shelfNumber) {
     else throw std::invalid_argument("Shelf number is not found in current shelf number. An argument has been set wrong.");
     //return *(*Shelf ) nullptr; //!!! Hier besser mit try und Exception arbeiten!!! https://cppbyexample.com/exceptions.html#:~:text=In%20C%2B%2B%20to%20raise%20or%20throw%20exceptions%20the,many%20basic%20exception%20types%20in%20the%20%3Cexception%3E%20header.
 }
+
+
 
 
 

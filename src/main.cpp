@@ -1,13 +1,12 @@
 #include "main.hpp"
 #include <algorithm>
-//#include "Inventory.h"
+
 #include "ConveyorBeltStore.h"
 #include "ConveyorBeltRetrieve.h"
-
-//using namespace Inventory;
-//using namespace Messages;
+#include "Inventory.h"
 
 int main (int argc, char *argv[]) {
+    /*
     // Initialize objects
     Timer timer;
     TransferPoint transfer1(12);
@@ -30,16 +29,22 @@ int main (int argc, char *argv[]) {
     conveyorRetrieve.transportContainer(transfer2, timer);
     conveyorRetrieve.transportContainer(transfer1, timer);
     conveyorRetrieve.transportContainer(transfer1, timer);
+    */
 
     // -------------------------------------------------------------------------------
 
+    using namespace inventoryLib;
+    using namespace messagesLib;
+
     //!!! Für Debugging auf 5 * 5 Matrizen verändert. Projekt-Info ist 54*90
-//    auto inventory{Inventory{2.6, 10, 5, 5,
-//                             0.8, 0.5, 3.5, 0.4,
-//                             1.2, 49.6, 28.0, 0.7,
-//                             1.5, 0.0, 0.1,
-//                             0.45, 0.45, 0.65, 0.4, 0.4,
-//                             0.6}};
+    auto inventory{inventoryLib::Inventory(8,90,2, 2.6, 10, 5, 5,
+                             0.8, 0.5, 3.5, 0.4,
+                             1.2, 49.6, 28.0, 0.7,
+                             1.5, 0.0, 0.1,
+                             0.45, 0.45, 0.65, 0.4, 0.4,
+                             0.6)};
+
+    inventory.printShelfSegments();
 
     //!!! For Debugging !!!
     //!!! Startpunkt mit aktuellem Punkt usw. später noch abgleichen und überarbeiten
@@ -75,6 +80,7 @@ int main (int argc, char *argv[]) {
 //    inventory.printShelfSegments();
 
 
+std::cout << "hello world" << std::endl;
 
     /*
     //FOR DEBUGGING
