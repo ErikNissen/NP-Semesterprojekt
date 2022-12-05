@@ -36,8 +36,8 @@ namespace inventoryLib {
         // counts
         unsigned int amountOfShelves;
 
-        int rowsPerShelf;
-        int segmentsPerRow;
+        unsigned long long int rowsPerShelf;
+        unsigned long long int segmentsPerRow;
 
 
         // measurements
@@ -102,7 +102,7 @@ namespace inventoryLib {
 
         // getters and setters
         ShelfPair& getShelfPairByShelfNumber(unsigned int shelfNumber);
-        static int getShelfPairNumberByShelfNumber(unsigned int shelfNumber);
+        static unsigned int getShelfPairNumberByShelfNumber(unsigned int shelfNumber);
 
         //void setSegment(unsigned int shelfNumber, unsigned long long int row, unsigned long long int column, int value);
         void setSegmentsPriority(const SegmentDataMessage &segmentDataMessage, const Priority &priority);
@@ -118,7 +118,7 @@ namespace inventoryLib {
 
     private:
 
-        void initiateContainerPriorities();
+       //void initiateContainerPriorities();
 
         void setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages();
 
@@ -130,15 +130,17 @@ namespace inventoryLib {
         //!!! Methode und Zusammenhängende auf für Prioritäten reservierte Bereiche anpassen und das aktuelle Segment hier auslesen (Allerdings muss für die Einlagerung die Bedienhilfe am Ausgangspunkt sein. Dafür müssten dann auch die Dauern für Rückfahrten der Bedienhilfen vom vorherigen (Ziel)Segment bestimmt werden. Die Strecke des vorher wartenden Containers wird also immer doppelt gefahren. Dazu kommt noch, dass ggf. auf gleichem Weg noch eine Auslieferung getätigt wird.) !!!
         //!!! Wo wird das aktuelle Segment gespeichert und wo ist dessen Abfrage relevant ??? !!!
         // The method gets the TimeSegmentMessage which contain the Segments coordinates and the time needed for the way (waiting time in queues excluded)
-        TimeSegmentMessage getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
+        //TimeSegmentMessage getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
 
-        TimeSegmentMessage getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
+        //TimeSegmentMessage getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse, const TransferMessage& transferMessage); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
+
+        std::optional<TimeSegmentMessage> getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse, const TransferMessage& transferMessage); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
 
 
         //!!! For Debugging!!!
-        std::vector<TimeSegmentMessage> getListOfFastestToReachEmptyContainersWithoutConveyorBeltForAllShelfPairs(const SegmentDataMessage& currentSegment);
+        //std::vector<TimeSegmentMessage> getListOfFastestToReachEmptyContainersWithoutConveyorBeltForAllShelfPairs(const SegmentDataMessage& currentSegment);
 
-        void printListOfFastestToReachEmptyContainersWithoutConveyorBeltForAllShelfPairs(const SegmentDataMessage& currentSegment);
+        //void printListOfFastestToReachEmptyContainersWithoutConveyorBeltForAllShelfPairs(const SegmentDataMessage& currentSegment);
 
         void printShelfSegments();
 

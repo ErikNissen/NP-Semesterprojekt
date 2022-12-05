@@ -96,8 +96,6 @@ class Shelf {
         // getters and setters
     public:
         [[nodiscard]] double getShelfDepthInMeters() const;
-        //!!! Später durch Weiterleitung zum Verändern der Daten das Containers ersetzen!!!
-        //void setSegment(unsigned long long int row, unsigned long long int column, int value);
         [[nodiscard]] unsigned int getShelfNumber() const;
         void setSegmentsPriority(const unsigned long long int row, const unsigned long long int column, const Priority& priority);
 
@@ -105,11 +103,7 @@ class Shelf {
 
         // methods
     private:
-        //!!! Später mit Prioritätsreservierung überarbeitern und ggf. mit Waren-Container !!! //!!! Später zu std::vector<ItemContainer> ändern
-        std::vector<SegmentDataMessage> getListOfFreeContainers();
         // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
-        std::vector<SegmentDataMessage> getListOfFreeContainersWithoutPriority();
-
         double calculateWayTimeToSegmentInSeconds(const SegmentDataMessage& currentSegment, const SegmentDataMessage& goalSegment);
 
         //double Shelf::calculateTimeInSecondsFromWayInMeters(const double wayInMetersHorizonzal, double wayInMetersVertical);
@@ -134,7 +128,7 @@ class Shelf {
 
     public:
         //!!! Später für Initialisierung mit leeren Containern drei verschiedener Prioritäten abändern!!!
-        void fillBasedOnFastestToReachSegments(int value);
+        //void fillBasedOnFastestToReachSegments(int value);
 
         //!!! Für folgende Methoden nochmal überprüfen, wie Zerstückelung stattfindet, wenn nicht ganze Ladung in einen Container passt
         //!!! Für folgende Methoden aktuelle Position der Bedienhilfen berücksichtigen, falls diese gerade frei sind. Dies aber eher mit Überladung der Methode machen, weil die generelle Regalzeilung ja schon vor dem Warten an der Warteschlange gemacht wird.
@@ -146,14 +140,17 @@ class Shelf {
         void printShelfSegments();
 
         //!!! Vernünftige Handhabe einführen, wenn das Regal keinen freien Container hat, ohne dass es den Aufruf von ShelfPair insgesamt blockiert, weil ja ein anderes Regal einen passenden Platz haben kann!!!
-        TimeSegmentMessage getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse);
-    TimeSegmentMessage getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment);
-        TimeSegmentMessage getFastestToReachEmptyContainerAlt(const SegmentDataMessage& currentSegment);
+        std::vector<SegmentDataMessage> getListOfContainersBasedOnUse(const ContainerUse &containerUse, const TransferMessage &transferMessage);
+        std::optional<TimeSegmentMessage> getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse, const TransferMessage &transferMessage);
+
+        //TimeSegmentMessage getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse, const TransferMessage &transferMessage);
+        //TimeSegmentMessage getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment);
+        //TimeSegmentMessage getFastestToReachEmptyContainerAlt(const SegmentDataMessage& currentSegment);
 
         // getNextContainerOfProductKindWithSpace(const Item& item); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
         void setSegmentPrioritiesBasedOnFastestToReachSegments();
 
-    std::vector<SegmentDataMessage> getListOfContainersBasedOnUse(const ContainerUse &containerUse);
+
 };
 }
 

@@ -62,8 +62,9 @@ namespace inventoryLib {
 
 
         //!!! Vernünftige Handhabe einführen, wenn das Regalpaar keinen freien Container hat, ohne dass es den Aufruf von Inventory insgesamt blockiert, weil ja ein anderes Regalpaar einen passenden Platz haben kann!!!
-        TimeSegmentMessage getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
-        TimeSegmentMessage getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
+        //TimeSegmentMessage getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
+        //TimeSegmentMessage getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse, const TransferMessage& transferMessage); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
+        std::optional<TimeSegmentMessage> getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse, const TransferMessage& transferMessage); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
 
 
         // getWayToNextMatchingContainer()

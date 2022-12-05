@@ -16,6 +16,7 @@ unsigned int TransferMessage::getAmountToTransfer() const {
 }
 
 // constructors
+
 TransferMessage::TransferMessage(const itemLib::Item &item, unsigned int amountToTransfer) : item(item),
                                                                                              amountToTransfer(
                                                                                                      amountToTransfer) {}

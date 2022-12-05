@@ -12,17 +12,18 @@ namespace messagesLib {
     class TransferMessage {
         // attributes
     private:
-        itemLib::Item item;
-        unsigned int amountToTransfer;
+        itemLib::Item item{};
+        unsigned int amountToTransfer{};
 
         // getters and setters
     public:
-        TransferMessage(const itemLib::Item &item, unsigned int amountToTransfer);
-
-        const itemLib::Item &getItem() const;
-        unsigned int getAmountToTransfer() const;
+        [[nodiscard]] const itemLib::Item &getItem() const;
+        [[nodiscard]] unsigned int getAmountToTransfer() const;
 
         // constructors
+        TransferMessage() = default;
+        TransferMessage(const itemLib::Item &item, unsigned int amountToTransfer);
+
     public:
 
     }; // Inventory

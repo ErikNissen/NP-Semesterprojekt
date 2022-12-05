@@ -37,7 +37,7 @@ int main (int argc, char *argv[]) {
     using namespace messagesLib;
 
     //!!! Für Debugging auf 5 * 5 Matrizen verändert. Projekt-Info ist 54*90
-    auto inventory{inventoryLib::Inventory(8,90,2, 2.6, 10, 5, 5,
+    auto inventory{inventoryLib::Inventory(8, 90, 2, 2.6, 10, 5, 5,
                              0.8, 0.5, 3.5, 0.4,
                              1.2, 49.6, 28.0, 0.7,
                              1.5, 0.0, 0.1,
@@ -46,9 +46,15 @@ int main (int argc, char *argv[]) {
 
     inventory.printShelfSegments();
 
+    auto fastestToReachContainerWithUndeclaredPrio {inventory.getFastestToReachContainerBasedOnUse({1,0,0},
+    ContainerUse::InitPrio, {})};
+
+    std::cout << "Fastest to reach container without prio" << std::endl;
+    fastestToReachContainerWithUndeclaredPrio->print();
+
     //!!! For Debugging !!!
     //!!! Startpunkt mit aktuellem Punkt usw. später noch abgleichen und überarbeiten
-//    SegmentDataMessage startPoint{1,0,0};
+    SegmentDataMessage startPoint{1,0,0};
     //auto emptyContainer{inventory.getFastestToReachEmptyContainer(startPoint)};
 
     //!!!getFastestToReachEmptyContainer({1,0,0}) gibt noch ein anderes Ergebnis zurück, als wenn mit startPoint als Parameter direkt eine SegmentDataMessage in den entsprechenenden Konstruktor gegeben wird!!!
@@ -72,13 +78,28 @@ int main (int argc, char *argv[]) {
 
     //!!! Für Debugging. Später in Main auf Basis der Methode Regale mit Containern füllen, die eine Priorität haben.!!!
 
+    /*
     for(int i{1}; i < 50; i++) {
         //!!! Zugriff in folgender Zeile funktioniert nicht !!!
 //        inventory.fillBasedOnFastestToReachSegments(i);
     }
+    */
 
 //    inventory.printShelfSegments();
 
+
+    //inventory.setSegmentsPriority({1,0,0},Priority::A);
+
+    /*
+    fastestToReachContainerWithUndeclaredPrio = {inventory.getFastestToReachContainerBasedOnUse({1,0,0},
+                                                                                                   ContainerUse::InitPrio, {})};
+
+    std::cout << "Fastest to reach container without prio" << std::endl;
+        fastestToReachContainerWithUndeclaredPrio->print();
+    */
+
+    inventory.setSegmentsPriority(startPoint,Priority::A);
+    inventory.printShelfSegments();
 
 std::cout << "hello world" << std::endl;
 

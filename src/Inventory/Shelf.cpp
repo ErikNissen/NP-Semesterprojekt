@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <iomanip>
 #include <vector>
+#include <optional>
 
 
 using namespace inventoryLib;
@@ -33,19 +34,7 @@ Shelf::Shelf(const unsigned int shelfNumber, const unsigned long long int rowsPe
     //!!! Muss eigenen Vector erstellen. Die Üblichen können nur Standard-Datentypen beinhalten!!! Alternativ einen Vector of Pointer (unique oder shared. Eher unique)
     // https://www.geeksforgeeks.org/program-to-create-custom-vector-class-in-c/
     // https://www.programiz.com/cpp-programming/vectors
-    matrix = {rowsPerShelf, std::vector<std::shared_ptr<ShelfContainer>>{segmentsPerRow, std::make_shared<ShelfContainer>(ShelfContainer{Priority::N})}};
-    //matrix = {rowsPerShelf, std::vector<int>(segmentsPerRow)};
-
-
-    for(unsigned long long i{0}; i < rowsPerShelf; i++)
-    {
-        for(unsigned int j{0}; j < segmentsPerRow; j++)
-        {
-            //!!! Folgende Zeile funktioniert so zum Initialisieren nicht!!!
-            //matrix[i][j] = std::make_shared({Priority::C}); // https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared
-            //matrix[i].push_back(std::make_shared<ShelfContainer>(ShelfContainer{Priority::C}));
-        }
-    }
+    matrix = {rowsPerShelf, std::vector<std::shared_ptr<ShelfContainer>>{segmentsPerRow, std::make_shared<ShelfContainer>(ShelfContainer{Priority::N})}}; // sets a matrix with a set size and Containers with default priority N which means no valid priority level
 
     // counts
     this->rowsPerShelf = rowsPerShelf;
@@ -104,7 +93,9 @@ unsigned int Shelf::getShelfNumber() const {
 }*/
 
 void Shelf::printShelfSegments() {
-    std::cout << "Shelf number: " << shelfNumber << std::endl;
+    std::cout << "------------------------------------------------------------" << std::endl;
+    std::cout << "--[Shelf number: " << shelfNumber << "]--------------------------------------" << std::endl;
+    std::cout << "------------------------------------------------------------" << std::endl;
 
     for(unsigned long long i{0}; i < rowsPerShelf; ++i)
     {
@@ -137,6 +128,7 @@ double Shelf::calculateTimeInSecondsFromWayInMeters(const double wayInMeters, co
     }
 }
 
+/*
 std::vector<SegmentDataMessage> Shelf::getListOfFreeContainers() { //!!! Hier noch später Reservierung für Warenprioritäten berücksichtigen!!!
     std::vector<SegmentDataMessage> listOfEmptyContainers;
     for(unsigned long long i{0} ; i < rowsPerShelf; i++)
@@ -151,9 +143,10 @@ std::vector<SegmentDataMessage> Shelf::getListOfFreeContainers() { //!!! Hier no
     }
     return listOfEmptyContainers;
 }
+*/
 
-
-std::vector<SegmentDataMessage> Shelf::getListOfContainersBasedOnUse(const ContainerUse& containerUse) { //!!! Hier noch später Reservierung für Warenprioritäten berücksichtigen!!!
+//!!! Hier TransferMessage als weiteres Argument einfügen und in entsprechenden Methoden von ShelfContainer, um direkt zu gucken, welcher Container aktuell zum Item und der Anzahl passt !!!
+std::vector<SegmentDataMessage> Shelf::getListOfContainersBasedOnUse(const ContainerUse& containerUse, const TransferMessage &transferMessage) { //!!! Hier noch später Reservierung für Warenprioritäten berücksichtigen!!!
     std::vector<SegmentDataMessage> listOfEmptyContainers;
     for(unsigned long long i{0} ; i < rowsPerShelf; i++)
     {
@@ -169,13 +162,13 @@ std::vector<SegmentDataMessage> Shelf::getListOfContainersBasedOnUse(const Conta
                     break;
 
                 case ContainerUse::Add:
-                    if(matrix.at(i).at(j).) {
+                    if(matrix.at(i).at(j)->containsPlaceForAmountToAddOfThisItem(transferMessage)) {
                         listOfEmptyContainers.emplace_back(shelfNumber, i, j);
                     }
                     break;
 
                 case ContainerUse::Get:
-                    if(matrix.at(i).at(j)->isEmpty()) {
+                    if(matrix.at(i).at(j)->containsAmountToGetOfThisItem(transferMessage)) {
                         listOfEmptyContainers.emplace_back(shelfNumber, i, j);
                     }
                     break;
@@ -237,26 +230,62 @@ double Shelf::calculateTimeNeededForVerticalWayInSeconds(const double wayInMeter
                                                  verticalAccelerationInMetersPerSquareSeconds);
 }
 
+/*
+    TimeSegmentMessage Shelf::getFastestToReachContainerBasedOnUse(const SegmentDataMessage &currentSegment,
+                                                                   const ContainerUse &containerUse, const TransferMessage &transferMessage) {
+        std::vector<SegmentDataMessage> listOfMatchingContainersForUse{getListOfContainersBasedOnUse(containerUse, transferMessage)};
 
-TimeSegmentMessage Shelf::getFastestToReachContainerBasedOnUse(const SegmentDataMessage &currentSegment,
-                                                               const ContainerUse &containerUse) {
-    std::vector<SegmentDataMessage> listOfFreeContainers{getListOfContainersBasedOnUse(containerUse)};
-    std::vector<TimeSegmentMessage> listOfTimeSegmentMessages{};
+        if(!listOfMatchingContainersForUse.empty()){
+            std::vector<TimeSegmentMessage> listOfTimeSegmentMessages{};
 
-    // add the needed way times to the segments and save new message in new list
-    for(SegmentDataMessage goalsSegmentDataMessage:listOfFreeContainers){
-        double timeNeededForWayInSeconds{calculateWayTimeToSegmentInSeconds(currentSegment, goalsSegmentDataMessage)};
-        listOfTimeSegmentMessages.emplace_back(timeNeededForWayInSeconds, goalsSegmentDataMessage);
+            // add the needed way times to the segments and save new message in new list
+            for(SegmentDataMessage goalsSegmentDataMessage:listOfMatchingContainersForUse){
+                double timeNeededForWayInSeconds{calculateWayTimeToSegmentInSeconds(currentSegment, goalsSegmentDataMessage)};
+                listOfTimeSegmentMessages.emplace_back(timeNeededForWayInSeconds, goalsSegmentDataMessage);
+            }
+
+            //if(!listOfTimeSegmentMessages.empty()){
+            TimeSegmentMessage segmentWithFastestWay;
+            segmentWithFastestWay = *std::min_element(listOfTimeSegmentMessages.begin(), listOfTimeSegmentMessages.end(),
+                                                  compareTwoElements);
+            return segmentWithFastestWay;
+        }
+        else
+        { //!!!Hier Exception werfen oder mit optional artbbeiten, falls TimeSegmentMessage* ein leer ist???
+            //!!! https://en.cppreference.com/w/cpp/utility/optional !!!
+            //!!! Wenn kein Container zur Verfügung steht, würde über den Weg versucht werden, ein Container einfach zu überschreiben, der dann 10000 Sekunden als Anlaufzeit versuchen würde zu nehmen
+            //!!! Wenn man hier aber eine Exception wirft, aber in einem anderen Regal noch Platz ist, wird das Programm fälschlicherweise abgebrochen !!!
+            return {TimeSegmentMessage(10000, currentSegment)}; //!!! Seeeehr schlechter Workaroud, um nicht nichts zurückzugeben!!!
+        }
     }
+    */
 
-    //if(!listOfTimeSegmentMessages.empty()){
-    TimeSegmentMessage segmentWithFastestWay;
-    segmentWithFastestWay = *std::min_element(listOfTimeSegmentMessages.begin(), listOfTimeSegmentMessages.end(),
-                                              compareTwoElements);
-    return segmentWithFastestWay; //!!!Hier Exception werfen, falls TimeSegmentMessage* ein leer ist???
+//!!! Berücksichtigt noch nicht, dass Eingabe und Ausgabe unterschiedliche Höhen und damit unterschiedliche Strecken haben!!!
+std::optional<TimeSegmentMessage> Shelf::getFastestToReachContainerBasedOnUse(const SegmentDataMessage &currentSegment,
+                                                               const ContainerUse &containerUse, const TransferMessage &transferMessage) {
+    std::vector<SegmentDataMessage> listOfMatchingContainersForUse{getListOfContainersBasedOnUse(containerUse, transferMessage)};
+
+    if(!listOfMatchingContainersForUse.empty()){
+        std::vector<TimeSegmentMessage> listOfTimeSegmentMessages{};
+
+        // add the needed way times to the segments and save new message in new list
+        for(SegmentDataMessage goalsSegmentDataMessage:listOfMatchingContainersForUse){
+            double timeNeededForWayInSeconds{calculateWayTimeToSegmentInSeconds(currentSegment, goalsSegmentDataMessage)};
+            listOfTimeSegmentMessages.emplace_back(timeNeededForWayInSeconds, goalsSegmentDataMessage);
+        }
+
+        TimeSegmentMessage segmentWithFastestWay;
+        segmentWithFastestWay = *std::min_element(listOfTimeSegmentMessages.begin(), listOfTimeSegmentMessages.end(),
+                                                  compareTwoElements);
+        return segmentWithFastestWay;
+    }
+    else{//!!! https://en.cppreference.com/w/cpp/utility/optional !!! // if no value is returned, optional contains an empty value which tranlates to a false bool value
+    return {};
+    }
 }
 
 
+/*
 TimeSegmentMessage Shelf::getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment) {
     std::vector<SegmentDataMessage> listOfFreeContainers{getListOfFreeContainers()};
     std::vector<TimeSegmentMessage> listOfTimeSegmentMessages{};
@@ -273,6 +302,7 @@ TimeSegmentMessage Shelf::getFastestToReachEmptyContainer(const SegmentDataMessa
                                                   compareTwoElements);
         return segmentWithFastestWay; //!!!Hier Exception werfen, falls TimeSegmentMessage* ein leer ist???
  }
+ */
 
 bool Shelf::compareTwoElements(const TimeSegmentMessage& leftElement, const TimeSegmentMessage& rightElement){
     return (leftElement.getNeededTimeWithoutWaitingInQueueInSeconds() < rightElement.getNeededTimeWithoutWaitingInQueueInSeconds());
@@ -281,7 +311,7 @@ bool Shelf::compareTwoElements(const TimeSegmentMessage& leftElement, const Time
 
 
 
-
+/*
 //!!! Performances überprüfen und nur diese Methode oder die darüber nutzen!
 TimeSegmentMessage Shelf::getFastestToReachEmptyContainerAlt(const SegmentDataMessage& currentSegment) {
     std::vector<SegmentDataMessage> listOfFreeContainers{getListOfFreeContainers()};
@@ -300,15 +330,19 @@ TimeSegmentMessage Shelf::getFastestToReachEmptyContainerAlt(const SegmentDataMe
     }
     return *segmentWithFastestWay; //!!! Fehler werfen oder null_ptr zurückgeben und an aufrufenden Stellen auf null_ptr abfragen, falls kein Element gefunden wird und die Liste ergo leer ist
 }
+ */
 
+//!!! Setzt die Priorität irgendwie für die komplette Matrix auf einmal !!!
 void Shelf::setSegmentsPriority(const unsigned long long int row, const unsigned long long int column, const Priority& priority) {
     matrix.at(row).at(column)->setPriority(priority); // Zuweisung wird irgendwie nicht umgesetzt, obwohl debugging bis hier kommt!
+    //matrix[row][column]->setPriority(priority); // Zuweisung wird irgendwie nicht umgesetzt, obwohl debugging bis hier kommt!
 }
 
+/*
 std::vector<SegmentDataMessage> Shelf::getListOfFreeContainersWithoutPriority() {
 
     return std::vector<SegmentDataMessage>();
-}
+}*/
 
 
 

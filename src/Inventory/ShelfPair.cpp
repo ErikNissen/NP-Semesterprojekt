@@ -68,11 +68,11 @@ void ShelfPair::setSegmentsPriority(const unsigned int shelfNumber, const unsign
 }
 
 // methods
-
-TimeSegmentMessage ShelfPair::getFastestToReachContainerBasedOnUse(const SegmentDataMessage &currentSegment,
-                                                                   const ContainerUse &containerUse) {
-    TimeSegmentMessage timeSegmentMessageOfFastestWayToSegmentShelfLeft{shelfLeft.getFastestToReachEmptyContainer(currentSegment, containerUse)};
-    TimeSegmentMessage timeSegmentMessageOfFastestWayToSegmentShelfRight{shelfRight.getFastestToReachEmptyContainer(currentSegment, containerUse)};
+/*
+TimeSegmentMessage ShelfPair::getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment,
+                                                                   const ContainerUse& containerUse, const TransferMessage& transferMessage ) {
+    TimeSegmentMessage timeSegmentMessageOfFastestWayToSegmentShelfLeft{shelfLeft.getFastestToReachContainerBasedOnUse(currentSegment, containerUse, transferMessage)};
+    TimeSegmentMessage timeSegmentMessageOfFastestWayToSegmentShelfRight{shelfRight.getFastestToReachContainerBasedOnUse(currentSegment, containerUse, transferMessage)};
 
     if(timeSegmentMessageOfFastestWayToSegmentShelfLeft.getNeededTimeWithoutWaitingInQueueInSeconds() <= timeSegmentMessageOfFastestWayToSegmentShelfRight.getNeededTimeWithoutWaitingInQueueInSeconds()){
         return timeSegmentMessageOfFastestWayToSegmentShelfLeft;
@@ -81,8 +81,35 @@ TimeSegmentMessage ShelfPair::getFastestToReachContainerBasedOnUse(const Segment
         return timeSegmentMessageOfFastestWayToSegmentShelfRight;
     }
 }
+*/
+
+//!!! Berücksichtigt noch nicht, dass Eingabe und Ausgabe unterschiedliche Höhen und damit unterschiedliche Strecken haben!!!
+std::optional<TimeSegmentMessage> ShelfPair::getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment,
+                                                                   const ContainerUse& containerUse, const TransferMessage& transferMessage ) {
+    auto timeSegmentMessageOfFastestWayToSegmentShelfLeft{shelfLeft.getFastestToReachContainerBasedOnUse(currentSegment, containerUse, transferMessage)};
+    auto timeSegmentMessageOfFastestWayToSegmentShelfRight{shelfRight.getFastestToReachContainerBasedOnUse(currentSegment, containerUse, transferMessage)};
+
+    if(timeSegmentMessageOfFastestWayToSegmentShelfLeft && timeSegmentMessageOfFastestWayToSegmentShelfRight) {
+        if (timeSegmentMessageOfFastestWayToSegmentShelfLeft->getNeededTimeWithoutWaitingInQueueInSeconds() <=
+            timeSegmentMessageOfFastestWayToSegmentShelfRight->getNeededTimeWithoutWaitingInQueueInSeconds()) {
+            return timeSegmentMessageOfFastestWayToSegmentShelfLeft;
+        } else {
+            return timeSegmentMessageOfFastestWayToSegmentShelfRight;
+        }
+    }
+    else if(timeSegmentMessageOfFastestWayToSegmentShelfLeft){
+        return (timeSegmentMessageOfFastestWayToSegmentShelfLeft);
+    }
+    else if(timeSegmentMessageOfFastestWayToSegmentShelfRight){
+        return (timeSegmentMessageOfFastestWayToSegmentShelfRight);
+    }
+    else {
+        return {};
+    }
+}
 
 
+/*
 //!!! Methode und Zusammenhängende auf für Prioritäten reservierte Bereiche anpassen und das aktuelle Segment hier auslesen (Allerdings muss für die Einlagerung die Bedienhilfe am Ausgangspunkt sein. Dafür müssten dann auch die Dauern für Rückfahrten der Bedienhilfen vom vorherigen (Ziel)Segment bestimmt werden. Die Strecke des vorher wartenden Containers wird also immer doppelt gefahren. Dazu kommt noch, dass ggf. auf gleichem Weg noch eine Auslieferung getätigt wird.) !!!
 TimeSegmentMessage ShelfPair::getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment) {
     TimeSegmentMessage timeSegmentMessageOfFastestWayToSegmentShelfLeft{shelfLeft.getFastestToReachEmptyContainer(currentSegment)};
@@ -117,6 +144,7 @@ TimeSegmentMessage ShelfPair::getFastestToReachEmptyContainer(const SegmentDataM
         return timeSegmentMessageOfFastestWayToSegmentShelfRight;
     }
 }
+ */
 
 void ShelfPair::printShelfSegments() {
     shelfLeft.printShelfSegments();

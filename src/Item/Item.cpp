@@ -44,21 +44,23 @@ void Item::print() {
 }
 
 // https://stackoverflow.com/questions/66488850/how-to-print-the-enum-value-from-its-index
+// !!! Methode am besten an die Klasse Priority koppelt (direkt oder als friend, falls das geht.)
 void Item::printPriority() {
     switch (this->priority) {
         case Priority::A:
-            std::cout << "Priority: A" << std::endl;
+            std::cout << "Item-Priority: A" << std::endl;
             break;
         case Priority::B:
-            std::cout << "Priority: B" << std::endl;
+            std::cout << "Item-Priority: B" << std::endl;
             break;
-
         case Priority::C:
-            std::cout << "Priority: C" << std::endl;
+            std::cout << "Item-Priority: C" << std::endl;
             break;
-
+        case Priority::N:
+            std::cout << "Item-Priority not itialized" << std::endl;
+            break;
         default:
-            std::cout << "Priority not available" << std::endl;
+            std::cout << "Item-Priority not available" << std::endl;
             //code to be executed, if the expression doesn't matched to  any constant_1(case 1)
             break;
     }
