@@ -12,38 +12,39 @@
 class PersistentFileManagement {
 public:
 	// Constructor
-	/// Creates a new PersistentFileManagement object
-	/// \param path The path to the file (optional)
-	explicit PersistentFileManagement(const std::string& name);
+	explicit PersistentFileManagement(std::string name);
 
 	PersistentFileManagement();
 
 	// Destructor
 	~PersistentFileManagement();
 
-	void save(const std::string& name);
+	void save(std::string name);
+
 	void save();
-	nlohmann::json load(const std::string& path);
-	nlohmann::json get(std::string
-	key);
 
-	template <typename T> void add(const std::string& key, T& value);
+	nlohmann::json load(std::string path);
 
-	void remove(const std::string& key);
+	nlohmann::json get(std::string key);
 
-	template <typename T> void update(const std::string& key, T& value);
+	void remove(std::string key);
 
-	void create(const std::string& name);
+	void create(std::string name);
 
 	void create();
 
-	template<typename T> void search(T search);
+	// Template functions
+	template<typename S> void search(S search);
+
+	template <typename U> void update(std::string key, U value);
+
+	template <typename A> void add(std::string key, A value);
 
 	//Getter
 	nlohmann::json getData();
 
 	//Setter
-	void setName(const std::string_view &name);
+	void setName(std::string name);
 
 private:
 	std::string name;
