@@ -1,0 +1,8 @@
+//
+// Created by KurayamiShadow on 06.12.2022.
+//
+
+#ifndef NP_SEMESTERPROJEKT_TESTHALL_H
+#define NP_SEMESTERPROJEKT_TESTHALL_H
+
+#endif //NP_SEMESTERPROJEKT_TESTHALL_H
