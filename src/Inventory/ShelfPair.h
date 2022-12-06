@@ -49,41 +49,30 @@ namespace inventoryLib {
 
         // getters and setters
     public:
+        Shelf& getShelfByShelfNumber(int shelfNumber);
         [[nodiscard]] unsigned int getShelfPairNumber() const;
         [[nodiscard]] double getDistanceBetweenShelvesOfPair() const;
         double getShelfDepthInMeters();
-
-        //!!! For Debugging !!!
-        //void setSegment(unsigned int shelfNumber, unsigned long long int row, unsigned long long int column, int value);
 
         void setSegmentsPriority(unsigned int shelfNumber, unsigned long long int row,
                                  unsigned long long int column, const Priority &priority);
 
         // methods
     public:
-        // getFastestToReachEmptyContainer(double horizontalMaxVelocityInMetersPerSecond, double verticalMaxVelocityInMetersPerSecond, double )
-        // getNextContainerOfProductKindWithSpace() // Als Rückgabewert muss die Regalbezeichnung mit übergeben werden. Evtl. Tuple oder Set zurückgeben
-        // getClosestContainerToAdd(ItemKind item, amount); //based on getNextContainerOfProductKindWithSpace(ItemKind item) and in case of no matching Container: getFastestToReachEmptyContainer()
-        // getClosestContainerToRemove(ItemKind item, amount); //based on getNextContainerOfProductKindWithSpace(ItemKind item)
-
+        //!!! Für folgende Methoden nochmal überprüfen, wie Zerstückelung stattfindet, wenn nicht ganze Ladung in einen Container passt
+        //!!! Für folgende Methoden aktuelle Position der Bedienhilfen berücksichtigen, falls diese gerade frei sind. Dies aber eher mit Überladung der Methode machen, weil die generelle Regalzeilung ja schon vor dem Warten an der Warteschlange gemacht wird.
+        //!!! -> Wenn die Berechnungen soweit implementiert sind, dass auch die Wartezeiten in der Schlange im Voraus bekannt sind, Methoden noch einmal ergänzen !!!
+        void reserveToAdd(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
+        void reserveToGet(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
+        void addToAmount(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
+        void getFromAmount(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
 
         //!!! Vernünftige Handhabe einführen, wenn das Regalpaar keinen freien Container hat, ohne dass es den Aufruf von Inventory insgesamt blockiert, weil ja ein anderes Regalpaar einen passenden Platz haben kann!!!
         //TimeSegmentMessage getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
         //TimeSegmentMessage getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse, const TransferMessage& transferMessage); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
         std::optional<TimeSegmentMessage> getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse, const TransferMessage& transferMessage); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
 
-
-        // getWayToNextMatchingContainer()
-        // getNeededTimeForWayToNextMatchingContainer()
-
-        //!!! Später auf ContainerInhalte abändern, sobald pro Segment ein Container vorliegt!!!
-        void printShelfSegments();
-
-        //!!! Später für Initialisierung mit leeren Containern drei verschiedener Prioritäten abändern!!!
-        void fillBasedOnFastestToReachSegments(int value);
-
-        Shelf& getShelfByShelfNumber(int shelfNumber);
-
+        void printAllShelfSegments();
     };
 }
 

@@ -100,51 +100,48 @@ namespace inventoryLib {
                   double containerDepthInMeters);
 
         // getters and setters
+        //!!! Für Debugging public gemacht -> Später private machen !!!
+    public:
         ShelfPair& getShelfPairByShelfNumber(unsigned int shelfNumber);
         static unsigned int getShelfPairNumberByShelfNumber(unsigned int shelfNumber);
 
-        //void setSegment(unsigned int shelfNumber, unsigned long long int row, unsigned long long int column, int value);
         void setSegmentsPriority(const SegmentDataMessage &segmentDataMessage, const Priority &priority);
         void setSegmentsPriority(unsigned int shelfNumber, unsigned long long int row, unsigned long long int column, const Priority& priority);
 
 
         // methods
-        //!!! Dafür benötigte Zeiten für Fahrt zwischen den Regalpaaren zu den benötigten Zeiten innerhalb der Regalpaare addieren und dann den Weg mit kürzester benötigter Gesamtzeit wählen!!! Dabei Regaltiefen berücksichtigen!
-        // getFastestToReachEmptyContainer() //!!! Rückgabewert: set/Tuple benötigte Zeit und Daten zum Segment (Regalpaar, Regal-Nummer, Segment-Nummer). Mit den Daten zum Segment übernimmt eine separate Methode den Weg Einlagerung
-        // getNextContainerOfProductKindWithSpace()
-        // getWayToNextMatchingContainer()
-        // getNeededTimeForWayToNextMatchingContainer() // !!! Dafür Geschwindigkeiten und Beschleunigungen der Bediengeräte berücksichtigen !!!
-
     private:
 
        //void initiateContainerPriorities();
-
         void setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages();
-
         void initiateContainerPriorities(const unsigned int amountOfSegmentsReservedForPrio, const Priority &priority);
-    public:
 
-        //addToInventory(ItemKind item);
-
-        //!!! Methode und Zusammenhängende auf für Prioritäten reservierte Bereiche anpassen und das aktuelle Segment hier auslesen (Allerdings muss für die Einlagerung die Bedienhilfe am Ausgangspunkt sein. Dafür müssten dann auch die Dauern für Rückfahrten der Bedienhilfen vom vorherigen (Ziel)Segment bestimmt werden. Die Strecke des vorher wartenden Containers wird also immer doppelt gefahren. Dazu kommt noch, dass ggf. auf gleichem Weg noch eine Auslieferung getätigt wird.) !!!
+        //!!! Aktuellen Punkt der Bedienhilfen berücksichtigen (Allerdings muss für die Einlagerung die Bedienhilfe am Ausgangspunkt sein. Dafür müssten dann auch die Dauern für Rückfahrten der Bedienhilfen vom vorherigen (Ziel)Segment bestimmt werden. Die Strecke des vorher wartenden Containers wird also immer doppelt gefahren. Dazu kommt noch, dass ggf. auf gleichem Weg noch eine Auslieferung getätigt wird.) !!!
         //!!! Wo wird das aktuelle Segment gespeichert und wo ist dessen Abfrage relevant ??? !!!
         // The method gets the TimeSegmentMessage which contain the Segments coordinates and the time needed for the way (waiting time in queues excluded)
-        //TimeSegmentMessage getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
-
-        //TimeSegmentMessage getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse, const TransferMessage& transferMessage); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
+        std::optional<TimeSegmentMessage> getFastestToReachContainerWithoutSetPriority(const SegmentDataMessage& currentSegment); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
+        std::optional<TimeSegmentMessage> getFastestToReachContainerForItemInput(const SegmentDataMessage& currentSegment, const TransferMessage& transferMessage); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
+        std::optional<TimeSegmentMessage> getFastestToReachContainerForItemOutput(const SegmentDataMessage& currentSegment, const TransferMessage& transferMessage); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
 
         std::optional<TimeSegmentMessage> getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse, const TransferMessage& transferMessage); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
 
+    public:
+        std::optional<TimeSegmentMessage> reserveContainerToGetFromInventory(const SegmentDataMessage& currentSegment, const TransferMessage& transferMessage);
+        std::optional<TimeSegmentMessage> reserveContainerToAddToInventory(const SegmentDataMessage& currentSegment, const TransferMessage& transferMessage);
 
-        //!!! For Debugging!!!
+        //!!! Für folgende Methoden nochmal überprüfen, wie Zerstückelung stattfindet, wenn nicht ganze Ladung in einen Container passt
+        //!!! Für folgende Methoden aktuelle Position der Bedienhilfen berücksichtigen, falls diese gerade frei sind. Dies aber eher mit Überladung der Methode machen, weil die generelle Regalzeilung ja schon vor dem Warten an der Warteschlange gemacht wird.
+        //!!! -> Wenn die Berechnungen soweit implementiert sind, dass auch die Wartezeiten in der Schlange im Voraus bekannt sind, Methoden noch einmal ergänzen !!!
+        void reserveToAdd(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
+        void reserveToGet(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
+        void addToAmount(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
+        void getFromAmount(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
+
+        //!!! Die Methode noch so ausbessern, dass dem ConveyorBelt eine Liste der jeweils besten Plätze pro Regalpaar übergeben werden kann (, damit dieser anhand der Warteschlangen nochmal berechnen kann, welches Segment insgesamt inklusive der Warteschlangen zum Zeitpunkt des ankommens am optimalsten ist)!!!
         //std::vector<TimeSegmentMessage> getListOfFastestToReachEmptyContainersWithoutConveyorBeltForAllShelfPairs(const SegmentDataMessage& currentSegment);
-
-        //void printListOfFastestToReachEmptyContainersWithoutConveyorBeltForAllShelfPairs(const SegmentDataMessage& currentSegment);
 
         void printShelfSegments();
 
-        //!!! Später für Füllen der Regale mit Containern bestimmter Prioritäten nutzen!!!
-        void fillBasedOnFastestToReachSegments(int value);
     };
 }
 

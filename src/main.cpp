@@ -67,7 +67,7 @@ int main (int argc, char *argv[]) {
     //inventory.printListOfFastestToReachEmptyContainersWithoutConveyorBeltForAllShelfPairs(startPoint);
 
 
-    //inventory.printShelfSegments();
+    //inventory.printAllShelfSegments();
 
     /*
     auto timeSegmentMessageToFastestSegment{inventory.getFastestToReachEmptyContainer({1,0,0})};
@@ -85,7 +85,7 @@ int main (int argc, char *argv[]) {
     }
     */
 
-//    inventory.printShelfSegments();
+//    inventory.printAllShelfSegments();
 
 
     //inventory.setSegmentsPriority({1,0,0},Priority::A);
@@ -108,7 +108,7 @@ std::cout << "hello world" << std::endl;
     std::cout << "TESTOUTPUT VON DIREKTER SHELFPAIR-ANSTEUERUNG!" << std::endl;
     inventory.setSegment(1,0,0,10);
 
-    inventory.printShelfSegments();
+    inventory.printAllShelfSegments();
     */
 
     /*
@@ -116,7 +116,7 @@ std::cout << "hello world" << std::endl;
     inventory.shelfPairs[0].setSegment(1,0,0,10);
 
     std::cout << "FOR DEBUGGING SEGMENTE von shelf pair 1:!" << std::endl;
-    inventory.shelfPairs[0].printShelfSegments();
+    inventory.shelfPairs[0].printAllShelfSegments();
     */
 
 
@@ -144,7 +144,7 @@ std::cout << "hello world" << std::endl;
     fastestToReachEmptyContainer.print();
 
     inventory.setSegment(1,0,1,10);
-    inventory.printShelfSegments();
+    inventory.printAllShelfSegments();
     fastestToReachEmptyContainer = inventory.getFastestToReachEmptyContainer(startPoint);
     fastestToReachEmptyContainer.print();
 */

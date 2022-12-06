@@ -14,8 +14,6 @@
 #define NUPPROJECT_SHELF_H
 
 using namespace messagesLib;
-//using namespace Inventory;
-//using namespace Item;
 
 namespace inventoryLib {
     //!!! Im Fall von Pointer-Gebrauch diesen zu modernerem Pointer umändern!!!
@@ -104,8 +102,6 @@ namespace inventoryLib {
         [[nodiscard]] unsigned int getShelfNumber() const;
         void setSegmentsPriority(const unsigned long long int row, const unsigned long long int column, const Priority& priority);
 
-
-
         // methods
     private:
         // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
@@ -114,13 +110,10 @@ namespace inventoryLib {
         //double Shelf::calculateTimeInSecondsFromWayInMeters(const double wayInMetersHorizonzal, double wayInMetersVertical);
         //!!! Bezug der Parameter evtl. klassenintern gestalten, anstatt Parameter zu verwenden. Evtl. auch extra Klasse als Service erstellen, die sich um reale Werte und Berechnungen von Zeiten und Strecken kümmert, so dass die einzelnen Regale nur eine Liste an möglichen Positionen zurückgeben ergänzt um Infos zur Regalnummer/Ansteuerung !!!
         double calculateTimeInSecondsFromWayInMeters(double wayInMeters, double maxVelocityInMetersPerSecond,
-                                                    double accelerationInMetersPerSquareSeconds);
+                                                     double accelerationInMetersPerSquareSeconds);
 
         double calculateTimeNeededForHorizontalWayInSeconds(double wayInMeters);
         double calculateTimeNeededForVerticalWayInSeconds(double wayInMeters);
-
-
-
 
         //!!! Weg anhand des aktuellen Ortes der Bedienhilfe ermitteln, indem dieser Wert von ShelfPair übergeben wird
         [[nodiscard]] double calculateHorizontalWayFromArrayIndicesDifference(int arrayIndicesDifference) const;
@@ -132,31 +125,22 @@ namespace inventoryLib {
         bool static compareTwoElements(const TimeSegmentMessage& leftElement, const TimeSegmentMessage& rightElement);
 
     public:
-        //!!! Später für Initialisierung mit leeren Containern drei verschiedener Prioritäten abändern!!!
-        //void fillBasedOnFastestToReachSegments(int value);
-
         //!!! Für folgende Methoden nochmal überprüfen, wie Zerstückelung stattfindet, wenn nicht ganze Ladung in einen Container passt
         //!!! Für folgende Methoden aktuelle Position der Bedienhilfen berücksichtigen, falls diese gerade frei sind. Dies aber eher mit Überladung der Methode machen, weil die generelle Regalzeilung ja schon vor dem Warten an der Warteschlange gemacht wird.
         //!!! -> Wenn die Berechnungen soweit implementiert sind, dass auch die Wartezeiten in der Schlange im Voraus bekannt sind, Methoden noch einmal ergänzen !!!
-        // getClosestContainerToAdd(ItemKind item, amount); //based on getNextContainerOfProductKindWithSpace(ItemKind item) and in case of no matching Container: getFastestToReachEmptyContainer()
-        // getClosestContainerToRemove(ItemKind item, amount); //based on getNextContainerOfProductKindWithSpace(ItemKind item)
-
-        // addToClosestContainer(ItemKind item);
-        void printShelfSegments();
+        void reserveToAdd(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
+        void reserveToGet(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
+        void addToAmount(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
+        void getFromAmount(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
 
         //!!! Vernünftige Handhabe einführen, wenn das Regal keinen freien Container hat, ohne dass es den Aufruf von ShelfPair insgesamt blockiert, weil ja ein anderes Regal einen passenden Platz haben kann!!!
         std::vector<SegmentDataMessage> getListOfContainersBasedOnUse(const ContainerUse &containerUse, const TransferMessage &transferMessage);
         std::optional<TimeSegmentMessage> getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse, const TransferMessage &transferMessage);
-
-        //TimeSegmentMessage getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse, const TransferMessage &transferMessage);
-        //TimeSegmentMessage getFastestToReachEmptyContainer(const SegmentDataMessage& currentSegment);
+        //!!! Folgende Methode noch aufheben, um ggf. die darüber nochmal effizienter zu gestalten !!!
         //TimeSegmentMessage getFastestToReachEmptyContainerAlt(const SegmentDataMessage& currentSegment);
 
-        // getNextContainerOfProductKindWithSpace(const Item& item); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
-        void setSegmentPrioritiesBasedOnFastestToReachSegments();
-
-
-};
+        void printShelfSegments();
+    };
 }
 
 #endif //NUPPROJECT_SHELF_H
