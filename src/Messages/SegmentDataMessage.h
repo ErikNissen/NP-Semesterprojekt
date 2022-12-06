@@ -8,7 +8,12 @@
 #include <iostream>
 
 namespace messagesLib {
+    /*
+     * The class SegmentDataMessage represents a message containing the address of a segment (which contains a container of items) of a shelf in the inventory.
+     * The class is used separately. The class is also used as a part of the class TimeSegmentMessage
+     */
     class SegmentDataMessage {
+
         // attributes
     private:
         unsigned int shelfNumber;
@@ -18,22 +23,18 @@ namespace messagesLib {
         // constructors
     public:
         SegmentDataMessage() = default;
-
         SegmentDataMessage(unsigned int shelfNumber, unsigned long long int row, unsigned long long int column);
 
 
         // getters and setters
     public:
         [[nodiscard]] unsigned long long int getRow() const;
-
         [[nodiscard]] unsigned long long int getColumn() const;
-
         [[nodiscard]]unsigned int getShelfNumber() const;
 
         // methods
     public:
         void print() const;
-
         [[nodiscard]] std::string toString() const;
     };
 }

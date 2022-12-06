@@ -19,8 +19,13 @@ using namespace messagesLib;
 
 namespace inventoryLib {
     //!!! Im Fall von Pointer-Gebrauch diesen zu modernerem Pointer umändern!!!
-    //!!! Funktioniert noch nicht mit Waren bzw. Containern mit Waren, fügt noch nichts hinzu, holt noch nichts und reserviert noch keine Bereiche anhand der Prioriäten !!!
-class Shelf {
+    /*
+    * The class Shelf is contained by the class ShelfPair. It represents one shelf of a pair.
+    * The class provides methods to store or restore items. For reservations there are also methods to reserve for adding to and to reserve for getting from the inventory.
+    * The class uses methods to calculate the fastest possible ways to shelf segments for storation processes.
+    * The storage positions are based on three different levels of priority of items.
+    */
+    class Shelf {
 
         // attributes
     private:

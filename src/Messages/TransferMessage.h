@@ -9,6 +9,11 @@
 
 namespace messagesLib {
 
+    /*
+     * The class TransferMessage represents a message for a transfer for input or output.
+     * It contains an item (Item) and an amount to transfer.
+     * It is used by methods to book, add and get in the inventory (Inventory).
+     */
     class TransferMessage {
         // attributes
     private:

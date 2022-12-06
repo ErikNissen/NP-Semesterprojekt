@@ -11,6 +11,11 @@
 namespace messagesLib {
 
     //!!!Bezeichner überdenken. Gemeint ist eine Nachricht, die Daten zu einem Ziel (bestimmtes Segment in bestimmter Spalte in bestimmter Reihe eines bestimmten Regals (eines bestimmten Regalpaares) mit benötigter sequentieller Zeit/benötigten Zeiten dahin beinhaltet!
+    /*
+     * The class TimeSegmentMessage represents a message containing the address and the needed time to get there from a certain point.
+     * The class contains the class SegmentDataMessage which represents a message containing the address of a segment (which contains a container of items) of a shelf in the inventory.
+     * The class TimeSegmentMessage is used for getting the fastest to reach segment in the inventory in reservation processes, input and output.
+     */
     class TimeSegmentMessage {
         // attributes
     private:

@@ -16,7 +16,7 @@ unsigned int TransferMessage::getAmountToTransfer() const {
 }
 
 // constructors
-
+//!!! Den Konstruktor zu einem klassischen Konstruktor umformen, oder die anderen an diese Form anpassen !!!
 TransferMessage::TransferMessage(const itemLib::Item &item, unsigned int amountToTransfer) : item(item),
                                                                                              amountToTransfer(
                                                                                                      amountToTransfer) {}

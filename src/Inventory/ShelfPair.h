@@ -12,6 +12,12 @@
 #include <iostream>
 
 namespace inventoryLib {
+    /*
+    * The class ShelfPair is contained by the class Inventory. It represents one shelf pair of the inventory containing two shelves per pair.
+    * The class provides methods to store or restore items. For reservations there are also methods to reserve for adding to and to reserve for getting from the inventory.
+    * The class uses methods to calculate the fastest possible ways to shelf segments for storation processes.
+    * The storage positions are based on three different levels of priority of items.
+    */
     class ShelfPair {
 
         // attributes

@@ -18,6 +18,11 @@ using namespace itemLib;
 using namespace messagesLib;
 
 namespace inventoryLib {
+    /*
+    * The class ShelfContainer is contained by the class Shelf. It represents one container in a segment of the shelf containing an amount of items (Item).
+    * The class provides methods to store or restore items. For reservations there are also methods to reserve for adding to and to reserve for getting from the inventory.
+    * The items () can only be added to containers with matching priority levels (Priority) if the container has been empty until now or are already containing this item and has space left.
+    */
     class ShelfContainer {
 // attributes
         //!!! Werte von Items am besten direkt über Methoden beziehen, anstatt sie einzeln aus dem Item als Attribute zu speichern

@@ -10,12 +10,11 @@
 
 namespace inventoryLib {
     /*
-     * The class inventory represents the whole inventory containing several shelfpairs which contain two shelves per pair.
-     * The class provides methods to store or restore items.
+     * The class Inventory represents the whole inventory containing several shelfpairs (ShelfPair) which contain two shelves (Shelf) per pair. Each shelf has rows with coloumns as segments containting containers (ShelfContainer) for containing items (Item)
+     * The class provides methods to store or restore items. For reservations there are also methods to reserve for adding to and to reserve for getting from the inventory.
      * The class uses methods to calculate the fastest possible ways to shelf segments for storation processes.
      * The storage positions are based on three different levels of priority of items.
      */
-
     //!!! Segment und Container nicht synonym verwenden. Für Methoden Entscheidung für eins der beiden Treffen und Bezeichner überarbeiten !!!
     class Inventory {
 
