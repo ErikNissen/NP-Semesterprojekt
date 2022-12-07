@@ -188,7 +188,7 @@ void ShelfContainer::printPriority() {
             std::cout << "Container-Priority: C" << std::endl;
             break;
         case Priority::N:
-            std::cout << "Container-Priority not itialized" << std::endl;
+            std::cout << "Container-Priority not initialized" << std::endl;
             break;
         default:
             std::cout << "Container-Priority not available" << std::endl;

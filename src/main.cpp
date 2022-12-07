@@ -30,10 +30,10 @@ int main (int argc, char *argv[]) {
     conveyorRetrieve.transportContainer(transfer2, timer);
     conveyorRetrieve.transportContainer(transfer1, timer);
     conveyorRetrieve.transportContainer(transfer1, timer);
-/*
+
 
     // -------------------------------------------------------------------------------
-
+*/
     //!!! Für Debugging auf 5 * 5 Matrizen verändert. Projekt-Info ist 54*90
     auto inventory{inventoryLib::Inventory(8, 90, 2, 2.6, 10, 5, 5,
                              0.8, 0.5, 3.5, 0.4,
@@ -41,6 +41,10 @@ int main (int argc, char *argv[]) {
                              1.5, 0.0, 0.1,
                              0.45, 0.45, 0.65, 0.4, 0.4,
                              0.6)};
+
+    inventory.printShelfSegments();
+
+    inventory.setSegmentsPriority({1,0,0}, Priority::A);
 
     inventory.printShelfSegments();
 
@@ -95,12 +99,7 @@ int main (int argc, char *argv[]) {
     */
 
     /*
-    std::cout << "TESTOUTPUT VON DIREKTER SHELFPAIR-ANSTEUERUNG!" << std::endl;
-    inventory.shelfPairs[0].setSegment(1,0,0,10);
 
-    std::cout << "FOR DEBUGGING SEGMENTE von shelf pair 1:!" << std::endl;
-    inventory.shelfPairs[0].printShelfSegments();
-    */
 
 
     /*
@@ -111,41 +110,12 @@ int main (int argc, char *argv[]) {
     std::cout << fastestToReachEmptyContainer.getColumn() << std::endl;
     std::cout << "time needed: " << fastestToReachEmptyContainer.getNeededTimeWithoutWaitingInQueueInSeconds() << std::endl;
 
-    fastestToReachEmptyContainer.print();
-*/
-
-
-    //fastestToReachEmptyContainer.print();
-
-/*
-    auto fastestToReachEmptyContainer{inventory.getFastestToReachEmptyContainer(startPoint)};
-    fastestToReachEmptyContainer.print();
-
-    inventory.setSegment(1,0,0,10);
-    inventory.printShelfSegments();
-    fastestToReachEmptyContainer = inventory.getFastestToReachEmptyContainer(startPoint);
-    fastestToReachEmptyContainer.print();
-
-    inventory.setSegment(1,0,1,10);
-    inventory.printShelfSegments();
-    fastestToReachEmptyContainer = inventory.getFastestToReachEmptyContainer(startPoint);
-    fastestToReachEmptyContainer.print();
 */
 
 
 
-
 /*
-    getFastestToReachEmptyContainer(startPoint).print();
-
-    matrix[0][0]=10;
-
-    getFastestToReachEmptyContainer(startPoint).print();
-
-    matrix[1][0]=10;
-    getFastestToReachEmptyContainer(startPoint).print();
-    */
-
+/*
 
 // !!! Mehrere Ausgaben hinterhereinanfer der jeweils gleichen Methode funktionieren. Diese Aufrufe funktionieren auch einzeln, aber nicht Nacheinander. Irgendein Problem mit Binding oder Freigeben der wenigen Pointer??? Oder Static-Methoden !!!
 
@@ -165,5 +135,6 @@ int main (int argc, char *argv[]) {
     inventory.getFastestToReachEmptyContainer(startPoint).print();
     inventory.getFastestToReachEmptyContainer(startPoint).print();
     */
+
     return 0;
 }

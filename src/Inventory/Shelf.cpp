@@ -34,7 +34,13 @@ Shelf::Shelf(const unsigned int shelfNumber, const unsigned long long int rowsPe
     //!!! Muss eigenen Vector erstellen. Die Üblichen können nur Standard-Datentypen beinhalten!!! Alternativ einen Vector of Pointer (unique oder shared. Eher unique)
     // https://www.geeksforgeeks.org/program-to-create-custom-vector-class-in-c/
     // https://www.programiz.com/cpp-programming/vectors
-    matrix = {rowsPerShelf, std::vector<std::shared_ptr<ShelfContainer>>{segmentsPerRow, std::make_shared<ShelfContainer>(ShelfContainer{Priority::N})}}; // sets a matrix with a set size and Containers with default priority N which means no valid priority level
+    matrix = {rowsPerShelf, std::vector<std::shared_ptr<ShelfContainer>>{segmentsPerRow}}; // sets a matrix with a set size and Containers with default priority N which means no valid priority level
+
+    for (auto row = 0; row < rowsPerShelf; row++) {
+        for (auto container = 0; container < segmentsPerRow; container++) {
+            matrix.at(row).at(container) = std::make_shared<ShelfContainer>(ShelfContainer{Priority::N});
+        }
+    }
 
     // counts
     this->rowsPerShelf = rowsPerShelf;
