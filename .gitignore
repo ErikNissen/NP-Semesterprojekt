@@ -94,6 +94,8 @@ _deps
 
 # ninja
 build.ninja
+.ninja_deps
+.ninja_log
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
