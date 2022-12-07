@@ -9,16 +9,15 @@
 
 
 #include <queue>
-#include "Container.h"
-#include "Timer.h"
+#include "../Inventory/Container.h"
 #include "windows.h"
 
 class TransferPoint {
 public:
     explicit TransferPoint(float _distanceToPackaging);
     std::queue<Container> containers;
-    void addContainer(Container&, Timer&);
-    Container& removeContainer(Timer&);
+    void addContainer(Container&);
+    Container& removeContainer();
     float getDistance() const;
 private:
     float length = 2.3;

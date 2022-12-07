@@ -11,7 +11,7 @@
 class ConveyorBeltStore : public ConveyorBelt {
 public:
     ConveyorBeltStore();
-    void transportContainer(Container&, TransferPoint&, Timer&);
+    void transportContainer(Container&, TransferPoint&);
 };
 
 

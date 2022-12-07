@@ -1,40 +1,37 @@
 #include "main.hpp"
 #include <algorithm>
-
+#include "Inventory.h"
 #include "ConveyorBeltStore.h"
 #include "ConveyorBeltRetrieve.h"
 #include "Inventory.h"
 
 int main (int argc, char *argv[]) {
-    /*
     // Initialize objects
-    Timer timer;
     TransferPoint transfer1(12);
     TransferPoint transfer2(14.2);
     ConveyorBeltStore conveyorStore;
     ConveyorBeltRetrieve conveyorRetrieve;
-    Container container1("container1");
-    Container container2("container2");
-    Container container3("container3");
+    Container container1(Priority::One, "Container 1");
+    Container container2(Priority::Two, "Container 2");
+    Container container3(Priority::Three, "Container 3");
 
     // Store some containers at the TransferPoints
-    timer.printSeconds();
-    conveyorStore.transportContainer(container1, transfer1, timer);
-    conveyorStore.transportContainer(container2, transfer1, timer);
-    conveyorStore.transportContainer(container3, transfer2, timer);
+    conveyorStore.transportContainer(container1, transfer1);
+    conveyorStore.transportContainer(container2, transfer1);
+    conveyorStore.transportContainer(container3, transfer2);
 
     Sleep(100);
 
     // Retrieve the Containers from the TransferPoints
+    conveyorRetrieve.transportContainer(transfer2);
+    conveyorRetrieve.transportContainer(transfer1);
+    conveyorRetrieve.transportContainer(transfer1);
     conveyorRetrieve.transportContainer(transfer2, timer);
     conveyorRetrieve.transportContainer(transfer1, timer);
     conveyorRetrieve.transportContainer(transfer1, timer);
-    */
+
 
     // -------------------------------------------------------------------------------
-
-    using namespace inventoryLib;
-    using namespace messagesLib;
 
     //!!! Für Debugging auf 5 * 5 Matrizen verändert. Projekt-Info ist 54*90
     auto inventory{inventoryLib::Inventory(8, 90, 2, 2.6, 10, 5, 5,
@@ -68,7 +65,7 @@ int main (int argc, char *argv[]) {
     //inventory.printListOfFastestToReachEmptyContainersWithoutConveyorBeltForAllShelfPairs(startPoint);
 
 
-    //inventory.printAllShelfSegments();
+    //inventory.printShelfSegments();
 
     /*
     auto timeSegmentMessageToFastestSegment{inventory.getFastestToReachEmptyContainer({1,0,0})};
@@ -79,37 +76,21 @@ int main (int argc, char *argv[]) {
 
     //!!! Für Debugging. Später in Main auf Basis der Methode Regale mit Containern füllen, die eine Priorität haben.!!!
 
-    /*
-    for(int i{1}; i < 50; i++) {
+    /*for(int i{1}; i < 50; i++) {
         //!!! Zugriff in folgender Zeile funktioniert nicht !!!
-//        inventory.fillBasedOnFastestToReachSegments(i);
-    }
-    */
+        inventory.fillBasedOnFastestToReachSegments(i);
+    }*/
 
-//    inventory.printAllShelfSegments();
+//    inventory.printShelfSegments();
 
 
-    //inventory.setSegmentsPriority({1,0,0},Priority::A);
-
-    /*
-    fastestToReachContainerWithUndeclaredPrio = {inventory.getFastestToReachContainerBasedOnUse({1,0,0},
-                                                                                                   ContainerUse::InitPrio, {})};
-
-    std::cout << "Fastest to reach container without prio" << std::endl;
-        fastestToReachContainerWithUndeclaredPrio->print();
-    */
-
-    inventory.setSegmentsPriority(startPoint,Priority::A);
-    inventory.printShelfSegments();
-
-std::cout << "hello world" << std::endl;
 
     /*
     //FOR DEBUGGING
     std::cout << "TESTOUTPUT VON DIREKTER SHELFPAIR-ANSTEUERUNG!" << std::endl;
     inventory.setSegment(1,0,0,10);
 
-    inventory.printAllShelfSegments();
+    inventory.printShelfSegments();
     */
 
     /*
@@ -117,7 +98,7 @@ std::cout << "hello world" << std::endl;
     inventory.shelfPairs[0].setSegment(1,0,0,10);
 
     std::cout << "FOR DEBUGGING SEGMENTE von shelf pair 1:!" << std::endl;
-    inventory.shelfPairs[0].printAllShelfSegments();
+    inventory.shelfPairs[0].printShelfSegments();
     */
 
 
@@ -145,7 +126,7 @@ std::cout << "hello world" << std::endl;
     fastestToReachEmptyContainer.print();
 
     inventory.setSegment(1,0,1,10);
-    inventory.printAllShelfSegments();
+    inventory.printShelfSegments();
     fastestToReachEmptyContainer = inventory.getFastestToReachEmptyContainer(startPoint);
     fastestToReachEmptyContainer.print();
 */
