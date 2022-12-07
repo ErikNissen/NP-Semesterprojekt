@@ -7,13 +7,13 @@
 #define NP_SEMESTERPROJEKT_CONVEYORBELT_H
 
 #include <string>
-#include "TransferPoint.h"
+//#include "TransferPoint.h"
 
 
 class ConveyorBelt {
 public:
     ConveyorBelt();
-    float getSpeed() const;
+    [[nodiscard]] float getSpeed() const;
 protected:
     const float speed = 2.6;
 };

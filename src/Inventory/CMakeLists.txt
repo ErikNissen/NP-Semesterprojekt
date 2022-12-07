@@ -2,7 +2,7 @@ add_library(Inventory
         Inventory.cpp
         ShelfPair.cpp
         Shelf.cpp
-        Container.cpp
+        ShelfContainer.cpp
         Timer.cpp)
 
 target_include_directories(Inventory

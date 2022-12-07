@@ -2,8 +2,8 @@
 // Created by Kim Simoski on 27.11.2022.
 //
 
-#ifndef NUPPROJECT_CONTAINER_H
-#define NUPPROJECT_CONTAINER_H
+#ifndef NUPPROJECT_SHELFCONTAINER_H
+#define NUPPROJECT_SHELFCONTAINER_H
 
 #include "../Item/Priority.h"
 
@@ -70,7 +70,7 @@ namespace inventoryLib {
     public:
         bool hasNoPriorityLevel(); // for initializing the containers priority levels only once to reserve percentages of container amounts for different priority levels
 
-        [[nodiscard]] bool containsAmountToGetOfThisItem(const TransferMessage& transferMessage);
+        bool containsAmountToGetOfThisItem(const TransferMessage& transferMessage);
         bool containsPlaceForAmountToAddOfThisItem(const TransferMessage& transferMessage);
 
         //!!! Reservieren bei Wahl des Laufbands aufrufen. Hinzufügen und abziehen erst aufrufen, wenn die Bedienhilfe tatsächlich angekommen ist !!!
@@ -85,4 +85,4 @@ namespace inventoryLib {
     };
 }
 
-#endif //NUPPROJECT_CONTAINER_H
+#endif //NUPPROJECT_SHELFCONTAINER_H

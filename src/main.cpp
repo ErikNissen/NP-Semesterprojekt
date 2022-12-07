@@ -6,6 +6,7 @@
 #include "Inventory.h"
 
 int main (int argc, char *argv[]) {
+    /*
     // Initialize objects
     TransferPoint transfer1(12);
     TransferPoint transfer2(14.2);
@@ -29,7 +30,7 @@ int main (int argc, char *argv[]) {
     conveyorRetrieve.transportContainer(transfer2, timer);
     conveyorRetrieve.transportContainer(transfer1, timer);
     conveyorRetrieve.transportContainer(transfer1, timer);
-
+/*
 
     // -------------------------------------------------------------------------------
 

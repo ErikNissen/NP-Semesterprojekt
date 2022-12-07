@@ -7,6 +7,8 @@
 
 
 #include "ConveyorBelt.h"
+#include "Container.h"
+#include "TransferPoint.h"
 
 class ConveyorBeltRetrieve : public ConveyorBelt {
 public:
