@@ -74,7 +74,7 @@ Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentage
      */
 
     //!!! Folgende Zeile wirft noch einen Speicherverwaltungsfehler aus (exit code -1073741819)
-    // setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages();
+    setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages();
 }
 
 // getters and setters
@@ -120,7 +120,7 @@ unsigned int Inventory::getShelfPairNumberByShelfNumber(const unsigned int shelf
 //!!! Analoge Methode ergänzen, die separat die Zeiten für die Einlagerung kennt. Dann könnten die für das Log gleich mitgegeben und für den Countdown an den Wartestationen. Ggf. aber auch woanders implementieren. Aber jeweils nur für das Zielsegment des insgesamt kürzesten Weges!!!
 //!!! Beachtet noch nicht die jeweils aktuelle Position oder die Interaktion mit Ausgabeprozessen !!!
 std::optional<TimeSegmentMessage> Inventory::getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment,
-                                                                   const ContainerUse& containerUse, const TransferMessage& transferMessage) {
+                                                                                  const SegmentUse& containerUse, const Item& item) {
 
     double shortestTimeInSeconds {-1};
     //TimeSegmentMessage* segmentWithFastestWay{nullptr}; //!!! Pointer-Workaround umgehen
@@ -129,7 +129,7 @@ std::optional<TimeSegmentMessage> Inventory::getFastestToReachContainerBasedOnUs
 
     for(ShelfPair shelfPair: shelfPairs){
         //!!! Bezeichner kürzen!!!
-        auto fastestToReachSegmentOfShelfPair{shelfPair.getFastestToReachContainerBasedOnUse(currentSegment, containerUse, transferMessage)};
+        auto fastestToReachSegmentOfShelfPair{shelfPair.getFastestToReachContainerBasedOnUse(currentSegment, containerUse, item)};
 
         if(fastestToReachSegmentOfShelfPair) {
             double neededTimeForReachingSegmentFromInputWaitingPlaceInSeconds{
@@ -203,65 +203,83 @@ void Inventory::setSegmentsPriority(const unsigned int shelfNumber, const unsign
     shelfPair.setSegmentsPriority(shelfNumber, row, column, priority);
 }
 
-//!!! Speicherzugrifffehler Process finished with exit code -1073741819 (0xC0000005)!!!
+
 void Inventory::initiateContainerPriorities(const unsigned int amountOfSegmentsReservedForPrio, const Priority& priority) {
     for (unsigned int i{0}; i < amountOfSegmentsReservedForPrio; i++) {
-        auto fastestToReachEmptyContainer{getFastestToReachContainerBasedOnUse({1, 0, 0}, ContainerUse::InitPrio, {Item(),0})->getSegmentDataMessage()};//!!! Hier bessere Übergabe des Startpunkts umsetzen!!!
+        auto fastestToReachEmptyContainer{getFastestToReachContainerBasedOnUse({1, 0, 0}, SegmentUse::InitPrio, {Item()})->getSegmentDataMessage()};//!!! Hier bessere Übergabe des Startpunkts umsetzen!!!
         setSegmentsPriority(fastestToReachEmptyContainer, priority);
     }
 }
 
 std::optional<TimeSegmentMessage>
 Inventory::getFastestToReachContainerWithoutSetPriority(const SegmentDataMessage &currentSegment) {
-    return Inventory::getFastestToReachContainerBasedOnUse(currentSegment, ContainerUse::InitPrio, {});
+    return Inventory::getFastestToReachContainerBasedOnUse(currentSegment, SegmentUse::InitPrio, {});
 }
 
 std::optional<TimeSegmentMessage>
 Inventory::getFastestToReachContainerForItemInput(const SegmentDataMessage &currentSegment,
-                                                  const TransferMessage &transferMessage) {
-    return getFastestToReachContainerBasedOnUse(currentSegment, ContainerUse::Add, transferMessage);
+                                                  const Item& item) {
+    return getFastestToReachContainerBasedOnUse(currentSegment, SegmentUse::Add, item);
 }
 
 std::optional<TimeSegmentMessage>
 Inventory::getFastestToReachContainerForItemOutput(const SegmentDataMessage &currentSegment,
-                                                   const TransferMessage &transferMessage) {
-    return getFastestToReachContainerBasedOnUse(currentSegment, ContainerUse::Get, transferMessage);
+                                                   const Item& item) {
+    return getFastestToReachContainerBasedOnUse(currentSegment, SegmentUse::Get, item);
 }
+
+
+//ToDO: Segmente müssen reserviert werden für: Ausgabe des Containers zum Befüllen, Ausgabe des Containers zum Herausnehmen, Einfügen des Containers in ein Segment
 
 std::optional<TimeSegmentMessage> Inventory::reserveContainerToAddToInventory(const SegmentDataMessage &currentSegment,
-                                                                              const TransferMessage &transferMessage) {
-    auto fastestToReachContainer{getFastestToReachContainerForItemOutput(currentSegment, transferMessage)};
-    reserveToAdd(fastestToReachContainer->getSegmentDataMessage(), transferMessage);
-    return std::optional<TimeSegmentMessage>();
+                                                                              const Item& item) {
+    auto fastestToReachContainer{getFastestToReachContainerForItemOutput(currentSegment, item)};
+    reserveSegmentToAddContainer(fastestToReachContainer->getSegmentDataMessage());
+    return {};
 }
 
+//ToDO: Im besten Fall diese Methode erst beim Punkt aufrufen, der das Laufband mit ansteuert und dafür noch eine Ebene aufrufen, die das schnellste zu erreichende Segment unter Berücksichtung der Warteschlangen berechnet
 //!!! Die Methoden zum Reservieren evtl. so anpassen, dass noch vor dem Aufruf die aktuellen Wartezeiten in den Schlangen berücksichtigt werden können, was so direkt nicht der Fall ist. Aber zwischen Abfrage der Liste und Reservierung darf keine Zeit liegen. Dann müsste ggf. das Laufband beides gleichzeitig in einer Methode machen, die ein Mutex ist !!!
-std::optional<TimeSegmentMessage> Inventory::reserveContainerToGetFromInventory(const SegmentDataMessage &currentSegment,
-                                              const TransferMessage &transferMessage) {
-    auto fastestToReachContainer{getFastestToReachContainerForItemOutput(currentSegment, transferMessage)};
-    reserveToGet(fastestToReachContainer->getSegmentDataMessage(), transferMessage);
-    return std::optional<TimeSegmentMessage>();
+std::optional<TimeSegmentMessage> Inventory::reserveContainerOutputFromInventoryToGetItems(const SegmentDataMessage &currentSegment,
+                                                                                           const Item& item) {
+    auto fastestToReachContainer{getFastestToReachContainerForItemOutput(currentSegment, item)};
+    reserveSegmentToGetContainer(fastestToReachContainer->getSegmentDataMessage());
+    return {};
 }
 
-void Inventory::reserveToAdd(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage) {
-    ShelfPair& shelfPair{getShelfPairByShelfNumber(goalSegment.getShelfNumber())};
-    shelfPair.reserveToAdd(goalSegment, transferMessage);
+//ToDO: Im besten Fall diese Methode erst beim Punkt aufrufen, der das Laufband mit ansteuert und dafür noch eine Ebene aufrufen, die das schnellste zu erreichende Segment unter Berücksichtung der Warteschlangen berechnet
+//!!! Die Methoden zum Reservieren evtl. so anpassen, dass noch vor dem Aufruf die aktuellen Wartezeiten in den Schlangen berücksichtigt werden können, was so direkt nicht der Fall ist. Aber zwischen Abfrage der Liste und Reservierung darf keine Zeit liegen. Dann müsste ggf. das Laufband beides gleichzeitig in einer Methode machen, die ein Mutex ist !!!
+std::optional<TimeSegmentMessage> Inventory::reserveContainerOutputFromInventoryToAddItems(const SegmentDataMessage &currentSegment,
+                                                                                           const Item& item) {
+    auto fastestToReachContainer{getFastestToReachContainerForItemInput(currentSegment, item)};
+    reserveSegmentToGetContainer(fastestToReachContainer->getSegmentDataMessage());
+    return {};
 }
 
-void Inventory::reserveToGet(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage) {
+//!!! the selection process of the fastest to reach matching shelf segment and the reservation (this method) have to be called simultaneously
+void Inventory::reserveSegmentToAddContainer(const SegmentDataMessage &goalSegment) {
     ShelfPair& shelfPair{getShelfPairByShelfNumber(goalSegment.getShelfNumber())};
-    shelfPair.reserveToGet(goalSegment, transferMessage);
+    shelfPair.reserveSegmentToAddContainer(goalSegment);
 }
 
-void Inventory::addToAmount(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage) {
+//!!! the selection process in of the fastest to reach matching shelf segment and the reservation (this method) have to be called simultaneously
+void Inventory::reserveSegmentToGetContainer(const SegmentDataMessage &goalSegment) {
     ShelfPair& shelfPair{getShelfPairByShelfNumber(goalSegment.getShelfNumber())};
-    shelfPair.addToAmount(goalSegment, transferMessage);
+    shelfPair.reserveSegmentToGetContainer(goalSegment);
 }
 
-void Inventory::getFromAmount(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage) {
+//!!! for getting called after waiting at a shelfPairs input waiting point
+void Inventory::addContainer(const SegmentDataMessage &goalSegment, const Container &newContainer) {
     ShelfPair& shelfPair{getShelfPairByShelfNumber(goalSegment.getShelfNumber())};
-    shelfPair.getFromAmount(goalSegment, transferMessage);
+    shelfPair.addContainer(goalSegment, newContainer);
 }
+
+//!!! for getting called after waiting at a shelfPairs input waiting point
+Container Inventory::takeContainer(const SegmentDataMessage &goalSegment) {
+    ShelfPair& shelfPair{getShelfPairByShelfNumber(goalSegment.getShelfNumber())};
+    return shelfPair.takeContainer(goalSegment);
+}
+
 
 
 void Inventory::printShelfSegments() {
@@ -270,6 +288,8 @@ void Inventory::printShelfSegments() {
         shelfPair.printAllShelfSegments();
     }
 }
+
+
 
 
 

@@ -11,7 +11,7 @@
 namespace itemLib {
 
     /*
-     * The class Item represents different items with different priority levels (Priority), a specific maximum amount of this item per container (ShelfContainer).
+     * The class Item represents different items with different priority levels (Priority), a specific maximum amount of this item per container (Segment).
      * Items get moved by the conveyor belt to a waiting queue of a shelf pair for adding them to the inventory.
      * Items get moved by one transport vehicle per shelf pair beetween the waiting point for the input, the shelf pair and the waiting point for the output.
      */

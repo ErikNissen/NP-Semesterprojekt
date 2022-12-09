@@ -7,8 +7,8 @@
 #include <memory>
 #include "../Messages/SegmentDataMessage.h"
 #include "../Messages/TimeSegmentMessage.h"
-#include "ShelfContainer.h"
-#include "ContainerUse.h"
+#include "Segment.h"
+#include "SegmentUse.h"
 
 #ifndef NUPPROJECT_SHELF_H
 #define NUPPROJECT_SHELF_H
@@ -30,7 +30,7 @@ namespace inventoryLib {
         // https://riptutorial.com/cplusplus/example/17463/matrices-using-vectors
         // https://iamsorush.com/posts/shared-pointer-cpp/
         //!!! Evtl. von shared_pointer zu unique_pointer wechseln und dafür Move-Konstruktor für Container-Klasse schreiben
-        std::vector<std::vector<std::shared_ptr<ShelfContainer>>> matrix;
+        std::vector<std::vector<std::shared_ptr<Segment>>> matrix;
         //std::vector<std::vector<int>> matrix;
 
         //!!! Log-Data bzw. Daten zum Berechnen entweder nur hier initialisieren, oder in extra Klasse, die zum Verrechnen genutzt wird oder in Inventar oder zusammengesetzt jeweils ergänzend in umklammernder Klasse, mit jeweils objektorientierter Zuteilung !!!
@@ -100,7 +100,7 @@ namespace inventoryLib {
     public:
         [[nodiscard]] double getShelfDepthInMeters() const;
         [[nodiscard]] unsigned int getShelfNumber() const;
-        void setSegmentsPriority(const unsigned long long int row, const unsigned long long int column, const Priority& priority);
+        void setSegmentsPriority(unsigned long long int row, unsigned long long int column, const Priority& priority);
 
         // methods
     private:
@@ -128,14 +128,15 @@ namespace inventoryLib {
         //!!! Für folgende Methoden nochmal überprüfen, wie Zerstückelung stattfindet, wenn nicht ganze Ladung in einen Container passt
         //!!! Für folgende Methoden aktuelle Position der Bedienhilfen berücksichtigen, falls diese gerade frei sind. Dies aber eher mit Überladung der Methode machen, weil die generelle Regalzeilung ja schon vor dem Warten an der Warteschlange gemacht wird.
         //!!! -> Wenn die Berechnungen soweit implementiert sind, dass auch die Wartezeiten in der Schlange im Voraus bekannt sind, Methoden noch einmal ergänzen !!!
-        void reserveToAdd(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
-        void reserveToGet(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
-        void addToAmount(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
-        void getFromAmount(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage);
+        void reserveSegmentToAddContainer(const SegmentDataMessage &goalSegment);
+        void reserveSegmentToGetContainer(const SegmentDataMessage &goalSegment);
+
+        void addContainer(const SegmentDataMessage &goalSegment, const Container &newContainer);
+        Container takeContainer(const SegmentDataMessage &goalSegment);
 
         //!!! Vernünftige Handhabe einführen, wenn das Regal keinen freien Container hat, ohne dass es den Aufruf von ShelfPair insgesamt blockiert, weil ja ein anderes Regal einen passenden Platz haben kann!!!
-        std::vector<SegmentDataMessage> getListOfContainersBasedOnUse(const ContainerUse &containerUse, const TransferMessage &transferMessage);
-        std::optional<TimeSegmentMessage> getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const ContainerUse& containerUse, const TransferMessage &transferMessage);
+        std::vector<SegmentDataMessage> getListOfContainersBasedOnUse(const SegmentUse &containerUse, const Item& item);
+        std::optional<TimeSegmentMessage> getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const SegmentUse& containerUse, const Item& item);
         //!!! Folgende Methode noch aufheben, um ggf. die darüber nochmal effizienter zu gestalten !!!
         //TimeSegmentMessage getFastestToReachEmptyContainerAlt(const SegmentDataMessage& currentSegment);
 

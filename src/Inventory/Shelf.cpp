@@ -3,7 +3,6 @@
 //
 
 #include "Shelf.h"
-#include "../Messages/TimeSegmentMessage.h"
 #include <cmath>
 #include <algorithm>
 #include <iomanip>
@@ -34,11 +33,11 @@ Shelf::Shelf(const unsigned int shelfNumber, const unsigned long long int rowsPe
     //!!! Muss eigenen Vector erstellen. Die Üblichen können nur Standard-Datentypen beinhalten!!! Alternativ einen Vector of Pointer (unique oder shared. Eher unique)
     // https://www.geeksforgeeks.org/program-to-create-custom-vector-class-in-c/
     // https://www.programiz.com/cpp-programming/vectors
-    matrix = {rowsPerShelf, std::vector<std::shared_ptr<ShelfContainer>>{segmentsPerRow}}; // sets a matrix with a set size and Containers with default priority N which means no valid priority level
+    matrix = {rowsPerShelf, std::vector<std::shared_ptr<Segment>>{segmentsPerRow}}; // sets a matrix with a set size and Containers with default priority N which means no valid priority level
 
     for (auto row = 0; row < rowsPerShelf; row++) {
         for (auto container = 0; container < segmentsPerRow; container++) {
-            matrix.at(row).at(container) = std::make_shared<ShelfContainer>(ShelfContainer{Priority::N});
+            matrix.at(row).at(container) = std::make_shared<Segment>(Segment{Priority::N});
         }
     }
 
@@ -96,26 +95,27 @@ void Shelf::setSegmentsPriority(const unsigned long long int row, const unsigned
 
 // methods
 
-void Shelf::reserveToAdd(const SegmentDataMessage& goalSegment, const TransferMessage& transferMessage){
-    matrix.at(goalSegment.getRow()).at(goalSegment.getColumn())->reserveAmountToAddForItem(transferMessage);
+void Shelf::reserveSegmentToAddContainer(const SegmentDataMessage &goalSegment) {
+    matrix.at(goalSegment.getRow()).at(goalSegment.getColumn())->reserveSegmentToAddContainer();
 }
 
-void Shelf::reserveToGet(const SegmentDataMessage& goalSegment, const TransferMessage& transferMessage){
-    matrix.at(goalSegment.getRow()).at(goalSegment.getColumn())->containsAmountToGetOfThisItem(transferMessage);
+void Shelf::reserveSegmentToGetContainer(const SegmentDataMessage &goalSegment) {
+    matrix.at(goalSegment.getRow()).at(goalSegment.getColumn())->reserveSegmentToGetContainer();
 }
 
-void Shelf::addToAmount(const SegmentDataMessage& goalSegment, const TransferMessage& transferMessage){
-    matrix.at(goalSegment.getRow()).at(goalSegment.getColumn())->addAmount(transferMessage);
+void Shelf::addContainer(const SegmentDataMessage& goalSegment, const Container& newContainer) {
+    matrix.at(goalSegment.getRow()).at(goalSegment.getColumn())->addContainer(newContainer);
 }
 
-void Shelf::getFromAmount(const SegmentDataMessage& goalSegment, const TransferMessage& transferMessage){
-    matrix.at(goalSegment.getRow()).at(goalSegment.getColumn())->takeAmount(transferMessage);
+Container Shelf::takeContainer(const SegmentDataMessage& goalSegment) {
+    return matrix.at(goalSegment.getRow()).at(goalSegment.getColumn())->takeContainer();
 }
+
 
 //!!! Berücksichtigt noch nicht, dass Eingabe und Ausgabe unterschiedliche Höhen und damit unterschiedliche Strecken haben!!!
 std::optional<TimeSegmentMessage> Shelf::getFastestToReachContainerBasedOnUse(const SegmentDataMessage &currentSegment,
-                                                                              const ContainerUse &containerUse, const TransferMessage &transferMessage) {
-    std::vector<SegmentDataMessage> listOfMatchingContainersForUse{getListOfContainersBasedOnUse(containerUse, transferMessage)};
+                                                                              const SegmentUse &containerUse, const Item &item) {
+    std::vector<SegmentDataMessage> listOfMatchingContainersForUse{getListOfContainersBasedOnUse(containerUse, item)};
 
     if(!listOfMatchingContainersForUse.empty()){
         std::vector<TimeSegmentMessage> listOfTimeSegmentMessages{};
@@ -158,8 +158,8 @@ TimeSegmentMessage Shelf::getFastestToReachEmptyContainerAlt(const SegmentDataMe
  */
 
 
-//!!! Hier TransferMessage als weiteres Argument einfügen und in entsprechenden Methoden von ShelfContainer, um direkt zu gucken, welcher Container aktuell zum Item und der Anzahl passt !!!
-std::vector<SegmentDataMessage> Shelf::getListOfContainersBasedOnUse(const ContainerUse& containerUse, const TransferMessage &transferMessage) { //!!! Hier noch später Reservierung für Warenprioritäten berücksichtigen!!!
+//!!! Hier TransferMessage als weiteres Argument einfügen und in entsprechenden Methoden von Segment, um direkt zu gucken, welcher Container aktuell zum Item und der Anzahl passt !!!
+std::vector<SegmentDataMessage> Shelf::getListOfContainersBasedOnUse(const SegmentUse& containerUse, const Item& item) { //!!! Hier noch später Reservierung für Warenprioritäten berücksichtigen!!!
     std::vector<SegmentDataMessage> listOfEmptyContainers;
     for(unsigned long long i{0} ; i < rowsPerShelf; i++)
     {
@@ -168,20 +168,20 @@ std::vector<SegmentDataMessage> Shelf::getListOfContainersBasedOnUse(const Conta
 
             switch(containerUse)
             {
-                case ContainerUse::InitPrio:
+                case SegmentUse::InitPrio:
                     if(matrix.at(i).at(j)->hasNoPriorityLevel()) {
                         listOfEmptyContainers.emplace_back(shelfNumber, i, j);
                     }
                     break;
 
-                case ContainerUse::Add:
-                    if(matrix.at(i).at(j)->containsPlaceForAmountToAddOfThisItem(transferMessage)) {
+                case SegmentUse::Add:
+                    if(matrix.at(i).at(j)->containsPlaceForAtLeastOnePieceOfThisItemToAdd(item)) {
                         listOfEmptyContainers.emplace_back(shelfNumber, i, j);
                     }
                     break;
 
-                case ContainerUse::Get:
-                    if(matrix.at(i).at(j)->containsAmountToGetOfThisItem(transferMessage)) {
+                case SegmentUse::Get:
+                    if(matrix.at(i).at(j)->containsAtLeastOnePieceOfThisItemToGet(item)) {
                         listOfEmptyContainers.emplace_back(shelfNumber, i, j);
                     }
                     break;
@@ -250,24 +250,16 @@ double Shelf::calculateVerticalWayFromArrayIndicesDifference(const int arrayIndi
 //!!! Für Nutzung der Methode für Initialisierung ist es aber vom Startpunkt des Regals richtig !!!
 int Shelf::calculateHorizontalArrayIndicesDifference(const SegmentDataMessage& currentSegmentOfThisShelfPair, const SegmentDataMessage& goalSegment){
     return std::abs(static_cast<int>(currentSegmentOfThisShelfPair.getColumn()) - static_cast<int>(goalSegment.getColumn()));
-    //return std::abs(goalSegment.getColumn() - 0);
 }
 
 //!!! Später currentSegementOfThisShelf implementieren und berücksichtigen, um nicht jedes Mal vom Ausgangspunkt zu rechnen. Für Nutzung der Methode für Initialisierung ist es aber vom Startpunkt des Regals richtig!!!
 int Shelf::calculateVerticalArrayIndicesDifference(const SegmentDataMessage& currentSegmentOfThisShelfPair, const SegmentDataMessage& goalSegment){
-    //return std::abs(goalSegment.getRow() - 0);
     return std::abs(static_cast<int>(currentSegmentOfThisShelfPair.getRow()) - static_cast<int>(goalSegment.getRow()));
 }
 
 bool Shelf::compareTwoElements(const TimeSegmentMessage& leftElement, const TimeSegmentMessage& rightElement){
     return (leftElement.getNeededTimeWithoutWaitingInQueueInSeconds() < rightElement.getNeededTimeWithoutWaitingInQueueInSeconds());
 }
-
-/*
-std::vector<SegmentDataMessage> Shelf::getListOfFreeContainersWithoutPriority() {
-
-    return std::vector<SegmentDataMessage>();
-}*/
 
 void Shelf::printShelfSegments() {
     std::cout << "------------------------------------------------------------" << std::endl;
@@ -283,6 +275,10 @@ void Shelf::printShelfSegments() {
         }
     }
 }
+
+
+
+
 
 
 

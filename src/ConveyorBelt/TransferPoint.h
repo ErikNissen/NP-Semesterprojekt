@@ -20,7 +20,7 @@ public:
     std::queue<Container> containers;
     void addContainer(Container&);
     Container& removeContainer();
-    float getDistance() const;
+    [[nodiscard]] float getDistance() const;
 private:
     float length = 2.3;
     float width = 0.7;

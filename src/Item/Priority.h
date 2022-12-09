@@ -8,9 +8,9 @@
 namespace itemLib {
     /*
     * The class Priority represents the different priority levels of items (Item).
-    * Based on the planned amount of items per priority level containers (ShelfContainer) gets reserved for managing items of the same priority level.
-    * The higher the priority (lower number/letter), the chosen containers are faster to reach than the ones with lower priority levels (higher number/letter)
-    * This class is used by the Class Shelf and the class ShelfContainer.
+    * Based on the planned amount of items per priority level segments (Segment) gets reserved for managing containers which contain items of the same priority level.
+    * The higher the priority (lower number/letter), the chosen containers gets put are faster to reach than the ones with lower priority levels (higher number/letter)
+    * This class is used by the Class Item and the class Segment.
     * N is the representation of an uninitalized priority level.
     * A, B, C are priority levels with descending priority level.
     */

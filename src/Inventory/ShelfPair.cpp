@@ -35,7 +35,7 @@ unsigned int ShelfPair::getShelfPairNumber() const{
     return shelfPairNumber;
 }
 
-Shelf& ShelfPair::getShelfByShelfNumber(const int shelfNumber) {
+Shelf& ShelfPair::getShelfByShelfNumber(const unsigned int shelfNumber) {
     if(shelfLeft.getShelfNumber() == shelfNumber){
         return shelfLeft;
     }
@@ -61,9 +61,9 @@ void ShelfPair::setSegmentsPriority(const unsigned int shelfNumber, const unsign
 // methods
 //!!! Berücksichtigt noch nicht, dass Eingabe und Ausgabe unterschiedliche Höhen und damit unterschiedliche Strecken haben!!!
 std::optional<TimeSegmentMessage> ShelfPair::getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment,
-                                                                   const ContainerUse& containerUse, const TransferMessage& transferMessage ) {
-    auto timeSegmentMessageOfFastestWayToSegmentShelfLeft{shelfLeft.getFastestToReachContainerBasedOnUse(currentSegment, containerUse, transferMessage)};
-    auto timeSegmentMessageOfFastestWayToSegmentShelfRight{shelfRight.getFastestToReachContainerBasedOnUse(currentSegment, containerUse, transferMessage)};
+                                                                                  const SegmentUse& containerUse, const Item& item) {
+    auto timeSegmentMessageOfFastestWayToSegmentShelfLeft{shelfLeft.getFastestToReachContainerBasedOnUse(currentSegment, containerUse, item)};
+    auto timeSegmentMessageOfFastestWayToSegmentShelfRight{shelfRight.getFastestToReachContainerBasedOnUse(currentSegment, containerUse, item)};
 
     if(timeSegmentMessageOfFastestWayToSegmentShelfLeft && timeSegmentMessageOfFastestWayToSegmentShelfRight) {
         if (timeSegmentMessageOfFastestWayToSegmentShelfLeft->getNeededTimeWithoutWaitingInQueueInSeconds() <=
@@ -85,27 +85,31 @@ std::optional<TimeSegmentMessage> ShelfPair::getFastestToReachContainerBasedOnUs
 }
 
 
-void ShelfPair::reserveToAdd(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage) {
-    getShelfByShelfNumber(goalSegment.getShelfNumber()).reserveToAdd(goalSegment, transferMessage);
+void ShelfPair::reserveSegmentToAddContainer(const SegmentDataMessage &goalSegment) {
+    getShelfByShelfNumber(goalSegment.getShelfNumber()).reserveSegmentToAddContainer(goalSegment);
 }
 
-void ShelfPair::reserveToGet(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage) {
-    getShelfByShelfNumber(goalSegment.getShelfNumber()).reserveToGet(goalSegment, transferMessage);
+void ShelfPair::reserveSegmentToGetContainer(const SegmentDataMessage &goalSegment) {
+    getShelfByShelfNumber(goalSegment.getShelfNumber()).reserveSegmentToGetContainer(goalSegment);
 }
 
-void ShelfPair::addToAmount(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage) {
-    getShelfByShelfNumber(goalSegment.getShelfNumber()).addToAmount(goalSegment, transferMessage);
+void ShelfPair::addContainer(const SegmentDataMessage &goalSegment, const Container &newContainer) {
+    getShelfByShelfNumber(goalSegment.getShelfNumber()).addContainer(goalSegment, newContainer);
 }
 
-void ShelfPair::getFromAmount(const SegmentDataMessage &goalSegment, const TransferMessage &transferMessage) {
-    getShelfByShelfNumber(goalSegment.getShelfNumber()).getFromAmount(goalSegment, transferMessage);
+//ToDo: get und take einheitlich benennen
+Container ShelfPair::takeContainer(const SegmentDataMessage &goalSegment) {
+    return getShelfByShelfNumber(goalSegment.getShelfNumber()).takeContainer(goalSegment);
 }
-
 
 void ShelfPair::printAllShelfSegments() {
     shelfLeft.printShelfSegments();
     shelfRight.printShelfSegments();
 }
+
+
+
+
 
 
 

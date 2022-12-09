@@ -50,7 +50,7 @@ int main (int argc, char *argv[]) {
 
     /*
     auto fastestToReachContainerWithUndeclaredPrio {inventory.getFastestToReachContainerBasedOnUse({1,0,0},
-    ContainerUse::InitPrio, {})};*/
+    SegmentUse::InitPrio, {})};*/
 
     std::cout << "Fastest to reach container without prio" << std::endl;
     //fastestToReachContainerWithUndeclaredPrio->print();
