@@ -29,16 +29,34 @@ public:
 
 	void remove(std::string key);
 
+	void purge();
+
 	void create(std::string name);
 
 	void create();
 
 	// Template functions
+	/*
 	template<typename S> void search(S search);
 
 	template <typename U> void update(std::string key, U value);
 
-	template <typename A> void add(std::string key, A value);
+	template <typename A> void add(std::string key, A value);*/
+
+	void search(std::string search, bool key);
+	void search(std::regex search, bool key);
+
+	void update(std::string key, std::string value);
+	void update(std::string key, int value);
+	void update(std::string key, double value);
+	void update(std::string key, bool value);
+	void update(std::string key, nlohmann::json value);
+
+	void add(std::string key, std::string value);
+	void add(std::string key, int value);
+	void add(std::string key, double value);
+	void add(std::string key, bool value);
+	void add(std::string key, nlohmann::json value);
 
 	//Getter
 	nlohmann::json getData();
