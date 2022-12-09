@@ -67,7 +67,7 @@ void PersistentFileManagement::save() {
 /// <BR><h3>Loads a json object from a file</h3>
 /// \param name The name of the file
 /// \return The json object
-/// \throws runtime_error if the file does not exist
+/// \throws PersistentFileManagement::FileErrorException if the file does not exist
 json PersistentFileManagement::load(const string name){
 	// Check if the directory exists
 	if (!filesystem::exists(basePath)) {
@@ -75,7 +75,7 @@ json PersistentFileManagement::load(const string name){
 		std::filesystem::create_directory(basePath);
 	}else if(!filesystem::exists(filesystem::current_path().string() + "\\"
 	                             + basePath + name + ".json")){
-		throw runtime_error("No data file found called " + name);
+		throw PersistentFileManagement::FileErrorException(const_cast<char*>(("No data file found called " + name).c_str()));
 	}
 	std::ifstream f(this->basePath + name + ".json");
 	return json::parse(f);
@@ -93,13 +93,13 @@ json PersistentFileManagement::get(string key){
 
 /// <BR><h3>Deletes a key from a json object</h3>
 /// \param key The key to delete
-/// \throws runtime_error if the key does not exist
+/// \throws PersistentFileManagement::KeyErrorException if the key does not exist
 void PersistentFileManagement::remove(string key){
 	// Check if the key exists
 	if (this->data.contains(key)) {
 		this->data.erase(key);
 	}else{
-		throw runtime_error("Key does not exist");
+		throw PersistentFileManagement::KeyErrorException();
 	}
 }
 
@@ -110,7 +110,7 @@ void PersistentFileManagement::purge(){
 
 /// <BR><h3>Creates a new json file</h3>
 /// \param name The name of the file
-/// \throws runtime_error if the file already exists
+/// \throws PersistentFileManagement::FileErrorException if the file already exists
 void PersistentFileManagement::create(string name){
 	//Check if directory exists
 	if (!filesystem::exists( this->basePath)) {
@@ -133,13 +133,13 @@ void PersistentFileManagement::create(string name){
 	} else {
 		//File exists
 		//Throw error
-		throw invalid_argument("File already exists");
+		throw PersistentFileManagement::FileErrorException();
 	}
 }
 
 /// <BR><h3>Creates a new json file</h3>
-/// \throws runtime_error if the file already exists
-/// \throws runtime_error if no name was given
+/// \throws PersistentFileManagement::FileErrorException if the file already exists
+/// \throws PersistentFileManagement::NameErrorException if no name was given
 void PersistentFileManagement::create(){
 	//Check if directory exists
 	if (!filesystem::exists( filesystem::current_path().string() + "\\" +
@@ -153,8 +153,7 @@ void PersistentFileManagement::create(){
 	if (this->name.empty()) {
 		//Name is empty
 		//Throw error
-		throw invalid_argument("Name is empty. Please set a "
-		                       "name with the setName() method");
+		throw PersistentFileManagement::NameErrorException();
 	}else{
 		//Check if file exists
 		if (!filesystem::exists(filesystem::current_path().string() + "\\" +
@@ -172,7 +171,7 @@ void PersistentFileManagement::create(){
 		} else {
 			//File exists
 			//Throw error
-			throw invalid_argument("File already exists");
+			throw PersistentFileManagement::FileErrorException();
 		}
 	}
 }
@@ -302,77 +301,76 @@ void PersistentFileManagement::search( std::regex search, bool keySearch) {
 /// <BR><h3>Updates a value in a json object</h3>
 /// \param key The key of the value
 /// \param value The new value
-/// \throws runtime_error if the key does not exist
+/// \throws PersistentFileManagement::KeyErrorException if the key does not exist
 void PersistentFileManagement::update( std::string key, std::string value ) {
 	// Check if the key exists
 	if (this->data.contains(key)) {
 		this->data[key] = value;
 	}else{
-		throw runtime_error("Key does not exist");
+		throw PersistentFileManagement::KeyErrorException();
 	}
 }
 
 /// <BR><h3>Updates a value in a json object</h3>
 /// \param key The key of the value
 /// \param value The new value
-/// \throws runtime_error if the key does not exist
+/// \throws PersistentFileManagement::KeyErrorException if the key does not exist
 void PersistentFileManagement::update( std::string key, int value ) {
 	// Check if the key exists
 	if (this->data.contains(key)) {
 		this->data[key] = value;
 	}else{
-		throw runtime_error("Key does not exist");
+		throw PersistentFileManagement::KeyErrorException();
 	}
 }
 
 /// <BR><h3>Updates a value in a json object</h3>
 /// \param key The key of the value
 /// \param value The new value
-/// \throws runtime_error if the key does not exist
+/// \throws PersistentFileManagement::KeyErrorException if the key does not exist
 void PersistentFileManagement::update( std::string key, double value ) {
 	// Check if the key exists
 	if (this->data.contains(key)) {
 		this->data[key] = value;
 	}else{
-		throw runtime_error("Key does not exist");
+		throw PersistentFileManagement::KeyErrorException();
 	}
 }
 
 /// <BR><h3>Updates a value in a json object</h3>
 /// \param key The key of the value
 /// \param value The new value
-/// \throws runtime_error if the key does not exist
+/// \throws PersistentFileManagement::KeyErrorException if the key does not exist
 void PersistentFileManagement::update( std::string key, bool value ) {
 	// Check if the key exists
 	if (this->data.contains(key)) {
 		this->data[key] = value;
 	}else{
-		throw runtime_error("Key does not exist");
+		throw PersistentFileManagement::KeyErrorException();
 	}
 }
 
 /// <BR><h3>Updates a value in a json object</h3>
 /// \param key The key of the value
 /// \param value The new value
-/// \throws runtime_error if the key does not exist
+/// \throws PersistentFileManagement::KeyErrorException if the key does not exist
 void PersistentFileManagement::update( std::string key, json value ) {
 	// Check if the key exists
 	if (this->data.contains(key)) {
 		this->data[key] = value;
 	}else{
-		throw runtime_error("Key does not exist");
+		throw PersistentFileManagement::KeyErrorException();
 	}
 }
 
 /// <BR><h3>Adds a value to a json object</h3>
 /// \param key The key of the value
 /// \param value The value
-/// \throws runtime_error if the key exists
+/// \throws PersistentFileManagement::KeyErrorException if the key exists
 void PersistentFileManagement::add( std::string key, std::string value ) {
 	// Check if the key already exists
 	if(this->data.contains(key)){
-		throw std::runtime_error("Key already exists. Use the update function to "
-		                         "update the value.");
+		throw PersistentFileManagement::KeyErrorException("Key already exists. Use the update function to update the value.");
 	}else{
 		this->data[key] = value;
 	}
@@ -381,12 +379,11 @@ void PersistentFileManagement::add( std::string key, std::string value ) {
 /// <BR><h3>Adds a value to a json object</h3>
 /// \param key The key of the value
 /// \param value The value
-/// \throws runtime_error if the key exists
+/// \throws PersistentFileManagement::KeyErrorException if the key exists
 void PersistentFileManagement::add( std::string key, int value ) {
 	// Check if the key already exists
 	if(this->data.contains(key)){
-		throw std::runtime_error("Key already exists. Use the update function to "
-		                         "update the value.");
+		PersistentFileManagement::KeyErrorException("Key already exists. Use the update function to update the value.");
 	}else{
 		this->data[key] = value;
 	}
@@ -395,12 +392,11 @@ void PersistentFileManagement::add( std::string key, int value ) {
 /// <BR><h3>Adds a value to a json object</h3>
 /// \param key The key of the value
 /// \param value The value
-/// \throws runtime_error if the key exists
+/// \throws PersistentFileManagement::KeyErrorException if the key exists
 void PersistentFileManagement::add( std::string key, double value ) {
 	// Check if the key already exists
 	if(this->data.contains(key)){
-		throw std::runtime_error("Key already exists. Use the update function to "
-		                         "update the value.");
+		throw PersistentFileManagement::KeyErrorException("Key already exists. Use the update function to update the value.");
 	}else{
 		this->data[key] = value;
 	}
@@ -409,12 +405,11 @@ void PersistentFileManagement::add( std::string key, double value ) {
 /// <BR><h3>Adds a value to a json object</h3>
 /// \param key The key of the value
 /// \param value The value
-/// \throws runtime_error if the key exists
+/// \throws PersistentFileManagement::KeyErrorException if the key exists
 void PersistentFileManagement::add( std::string key, bool value ) {
 	// Check if the key already exists
 	if(this->data.contains(key)){
-		throw std::runtime_error("Key already exists. Use the update function to "
-		                         "update the value.");
+		throw PersistentFileManagement::KeyErrorException("Key already exists. Use the update function to update the value.");
 	}else{
 		this->data[key] = value;
 	}
@@ -423,12 +418,11 @@ void PersistentFileManagement::add( std::string key, bool value ) {
 /// <BR><h3>Adds a value to a json object</h3>
 /// \param key The key of the value
 /// \param value The value
-/// \throws runtime_error if the key exists
+/// \throws PersistentFileManagement::KeyErrorException if the key exists
 void PersistentFileManagement::add( std::string key, json value ) {
 	// Check if the key already exists
 	if(this->data.contains(key)){
-		throw std::runtime_error("Key already exists. Use the update function to "
-		                         "update the value.");
+		throw PersistentFileManagement::KeyErrorException("Key already exists. Use the update function to update the value.");
 	}else{
 		this->data[key] = value;
 	}

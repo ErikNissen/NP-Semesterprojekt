@@ -64,6 +64,42 @@ public:
 	//Setter
 	void setName(std::string name);
 
+	//Exceptions
+	class KeyErrorException : public std::exception {
+	private:
+		char * message;
+
+	public:
+		KeyErrorException(char * msg="Key does not exist"): message(msg){}
+		char * what (){
+			return message;
+		}
+	};
+
+	class FileErrorException : public std::exception {
+	private:
+		char * message;
+
+	public:
+		FileErrorException(char * msg="File already exists"): message(msg){}
+		char * what(){
+			return message;
+		}
+	};
+
+	class NameErrorException : public std::exception {
+	private:
+		char * message;
+
+	public:
+		NameErrorException(char * msg="Name is empty. Please set a name "
+									  "with the setName() function."): message
+									  (msg){}
+		char * what(){
+			return message;
+		}
+	};
+
 private:
 	std::string name;
 	std::string basePath;
