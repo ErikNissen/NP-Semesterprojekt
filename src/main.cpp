@@ -67,10 +67,10 @@ int main() {
 	cin.get();
 
 	cout << "Search (String)" << endl;
-	pfm.search("Erik");
-	pfm.search("21");
-	pfm.search("1.81");
-	pfm.search("false");
+	pfm.search("Erik", false);
+	pfm.search("21", false);
+	pfm.search("1.81", false);
+	pfm.search("false", false);
 	cout << endl;
 
 	cout << "Press any key to continue..." << endl;
@@ -78,10 +78,12 @@ int main() {
 
 	cout << "Search (Regex)" << endl;
 	cout << "contains \"E\": " << endl;
-	pfm.search(regex("E"));
+	pfm.search(regex("E"), false);
+	pfm.search(regex("E"), true);
 
 	cout << "contains not \"a\": " << endl;
-	pfm.search(regex("[^a]"));
+	pfm.search(regex("[^a]"), false);
+	pfm.search(regex("[^a]"), true);
 	cout << endl;
 
 	cout << "Press any key to continue..." << endl;
