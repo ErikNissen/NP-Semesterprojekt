@@ -66,6 +66,8 @@ void PersistentFileManagement::save() {
 
 /// <BR><h3>Loads a json object from a file</h3>
 /// \param name The name of the file
+/// \return The json object
+/// \throws runtime_error if the file does not exist
 json PersistentFileManagement::load(const string name){
 	// Check if the directory exists
 	if (!filesystem::exists(basePath)) {
@@ -91,6 +93,7 @@ json PersistentFileManagement::get(string key){
 
 /// <BR><h3>Deletes a key from a json object</h3>
 /// \param key The key to delete
+/// \throws runtime_error if the key does not exist
 void PersistentFileManagement::remove(string key){
 	// Check if the key exists
 	if (this->data.contains(key)) {
@@ -107,6 +110,7 @@ void PersistentFileManagement::purge(){
 
 /// <BR><h3>Creates a new json file</h3>
 /// \param name The name of the file
+/// \throws runtime_error if the file already exists
 void PersistentFileManagement::create(string name){
 	//Check if directory exists
 	if (!filesystem::exists( this->basePath)) {
@@ -134,6 +138,8 @@ void PersistentFileManagement::create(string name){
 }
 
 /// <BR><h3>Creates a new json file</h3>
+/// \throws runtime_error if the file already exists
+/// \throws runtime_error if no name was given
 void PersistentFileManagement::create(){
 	//Check if directory exists
 	if (!filesystem::exists( filesystem::current_path().string() + "\\" +
