@@ -44,93 +44,11 @@ int main (int argc, char *argv[]) {
 
     inventory.printShelfSegments();
 
-    /*
-    auto fastestToReachContainerWithUndeclaredPrio {inventory.getFastestToReachContainerBasedOnUse({1,0,0},
-    SegmentUse::InitPrio, {})};*/
 
-    std::cout << "Fastest to reach container without prio" << std::endl;
-    //fastestToReachContainerWithUndeclaredPrio->print();
-
-    //!!! For Debugging !!!
     //!!! Startpunkt mit aktuellem Punkt usw. später noch abgleichen und überarbeiten
     SegmentDataMessage startPoint{1,0,0};
-    //auto emptyContainer{inventory.getFastestToReachEmptyContainer(startPoint)};
-
-    //!!!getFastestToReachEmptyContainer({1,0,0}) gibt noch ein anderes Ergebnis zurück, als wenn mit startPoint als Parameter direkt eine SegmentDataMessage in den entsprechenenden Konstruktor gegeben wird!!!
-    /*auto emptyContainer{inventory.getFastestToReachEmptyContainer({1,0,0})};
-    std::cout << "!!! Ausgabe mit fertiger Print-Methode: !!! \n";
-    emptyContainer.print();
-    */
 
 
-    //inventory.printListOfFastestToReachEmptyContainersWithoutConveyorBeltForAllShelfPairs(startPoint);
-
-
-    //inventory.printShelfSegments();
-
-    /*
-    auto timeSegmentMessageToFastestSegment{inventory.getFastestToReachEmptyContainer({1,0,0})};
-
-    std::cout<< "[*GESAMTWEG OHNE QUEUES*]: " << std::endl;
-    timeSegmentMessageToFastestSegment.print();
-*/
-
-    //!!! Für Debugging. Später in Main auf Basis der Methode Regale mit Containern füllen, die eine Priorität haben.!!!
-
-    /*for(int i{1}; i < 50; i++) {
-        //!!! Zugriff in folgender Zeile funktioniert nicht !!!
-        inventory.fillBasedOnFastestToReachSegments(i);
-    }*/
-
-//    inventory.printShelfSegments();
-
-
-
-    /*
-    //FOR DEBUGGING
-    std::cout << "TESTOUTPUT VON DIREKTER SHELFPAIR-ANSTEUERUNG!" << std::endl;
-    inventory.setSegment(1,0,0,10);
-
-    inventory.printShelfSegments();
-    */
-
-    /*
-
-
-
-    /*
-    auto fastestToReachEmptyContainer{inventory.getFastestToReachEmptyContainer(startPoint)};
-    std::cout << "REGAL, IN DEM INSGESAMT SCHNELLSTES ZU ERREICHENDES SEGMENT IST" << std::endl;
-    std::cout << fastestToReachEmptyContainer.getShelfNumber() << std::endl;
-    std::cout << fastestToReachEmptyContainer.getRow() << std::endl;
-    std::cout << fastestToReachEmptyContainer.getColumn() << std::endl;
-    std::cout << "time needed: " << fastestToReachEmptyContainer.getNeededTimeWithoutWaitingInQueueInSeconds() << std::endl;
-
-*/
-
-
-
-/*
-/*
-
-// !!! Mehrere Ausgaben hinterhereinanfer der jeweils gleichen Methode funktionieren. Diese Aufrufe funktionieren auch einzeln, aber nicht Nacheinander. Irgendein Problem mit Binding oder Freigeben der wenigen Pointer??? Oder Static-Methoden !!!
-
-/*
-    std::cout << "needed time for reaching shelf pair via conveyor belt in seconds: " << inventory.calculateTimeForReachingPairFromFirstPairViaConveyorBeltInSeconds(1) << std::endl;
-    std::cout << "needed time for reaching shelf pair via conveyor belt in seconds: " << inventory.calculateTimeForReachingPairFromFirstPairViaConveyorBeltInSeconds(2) << std::endl;
-    std::cout << "needed time for reaching shelf pair via conveyor belt in seconds: " << inventory.calculateTimeForReachingPairFromFirstPairViaConveyorBeltInSeconds(3) << std::endl;
-    std::cout << "needed time for reaching shelf pair via conveyor belt in seconds: " << inventory.calculateTimeForReachingPairFromFirstPairViaConveyorBeltInSeconds(4) << std::endl;
-    std::cout << "needed time for reaching shelf pair via conveyor belt in seconds: " << inventory.calculateTimeForReachingPairFromFirstPairViaConveyorBeltInSeconds(5) << std::endl;
-    std::cout << "needed time for reaching shelf pair via conveyor belt in seconds: " << inventory.calculateTimeForReachingPairFromFirstPairViaConveyorBeltInSeconds(6) << std::endl;
-*/
-
-    //std::cout << "Hello, World!" << std::endl;
-
-    /*
-    inventory.getFastestToReachEmptyContainer(startPoint).print();
-    inventory.getFastestToReachEmptyContainer(startPoint).print();
-    inventory.getFastestToReachEmptyContainer(startPoint).print();
-    */
 
     return 0;
 }
