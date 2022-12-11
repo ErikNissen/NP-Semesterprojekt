@@ -44,10 +44,6 @@ int main (int argc, char *argv[]) {
 
     inventory.printShelfSegments();
 
-    inventory.setSegmentsPriority({1,0,0}, Priority::A);
-
-    inventory.printShelfSegments();
-
     /*
     auto fastestToReachContainerWithUndeclaredPrio {inventory.getFastestToReachContainerBasedOnUse({1,0,0},
     SegmentUse::InitPrio, {})};*/

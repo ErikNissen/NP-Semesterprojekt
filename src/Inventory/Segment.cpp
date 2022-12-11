@@ -3,8 +3,7 @@
 //
 
 #include "Segment.h"
-#include "../Messages/TransferMessage.h"
-#include "../ConveyorBelt/Container.h"
+
 
 using namespace inventoryLib;
 
@@ -63,12 +62,12 @@ bool Segment::isSegmentReservedForContainerInput() const {
     return segmentReservedForContainerInput;
 }
 
-void Segment::setSegmentReservedForContainerInput(bool segmentReservedForContainerInput) {
-    Segment::segmentReservedForContainerInput = segmentReservedForContainerInput;
+void Segment::setSegmentReservedForContainerInput(bool newSegmentReservedForContainerInputState) {
+    Segment::segmentReservedForContainerInput = newSegmentReservedForContainerInputState;
 }
 
-void Segment::setSegmentMarkedForContainerOutput(bool segmentMarkedForContainerOutput) {
-    Segment::segmentReservedForContainerOutput = segmentMarkedForContainerOutput;
+void Segment::setSegmentMarkedForContainerOutput(bool newSegmentMarkedForContainerOutputState) {
+    Segment::segmentReservedForContainerOutput = newSegmentMarkedForContainerOutputState;
 }
 
 

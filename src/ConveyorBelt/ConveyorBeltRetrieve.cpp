@@ -3,6 +3,7 @@
 //
 
 #include "ConveyorBeltRetrieve.h"
+#include "../Item/Container.h"
 
 ConveyorBeltRetrieve::ConveyorBeltRetrieve() : ConveyorBelt() {}
 

@@ -5,7 +5,7 @@
 #ifndef NUPPROJECT_INVENTORY_H
 #define NUPPROJECT_INVENTORY_H
 
-# include "ShelfPair.h"
+#include "ShelfPair.h"
 #include "SegmentUse.h"
 
 namespace inventoryLib {
@@ -20,15 +20,8 @@ namespace inventoryLib {
 
         //attributes
     private:
-
-
-        //!!! Public for Debugging. Hinterher wieder private machen !!!
-    public:
         std::vector<ShelfPair> shelfPairs;
 
-        double calculateTimeForReachingPairFromFirstPairViaConveyorBeltInSeconds(unsigned int shelfPairNumber);
-
-    private:
         // log_data
 
 
@@ -124,6 +117,8 @@ namespace inventoryLib {
         std::optional<TimeSegmentMessage> getFastestToReachContainerForItemOutput(const SegmentDataMessage& currentSegment, const Item& item); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
 
         std::optional<TimeSegmentMessage> getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const SegmentUse& containerUse, const Item& item); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
+
+        double calculateTimeForReachingPairFromFirstPairViaConveyorBeltInSeconds(unsigned int shelfPairNumber);
 
     public:
         //!!! Für die folgenden beiden Methoden aktuelle Position der Bedienhilfen berücksichtigen, falls diese gerade frei sind. Dies aber eher mit Überladung der Methode machen, weil die generelle Regalzeilung ja schon vor dem Warten an der Warteschlange gemacht wird.

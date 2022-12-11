@@ -9,7 +9,7 @@
 
 #include "../Item/Item.h"
 #include "../Messages/TransferMessage.h"
-#include "../ConveyorBelt/Container.h"
+#include "../Item/Container.h"
 
 
 
@@ -47,7 +47,7 @@ namespace inventoryLib {
     public:
         Segment();
 
-        explicit Segment(const Priority &priority);
+        explicit Segment(const Priority& priority);
 
         // getters and setters
     public:

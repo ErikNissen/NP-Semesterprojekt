@@ -25,6 +25,10 @@ unsigned int Container::getMaxAmountOfItem() {
     return item.getMaxAmountPerContainer();
 }
 
+unsigned int Container::getAmountOfPlacesForItem() {
+    return item.getMaxAmountPerContainer() - currentAmountOfItem;
+}
+
 Priority Container::getItemsPriority() {
     return item.getPriority();
 }
@@ -86,6 +90,8 @@ void Container::print() {
     item.print();
     std::cout << "current amount of item: " << currentAmountOfItem << std::endl;
 }
+
+
 
 
 

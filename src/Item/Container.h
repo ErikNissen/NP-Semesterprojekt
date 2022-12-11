@@ -5,9 +5,9 @@
 #ifndef NUPPROJECT_CONTAINER_H
 #define NUPPROJECT_CONTAINER_H
 
-#include "../Item/Priority.h"
-#include "../Item/Item.h"
-#include "../Inventory/Timer.h"
+#include "Priority.h"
+#include "Item.h"
+#include "Timer.h"
 
 
 // container for containing items with amounts and priorities in a shelf segment per container
@@ -37,6 +37,7 @@ public:
     unsigned int getMaxAmountOfItem(); // gets max amount of contained item
     Priority getItemsPriority();
     void appendItemType(const Item& item);
+    unsigned int getAmountOfPlacesForItem();
 
     // methods
 private:
