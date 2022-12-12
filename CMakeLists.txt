@@ -29,4 +29,5 @@ target_link_libraries(NP_Semesterprojekt
         Inventory
         Messages
         Item
-        nlohmann_json::nlohmann_json)
+        nlohmann_json::nlohmann_json
+        src/PersistentFileManagement/json.hpp)
