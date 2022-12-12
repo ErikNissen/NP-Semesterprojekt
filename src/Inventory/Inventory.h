@@ -94,7 +94,6 @@ namespace inventoryLib {
 
         // getters and setters
     private:
-        ShelfPair& getShelfPairByShelfNumber(unsigned int shelfNumber);
         static unsigned int getShelfPairNumberByShelfNumber(unsigned int shelfNumber);
 
         void setSegmentsPriority(const SegmentDataMessage &segmentDataMessage, const Priority &priority);
@@ -124,6 +123,10 @@ namespace inventoryLib {
         double calculateTimeForReachingPairFromFirstPairViaConveyorBeltInSeconds(unsigned int shelfPairNumber);
 
     public:
+
+        //ToDo: evtl. später wieder private machen
+        ShelfPair& getShelfPairByShelfNumber(unsigned int shelfNumber);
+
         //!!! Für die folgenden beiden Methoden aktuelle Position der Bedienhilfen berücksichtigen, falls diese gerade frei sind. Dies aber eher mit Überladung der Methode machen, weil die generelle Regalzeilung ja schon vor dem Warten an der Warteschlange gemacht wird.
         //!!! -> Wenn die Berechnungen soweit implementiert sind, dass auch die Wartezeiten in der Schlange im Voraus bekannt sind, Methoden noch einmal ergänzen !!!
         std::optional<TimeSegmentMessage> reserveContainerOutputFromInventoryToGetItems(const Item& item);
