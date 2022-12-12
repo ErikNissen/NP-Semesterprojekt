@@ -2,8 +2,8 @@
 // Created by erikn on 29.11.2022.
 //
 
-#ifndef NP_SEMESTERPROJEKT_JSON_HPP
-#define NP_SEMESTERPROJEKT_JSON_HPP
+#ifndef NP_SEMESTERPROJEKT_PERSISTENTFILEMANAGEMENT_HPP
+#define NP_SEMESTERPROJEKT_PERSISTENTFILEMANAGEMENT_HPP
 
 #include <nlohmann/json.hpp>
 #include <fstream>
@@ -106,4 +106,4 @@ private:
 	nlohmann::json data;
 };
 
-#endif //NP_SEMESTERPROJEKT_JSON_HPP
+#endif //NP_SEMESTERPROJEKT_PERSISTENTFILEMANAGEMENT_HPP
