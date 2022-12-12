@@ -11,16 +11,6 @@ add_executable(NP_Semesterprojekt
 
 add_subdirectory(src)
 
-target_include_directories(NP_Semesterprojekt
-        PUBLIC src)
-
-target_link_libraries(NP_Semesterprojekt
-        ConveyorBelt
-        Inventory
-        Messages
-        Item)
-        src/main.hpp src/PersistentFileManagement/json.cpp src/PersistentFileManagement/json.hpp)
-
 include(FetchContent)
 
 FetchContent_Declare(json
@@ -31,5 +21,12 @@ FetchContent_Declare(json
 
 FetchContent_MakeAvailable(json)
 
-target_link_libraries(NP_Semesterprojekt PRIVATE
+target_include_directories(NP_Semesterprojekt
+        PUBLIC src)
+
+target_link_libraries(NP_Semesterprojekt
+        ConveyorBelt
+        Inventory
+        Messages
+        Item
         nlohmann_json::nlohmann_json)
