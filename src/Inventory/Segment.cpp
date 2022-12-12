@@ -130,16 +130,19 @@ bool Segment::hasNoPriorityLevel() {
     return (priority == Priority::N);
 }
 
-bool Segment::hasMatchingPriorityLevel(Container& externalContainer) {
-    return (priority == externalContainer.getItemsPriority());
+bool Segment::hasMatchingPriorityLevel(const Item& item) {
+    return (priority == item.getPriority());
 }
 
+bool Segment::containsNoContainerAndHasMatchingPrio(const Item& item) {
+    return !containsContainer() && hasMatchingPriorityLevel(item);
+}
 
-bool Segment::containsAtLeastOnePieceOfThisItemToGet(const Item &item) {
+bool Segment::containsAtLeastOnePieceOfThisItemToGet(const Item& item) {
     return container.containsAtLeastOnePieceOfThisItemToGet(item);
 }
 
-bool Segment::containsPlaceForAtLeastOnePieceOfThisItemToAdd(const Item &item) {
+bool Segment::containsPlaceForAtLeastOnePieceOfThisItemToAdd(const Item& item) {
     return container.containsPlaceForAtLeastOnePieceOfThisItemToAdd(item);
 }
 

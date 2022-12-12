@@ -160,7 +160,7 @@ TimeSegmentMessage Shelf::getFastestToReachEmptyContainerAlt(const SegmentDataMe
 
 //!!! Hier TransferMessage als weiteres Argument einfügen und in entsprechenden Methoden von Segment, um direkt zu gucken, welcher Container aktuell zum Item und der Anzahl passt !!!
 std::vector<SegmentDataMessage> Shelf::getListOfContainersBasedOnUse(const SegmentUse& containerUse, const Item& item) { //!!! Hier noch später Reservierung für Warenprioritäten berücksichtigen!!!
-    std::vector<SegmentDataMessage> listOfEmptyContainers;
+    std::vector<SegmentDataMessage> listOfEmptyMatchingSegmentsOrContainers;
     for(unsigned long long i{0} ; i < rowsPerShelf; i++)
     {
         for(unsigned long long j{0}; j < segmentsPerRow; j++)
@@ -170,19 +170,25 @@ std::vector<SegmentDataMessage> Shelf::getListOfContainersBasedOnUse(const Segme
             {
                 case SegmentUse::InitPrio:
                     if(matrix.at(i).at(j)->hasNoPriorityLevel()) {
-                        listOfEmptyContainers.emplace_back(shelfNumber, i, j);
+                        listOfEmptyMatchingSegmentsOrContainers.emplace_back(shelfNumber, i, j);
                     }
                     break;
 
-                case SegmentUse::Add:
+                case SegmentUse::AddItemToContainer:
                     if(matrix.at(i).at(j)->containsPlaceForAtLeastOnePieceOfThisItemToAdd(item)) {
-                        listOfEmptyContainers.emplace_back(shelfNumber, i, j);
+                        listOfEmptyMatchingSegmentsOrContainers.emplace_back(shelfNumber, i, j);
                     }
                     break;
 
-                case SegmentUse::Get:
+                case SegmentUse::GetItemFromContainer:
                     if(matrix.at(i).at(j)->containsAtLeastOnePieceOfThisItemToGet(item)) {
-                        listOfEmptyContainers.emplace_back(shelfNumber, i, j);
+                        listOfEmptyMatchingSegmentsOrContainers.emplace_back(shelfNumber, i, j);
+                    }
+                    break;
+
+                case SegmentUse::AddContainerToSegment:
+                    if(matrix.at(i).at(j)->containsNoContainerAndHasMatchingPrio(item)) {
+                        listOfEmptyMatchingSegmentsOrContainers.emplace_back(shelfNumber, i, j);
                     }
                     break;
 
@@ -191,7 +197,7 @@ std::vector<SegmentDataMessage> Shelf::getListOfContainersBasedOnUse(const Segme
             }
         }
     }
-    return listOfEmptyContainers;
+    return listOfEmptyMatchingSegmentsOrContainers;
 }
 
 double Shelf::calculateWayTimeToSegmentInSeconds(const SegmentDataMessage& currentSegment, const SegmentDataMessage& goalSegment) {

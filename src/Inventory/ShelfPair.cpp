@@ -60,10 +60,9 @@ void ShelfPair::setSegmentsPriority(const unsigned int shelfNumber, const unsign
 
 // methods
 //!!! Berücksichtigt noch nicht, dass Eingabe und Ausgabe unterschiedliche Höhen und damit unterschiedliche Strecken haben!!!
-std::optional<TimeSegmentMessage> ShelfPair::getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment,
-                                                                                  const SegmentUse& containerUse, const Item& item) {
-    auto timeSegmentMessageOfFastestWayToSegmentShelfLeft{shelfLeft.getFastestToReachContainerBasedOnUse(currentSegment, containerUse, item)};
-    auto timeSegmentMessageOfFastestWayToSegmentShelfRight{shelfRight.getFastestToReachContainerBasedOnUse(currentSegment, containerUse, item)};
+std::optional<TimeSegmentMessage> ShelfPair::getFastestToReachContainerBasedOnUse(const SegmentUse& containerUse, const Item& item) {
+    auto timeSegmentMessageOfFastestWayToSegmentShelfLeft{shelfLeft.getFastestToReachContainerBasedOnUse({1,0,0}, containerUse, item)};
+    auto timeSegmentMessageOfFastestWayToSegmentShelfRight{shelfRight.getFastestToReachContainerBasedOnUse({1,0,0}, containerUse, item)};
 
     if(timeSegmentMessageOfFastestWayToSegmentShelfLeft && timeSegmentMessageOfFastestWayToSegmentShelfRight) {
         if (timeSegmentMessageOfFastestWayToSegmentShelfLeft->getNeededTimeWithoutWaitingInQueueInSeconds() <=
