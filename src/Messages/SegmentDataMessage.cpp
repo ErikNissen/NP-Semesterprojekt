@@ -4,6 +4,8 @@
 
 #include "SegmentDataMessage.h"
 
+#include <cmath>
+
 using namespace messagesLib;
 
     // constructors
@@ -36,5 +38,9 @@ using namespace messagesLib;
         std::string rowNumberOutput = "row number: " + std::to_string(row) + "\n";
         std::string columnNumberOutput = "column number: " + std::to_string(column) + "\n";
         return shelfNumberOutput + rowNumberOutput + columnNumberOutput;
+    }
+
+    unsigned int SegmentDataMessage::getShelfPairNumber() {
+        return std::ceil(static_cast<double>(shelfNumber)/2);
     }
 
