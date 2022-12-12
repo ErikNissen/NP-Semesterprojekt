@@ -7,7 +7,6 @@ set(CMAKE_CXX_STANDARD ${CPP_VERSION})
 
 add_executable(NP_Semesterprojekt
         src/main.cpp
-        src/PersistentFileManagement/PersistentFileManagement.cpp
         )
 
 add_subdirectory(src)
@@ -30,5 +29,5 @@ target_link_libraries(NP_Semesterprojekt
         Inventory
         Messages
         Item
-        nlohmann_json::nlohmann_json
+        PersistentFileManagement
         )
