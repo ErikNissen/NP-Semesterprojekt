@@ -1,108 +1,105 @@
-#include "PersistentFileManagement/json.hpp"
+#include "main.hpp"
+#include <algorithm>
+#include "Inventory.h"
+#include "ConveyorBeltStore.h"
+#include "ConveyorBeltRetrieve.h"
+#include "Inventory.h"
 
-#include <iostream>
-#include <string>
+int main (int argc, char *argv[]) {
+    /*
+    // Initialize objects
+    TransferPoint transfer1(12);
+    TransferPoint transfer2(14.2);
+    ConveyorBeltStore conveyorStore;
+    ConveyorBeltRetrieve conveyorRetrieve;
+    Container container1(Priority::One, "Container 1");
+    Container container2(Priority::Two, "Container 2");
+    Container container3(Priority::Three, "Container 3");
 
-using namespace std;
+    // Store some containers at the TransferPoints
+    conveyorStore.transportContainer(container1, transfer1);
+    conveyorStore.transportContainer(container2, transfer1);
+    conveyorStore.transportContainer(container3, transfer2);
 
-int main() {
-	cout << "Create JSON Object" << endl;
-	auto pfm = PersistentFileManagement("test");
-	cout << endl;
+    Sleep(100);
 
-	cout << "Press any key to continue..." << endl;
-	cin.get();
-
-	cout << "Add data to JSON Object" << endl;
-	string name = "Max Mustermann";
-	pfm.add("name", name);
-	pfm.add("age", 20);
-	pfm.add("height", 1.80f);
-	pfm.add("isStudent", true);
-	cout << endl;
-
-	cout << "Press any key to continue..." << endl;
-	cin.get();
-
-	cout << "Save JSON Object to file" << endl;
-	pfm.save();
-	cout << endl;
-
-	cout << "Press any key to continue..." << endl;
-	cin.get();
-
-	cout << "Load JSON Object from file" << endl;
-	pfm.load("test");
-	cout << endl;
-
-	cout << "Press any key to continue..." << endl;
-	cin.get();
-
-	cout << "Get data from JSON Object" << endl;
-	cout << pfm.get("name") << endl;
-	cout << pfm.get("age") << endl;
-	cout << pfm.get("height") << endl;
-	cout << pfm.get("isStudent") << endl;
-	cout << endl;
-
-	cout << "Press any key to continue..." << endl;
-	cin.get();
-
-	cout << "Get all data containing in the JSON Object." << endl;
-	cout << pfm.getData() << endl;
-	cout << endl;
-
-	cout << "Press any key to continue..." << endl;
-	cin.get();
-
-	cout << "Update data in JSON Object" << endl;
-	string newName = "Maximilian Mustermann";
-	pfm.update("name", newName);
-	pfm.update("age", 21);
-	pfm.update("height", 1.81f);
-	pfm.update("isStudent", false);
-	cout << endl;
-
-	cout << "Press any key to continue..." << endl;
-	cin.get();
-
-	cout << "Search (String)" << endl;
-	pfm.search("Erik", false);
-	pfm.search("21", false);
-	pfm.search("1.81", false);
-	pfm.search("false", false);
-	cout << endl;
-
-	cout << "Press any key to continue..." << endl;
-	cin.get();
-
-	cout << "Search (Regex)" << endl;
-	cout << "contains \"E\": " << endl;
-	pfm.search(regex("E"), false);
-	pfm.search(regex("E"), true);
-
-	cout << "contains not \"a\": " << endl;
-	pfm.search(regex("[^a]"), false);
-	pfm.search(regex("[^a]"), true);
-	cout << endl;
-
-	cout << "Press any key to continue..." << endl;
-	cin.get();
-
-	cout << "Delete data in JSON Object" << endl;
-	pfm.remove("name");
-	pfm.remove("age");
-	pfm.remove("height");
-	pfm.remove("isStudent");
-	cout << endl;
-
-	cout << "Press any key to continue..." << endl;
-	cin.get();
+    // Retrieve the Containers from the TransferPoints
+    conveyorRetrieve.transportContainer(transfer2);
+    conveyorRetrieve.transportContainer(transfer1);
+    conveyorRetrieve.transportContainer(transfer1);
+    conveyorRetrieve.transportContainer(transfer2, timer);
+    conveyorRetrieve.transportContainer(transfer1, timer);
+    conveyorRetrieve.transportContainer(transfer1, timer);
 
 
-	cout << "Purge JSON Object" << endl;
-	pfm.purge();
-	cout << endl;
+    // -------------------------------------------------------------------------------
+*/
+    //!!! Für Debugging auf 5 * 5 Matrizen verändert. Projekt-Info ist 54*90
+    auto inventory{inventoryLib::Inventory(8, 90, 2, 2.6, 10, 5, 5,
+                             0.8, 0.5, 3.5, 0.4,
+                             1.2, 49.6, 28.0, 0.7,
+                             1.5, 0.0, 0.1,
+                             0.45, 0.45, 0.65, 0.4, 0.4,
+                             0.6)};
 
-	return 0;
+    inventory.printShelfSegments();
+
+
+    //!!! Startpunkt mit aktuellem Punkt usw. später noch abgleichen und überarbeiten
+    SegmentDataMessage startPoint{1,0,0};
+
+    startPoint.print();
+
+    TimeSegmentMessage testMessage{1, startPoint};
+    testMessage.print();
+
+
+    inventory.reserveSegmentToAddContainer({1,0,0});
+
+    // test adding containers
+    Item item {1, Priority::A, 5};
+    Container container {item};
+    container.addAmount(container.getAmountOfPlacesForItem()-1);
+    inventory.addContainer({1,0,0}, container);
+
+    std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> after adding container to shelf 1, row 1, segment 1: <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+    inventory.printShelfSegments();
+
+    /*
+    // test reserving segment for container output for adding item to fastest to reach container
+    auto fastestToReachContainerToAddItems{inventory.reserveContainerOutputFromInventoryToAddItems(startPoint, item)};
+    if(fastestToReachContainerToAddItems) {
+        std::cout << "Der aktuell schnellste zu erreichende Container zum Hinzufügen von Items: " << std::endl;
+        fastestToReachContainerToAddItems->print();
+    }
+    else{
+        std::cout << "Aktuell steht kein Container zum Hinzufügen von Items zur Verfügung." << std::endl;
+    }
+    */
+
+    // test reserving segment for container output for adding item to fastest to reach container
+    auto fastestToReachContainerToGetItems{inventory.reserveContainerOutputFromInventoryToGetItems(startPoint, item)};
+    if(fastestToReachContainerToGetItems) {
+        std::cout << "Der aktuell schnellste zu erreichende Container zum Entnehmen von Items: " << std::endl;
+        fastestToReachContainerToGetItems->print();
+    }
+    else{
+        std::cout << "Aktuell steht kein Container zum Entnehmen von Items zur Verfügung." << std::endl;
+    }
+
+    //inventory.reserveSegmentToGetContainer({1,0,0});
+
+
+     /*
+     inventory.reserveSegmentToGetContainer(timeSegmentMessageFromFastestToReach->getSegmentDataMessage());
+
+    //inventory.takeContainer({1,0,0});
+
+    */
+
+
+
+
+
+    return 0;
 }

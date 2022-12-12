@@ -5,10 +5,20 @@ project(NP_Semesterprojekt)
 
 set(CMAKE_CXX_STANDARD ${CPP_VERSION})
 
-include_directories(src)
-
 add_executable(NP_Semesterprojekt
         src/main.cpp
+        )
+
+add_subdirectory(src)
+
+target_include_directories(NP_Semesterprojekt
+        PUBLIC src)
+
+target_link_libraries(NP_Semesterprojekt
+        ConveyorBelt
+        Inventory
+        Messages
+        Item)
         src/main.hpp src/PersistentFileManagement/json.cpp src/PersistentFileManagement/json.hpp)
 
 include(FetchContent)
