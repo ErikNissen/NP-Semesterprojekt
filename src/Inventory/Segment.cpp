@@ -117,11 +117,11 @@ Container Segment::takeContainer() {
             return returnContainer;
         }
         else{
-            throw std::invalid_argument("A container has been tried to be taken in a not reserved segment. Something went wrong.");
+            throw std::invalid_argument("A container has been tried to be taken from a not reserved segment. Something went wrong.");
         }
     }
     else{
-        throw std::invalid_argument("A container has been tried to be added in an occupied segment. Something went wrong.");
+        throw std::invalid_argument("A container has been tried to be taken from an unoccupied segment. Something went wrong.");
     }
 }
 

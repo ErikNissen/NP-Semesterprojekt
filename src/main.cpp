@@ -48,6 +48,7 @@ int main (int argc, char *argv[]) {
     //!!! Startpunkt mit aktuellem Punkt usw. später noch abgleichen und überarbeiten
     SegmentDataMessage startPoint{1,0,0};
 
+    inventory.takeContainer({1,0,0})
 
 
     return 0;

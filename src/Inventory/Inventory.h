@@ -93,8 +93,7 @@ namespace inventoryLib {
                   double containerDepthInMeters);
 
         // getters and setters
-        //!!! Für Debugging public gemacht -> Später private machen !!!
-    public:
+    private:
         ShelfPair& getShelfPairByShelfNumber(unsigned int shelfNumber);
         static unsigned int getShelfPairNumberByShelfNumber(unsigned int shelfNumber);
 
