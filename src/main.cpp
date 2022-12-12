@@ -48,7 +48,57 @@ int main (int argc, char *argv[]) {
     //!!! Startpunkt mit aktuellem Punkt usw. später noch abgleichen und überarbeiten
     SegmentDataMessage startPoint{1,0,0};
 
-    inventory.takeContainer({1,0,0})
+    startPoint.print();
+
+    TimeSegmentMessage testMessage{1, startPoint};
+    testMessage.print();
+
+
+    inventory.reserveSegmentToAddContainer({1,0,0});
+
+    // test adding containers
+    Item item {1, Priority::A, 5};
+    Container container {item};
+    container.addAmount(container.getAmountOfPlacesForItem()-1);
+    inventory.addContainer({1,0,0}, container);
+
+    std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> after adding container to shelf 1, row 1, segment 1: <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+    inventory.printShelfSegments();
+
+    /*
+    // test reserving segment for container output for adding item to fastest to reach container
+    auto fastestToReachContainerToAddItems{inventory.reserveContainerOutputFromInventoryToAddItems(startPoint, item)};
+    if(fastestToReachContainerToAddItems) {
+        std::cout << "Der aktuell schnellste zu erreichende Container zum Hinzufügen von Items: " << std::endl;
+        fastestToReachContainerToAddItems->print();
+    }
+    else{
+        std::cout << "Aktuell steht kein Container zum Hinzufügen von Items zur Verfügung." << std::endl;
+    }
+    */
+
+    // test reserving segment for container output for adding item to fastest to reach container
+    auto fastestToReachContainerToGetItems{inventory.reserveContainerOutputFromInventoryToGetItems(startPoint, item)};
+    if(fastestToReachContainerToGetItems) {
+        std::cout << "Der aktuell schnellste zu erreichende Container zum Entnehmen von Items: " << std::endl;
+        fastestToReachContainerToGetItems->print();
+    }
+    else{
+        std::cout << "Aktuell steht kein Container zum Entnehmen von Items zur Verfügung." << std::endl;
+    }
+
+    //inventory.reserveSegmentToGetContainer({1,0,0});
+
+
+     /*
+     inventory.reserveSegmentToGetContainer(timeSegmentMessageFromFastestToReach->getSegmentDataMessage());
+
+    //inventory.takeContainer({1,0,0});
+
+    */
+
+
+
 
 
     return 0;

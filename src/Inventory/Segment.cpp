@@ -147,12 +147,8 @@ void Segment::print() {
     std::cout << "********************************"<< std::endl;
     container.print();
     printPriority();
-    /*
-    std::cout << "current amount of item: " << currentAmountOfItem << std::endl;
-    std::cout << "reserved to add amount: " << reservedToAddAmount << std::endl;
-    std::cout << "reserved to get amount: " << reservedToGetAmount << std::endl;
     std::cout << "********************************"<< std::endl;
-    */
+
 }
 
 // https://stackoverflow.com/questions/66488850/how-to-print-the-enum-value-from-its-index

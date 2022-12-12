@@ -244,7 +244,7 @@ std::optional<TimeSegmentMessage> Inventory::reserveContainerOutputFromInventory
                                                                                            const Item& item) {
     auto fastestToReachContainer{getFastestToReachContainerForItemOutput(currentSegment, item)};
     reserveSegmentToGetContainer(fastestToReachContainer->getSegmentDataMessage());
-    return {};
+    return fastestToReachContainer;
 }
 
 //ToDO: Im besten Fall diese Methode erst beim Punkt aufrufen, der das Laufband mit ansteuert und dafür noch eine Ebene aufrufen, die das schnellste zu erreichende Segment unter Berücksichtung der Warteschlangen berechnet
@@ -253,7 +253,7 @@ std::optional<TimeSegmentMessage> Inventory::reserveContainerOutputFromInventory
                                                                                            const Item& item) {
     auto fastestToReachContainer{getFastestToReachContainerForItemInput(currentSegment, item)};
     reserveSegmentToGetContainer(fastestToReachContainer->getSegmentDataMessage());
-    return {};
+    return fastestToReachContainer;
 }
 
 //!!! the selection process of the fastest to reach matching shelf segment and the reservation (this method) have to be called simultaneously
