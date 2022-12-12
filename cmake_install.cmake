@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Victor Rodriguez/CLionProjects/NP-Semesterprojekt
+# Install script for directory: H:/erikn/Projekte/NP-Semesterprojekt
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,12 +34,17 @@ endif()
 
 # Set default install directory permissions.
 if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "C:/msys64/mingw64/bin/objdump.exe")
+  set(CMAKE_OBJDUMP "C:/Users/erikn/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/223.7571.171/bin/mingw/bin/objdump.exe")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/Victor Rodriguez/CLionProjects/NP-Semesterprojekt/src/cmake_install.cmake")
+  include("H:/erikn/Projekte/NP-Semesterprojekt/src/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("H:/erikn/Projekte/NP-Semesterprojekt/_deps/json-build/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -50,5 +55,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/Victor Rodriguez/CLionProjects/NP-Semesterprojekt/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "H:/erikn/Projekte/NP-Semesterprojekt/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
