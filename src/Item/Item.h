@@ -5,7 +5,7 @@
 #ifndef NUPPROJECT_ITEM_H
 #define NUPPROJECT_ITEM_H
 
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 #include "Priority.h"
 
 namespace itemLib {

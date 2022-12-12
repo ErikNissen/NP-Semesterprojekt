@@ -14,9 +14,9 @@ Container::Container(const Item& item) {
     timer = Timer();
 }
 
-Container::Container(const Item& item, std::string name) {
+Container::Container(const Item& item, const unsigned int currentAmount) {
     this->item = item;
-    this->name = std::move(name);
+    this->currentAmountOfItem = currentAmount;
     timer = Timer();
 }
 
@@ -25,15 +25,19 @@ const Item &Container::getItem() const {
     return item;
 }
 
-unsigned int Container::getMaxAmountOfItem() {
+unsigned int Container::getMaxAmountOfItem() const {
     return item.getMaxAmountPerContainer();
 }
 
-unsigned int Container::getAmountOfPlacesForItem() {
+unsigned int Container::getCurrentAmountOfItem() const {
+    return currentAmountOfItem;
+}
+
+unsigned int Container::getAmountOfPlacesForItem() const {
     return item.getMaxAmountPerContainer() - currentAmountOfItem;
 }
 
-Priority Container::getItemsPriority() {
+Priority Container::getItemsPriority() const {
     return item.getPriority();
 }
 
@@ -94,16 +98,3 @@ void Container::print() {
     item.print();
     std::cout << "current amount of item: " << currentAmountOfItem << std::endl;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

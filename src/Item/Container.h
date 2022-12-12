@@ -18,7 +18,7 @@ class Container {
     // attributes
 private:
     Item item{};
-    unsigned int currentAmountOfItem{};
+    unsigned int currentAmountOfItem;
 
 public:
     Timer timer; // Tracks the time a Container is getting transported
@@ -30,16 +30,16 @@ public:
     // constructors
 public:
     explicit Container(const Item& item);
-    explicit Container(const Item& item, std::string name);
+    explicit Container(const Item& item, unsigned int currentAmount);
 
     // getters and setters
 public:
-    const Item &getItem() const;
-    unsigned int getMaxAmountOfItem(); // gets max amount of contained item
-    Priority getItemsPriority();
+    [[nodiscard]] const Item &getItem() const;
+    [[nodiscard]] unsigned int getMaxAmountOfItem() const; // gets max amount of contained item
+    [[nodiscard]] unsigned int getCurrentAmountOfItem() const;
+    [[nodiscard]] unsigned int getAmountOfPlacesForItem() const;
+    [[nodiscard]] Priority getItemsPriority() const;
     void appendItemType(const Item& item);
-    unsigned int getAmountOfPlacesForItem();
-
 
 
     // methods
