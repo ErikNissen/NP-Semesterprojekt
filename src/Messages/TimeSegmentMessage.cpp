@@ -11,14 +11,16 @@ using namespace messagesLib;
     // constructors
     TimeSegmentMessage::TimeSegmentMessage() = default;
 
-    TimeSegmentMessage::TimeSegmentMessage(const double neededTimeWithoutWaitingInQueueInSeconds, const unsigned int shelfPairNumber, const unsigned int shelfNumber, const unsigned long long int row, unsigned long long int column){
+    TimeSegmentMessage::TimeSegmentMessage(const double neededTimeForShelfWayInSeconds, const double neededTimeWithoutWaitingInQueueInSeconds, const unsigned int shelfPairNumber, const unsigned int shelfNumber, const unsigned long long int row, unsigned long long int column){
+        this->neededTimeForShelfWayInSeconds = neededTimeForShelfWayInSeconds;
         this->neededTimeWithoutWaitingInQueueInSeconds = neededTimeWithoutWaitingInQueueInSeconds;
         this->shelfPairNumber = shelfPairNumber; //!!! Kann mit Suchmechanismus in ShelfPair auch wegrationalisiert werden, da sie aus einander hergeleitet werden können!!!
         this->segmentDataMessage = SegmentDataMessage{shelfNumber, row, column};
     }
 
-    TimeSegmentMessage::TimeSegmentMessage(const double neededTimeWithoutWaitingInQueueInSeconds,
+    TimeSegmentMessage::TimeSegmentMessage(const double neededTimeForShelfWayInSeconds, const double neededTimeWithoutWaitingInQueueInSeconds,
                                            const SegmentDataMessage& segmentDataMessage) {
+        this->neededTimeForShelfWayInSeconds = neededTimeForShelfWayInSeconds;
         this->neededTimeWithoutWaitingInQueueInSeconds = neededTimeWithoutWaitingInQueueInSeconds;
         this->shelfPairNumber = std::ceil(segmentDataMessage.getShelfNumber()/2); //!!! Kann mit Suchmechanismus in ShelfPair auch wegrationalisiert werden, da sie aus einander hergeleitet werden können!!!
         this->segmentDataMessage = SegmentDataMessage{segmentDataMessage};
@@ -27,6 +29,9 @@ using namespace messagesLib;
 
 
     // getters and setters
+    double TimeSegmentMessage::getNeededTimeForShelfWayInSeconds() const{
+        return neededTimeForShelfWayInSeconds;
+    }
     double TimeSegmentMessage::getNeededTimeWithoutWaitingInQueueInSeconds() const{
         return neededTimeWithoutWaitingInQueueInSeconds;
     }

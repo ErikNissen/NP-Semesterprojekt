@@ -21,6 +21,10 @@ Container::Container(const Item& item, std::string name) {
 }
 
 // getters and setters
+const Item &Container::getItem() const {
+    return item;
+}
+
 unsigned int Container::getMaxAmountOfItem() {
     return item.getMaxAmountPerContainer();
 }
@@ -90,6 +94,8 @@ void Container::print() {
     item.print();
     std::cout << "current amount of item: " << currentAmountOfItem << std::endl;
 }
+
+
 
 
 

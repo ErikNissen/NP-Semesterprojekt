@@ -28,6 +28,7 @@ namespace messagesLib {
 
         // getters and setters
     public:
+        unsigned int getShelfPairNumber();
         [[nodiscard]] unsigned long long int getRow() const;
         [[nodiscard]] unsigned long long int getColumn() const;
         [[nodiscard]]unsigned int getShelfNumber() const;

@@ -34,10 +34,13 @@ public:
 
     // getters and setters
 public:
+    const Item &getItem() const;
     unsigned int getMaxAmountOfItem(); // gets max amount of contained item
     Priority getItemsPriority();
     void appendItemType(const Item& item);
     unsigned int getAmountOfPlacesForItem();
+
+
 
     // methods
 private:

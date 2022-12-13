@@ -84,8 +84,9 @@ namespace inventoryLib {
         bool containsContainer();
 
         bool hasNoPriorityLevel(); // for initializing the containers priority levels only once to reserve percentages of container amounts for different priority levels
-        bool hasMatchingPriorityLevel(Container &externalContainer);
+        bool hasMatchingPriorityLevel(const Item &item);
 
+        bool containsNoContainerAndHasMatchingPrio(const Item &item);
         bool containsAtLeastOnePieceOfThisItemToGet(const Item& item);
         bool containsPlaceForAtLeastOnePieceOfThisItemToAdd(const Item& item);
 
@@ -129,6 +130,7 @@ namespace inventoryLib {
         void addAmount(const TransferMessage &transferMessage);
         void takeAmount(const TransferMessage &transferMessage);
          */
+
 
     };
 }
