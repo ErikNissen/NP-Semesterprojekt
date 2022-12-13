@@ -79,7 +79,6 @@ Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentage
     saveAsJSONFile();
 }
 
-//ToDo: Vor dem adden testen, ob Variabla bereits vorhanden ist, falls ja, stattdessen updaten -> dafür eine Methode in PersistentFileManager erstellen
 void Inventory::saveAsJSONFile(){
     PersistentFileManagement persistentFileManagement{"Inventory"};
     std::cout << "Add data to JSON Object" << std::endl;
