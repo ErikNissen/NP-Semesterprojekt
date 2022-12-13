@@ -437,6 +437,7 @@ json PersistentFileManagement::getData() {
 
 //Setter
 /// <BR><h3>Sets the name of the file</h3>
+/// \param name The name of the file
 void PersistentFileManagement::setName(const string& name ) {
 	this->name = name;
 	this->create();

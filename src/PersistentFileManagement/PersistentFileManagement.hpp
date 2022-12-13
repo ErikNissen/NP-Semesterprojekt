@@ -5,9 +5,9 @@
 #ifndef NP_SEMESTERPROJEKT_PERSISTENTFILEMANAGEMENT_HPP
 #define NP_SEMESTERPROJEKT_PERSISTENTFILEMANAGEMENT_HPP
 
-#include <nlohmann/json.hpp>
 #include <fstream>
 #include <regex>
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
 
 class PersistentFileManagement {
 public:
