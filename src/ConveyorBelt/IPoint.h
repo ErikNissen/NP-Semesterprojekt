@@ -14,6 +14,7 @@
 class IPoint {
 public:
     explicit IPoint(inventoryLib::Inventory&);
+    void storeContainerInInventory(Container&);
     void storeItemsInInventory(itemLib::Item, unsigned int totalItemCount);
 private:
     inventoryLib::Inventory& inv;

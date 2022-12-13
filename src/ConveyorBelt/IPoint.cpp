@@ -45,7 +45,19 @@ void IPoint::dispatchContainer(Container &container, TransferPoint &tp) {
     conveyor.transportContainer(container, tp);
 }
 
-/// This is the main public method that gets called from outside the class. It is only allowed to run once at a time. TODO: If necessary (if multiple threads actually access this method), lock with Mutex.
+/// This method is only allowed to run once at a time (so the ConveyorBelt doesn't get overfilled). TODO: lock with Mutex.
+// Reserve >one< Container to be stored in the Inventory and if reservation was successful, send it to the correct TransferPoint via ConveyorBelt
+void IPoint::storeContainerInInventory(Container &container) {
+    auto answer {inv.reserveContainerToAddToInventory(container)};
+    if(answer) {
+        // put Container onto ConveyorBelt and send it to the correct TransferPoint
+        dispatchContainer(container, inv.getShelfPairByShelfNumber(answer->getShelfPairNumber()).getInputTransferPoint());
+        // wait before putting the next Container onto the ConveyorBelt
+        Sleep(250);
+    }
+}
+
+/// This is the main public method that gets called to store a certain amount of items in Inventory. How they are distributed to different Containers is handled by this method.
 // Initiate the storing of a certain amount of Items into the Inventory.
 // If possible and useful, existing Containers in Inventory will be filled before new Containers are then generated for the rest of the items.
 void IPoint::storeItemsInInventory(itemLib::Item item, const unsigned int totalItemCount) {
@@ -71,12 +83,6 @@ void IPoint::storeItemsInInventory(itemLib::Item item, const unsigned int totalI
         containers = generateContainersForItems(item, itemCount);
     }
     for(Container& c : containers) {
-        auto answer {inv.reserveContainerToAddToInventory(c)};
-        if(answer) {
-            // put Container onto ConveyorBelt and send it to the correct TransferPoint
-            dispatchContainer(c, inv.getShelfPairByShelfNumber(answer->getShelfPairNumber()).getInputTransferPoint());
-            // wait before putting the next Container onto the ConveyorBelt
-            Sleep(250);
-        }
+        storeContainerInInventory(c);
     }
 }
