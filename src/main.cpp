@@ -3,7 +3,6 @@
 #include "Inventory.h"
 #include "ConveyorBeltStore.h"
 #include "ConveyorBeltRetrieve.h"
-#include "Inventory.h"
 #include "PersistentFileManagement/PersistentFileManagement.hpp"
 
 int main (int argc, char *argv[]) {

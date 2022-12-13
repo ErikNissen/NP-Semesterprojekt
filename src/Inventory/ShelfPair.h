@@ -8,6 +8,7 @@
 
 #include "Shelf.h"
 #include "SegmentUse.h"
+#include "../ConveyorBelt/TransferPoint.h"
 #include <exception>
 #include <iostream>
 
@@ -32,6 +33,12 @@ namespace inventoryLib {
         // measurement
         double distanceBetweenShelvesOfPair;
 
+        // TransferPoint to remove Containers from and put them into the Shelf
+        TransferPoint inputTransferPoint;
+
+        // TransferPoint to put Containers on to send them to KPoint
+        TransferPoint outputTransferPoint;
+
         // constructors
     public:
         //ShelfPair(unsigned long long int rows, unsigned long long int columns);
@@ -53,6 +60,8 @@ namespace inventoryLib {
         [[nodiscard]] unsigned int getShelfPairNumber() const;
         [[nodiscard]] double getDistanceBetweenShelvesOfPair() const;
         double getShelfDepthInMeters();
+        [[nodiscard]] TransferPoint& getInputTransferPoint();
+        [[nodiscard]] TransferPoint& getOutputTransferPoint();
 
         void setSegmentsPriority(unsigned int shelfNumber, unsigned long long int row,
                                  unsigned long long int column, const Priority &priority);

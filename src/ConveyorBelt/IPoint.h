@@ -9,6 +9,7 @@
 #include "Container.h"
 #include "TransferPoint.h"
 #include "Inventory.h"
+#include "ConveyorBeltStore.h"
 
 class IPoint {
 public:
@@ -16,6 +17,7 @@ public:
     void storeItemsInInventory(itemLib::Item, unsigned int totalItemCount);
 private:
     inventoryLib::Inventory& inv;
+    ConveyorBeltStore conveyor;
     std::optional<TimeSegmentMessage> checkForNonFullContainersInInventory(const itemLib::Item& itemType);
     static std::vector<Container> generateContainersForItems(const itemLib::Item&, unsigned int itemCount);
     void dispatchContainer(Container&, TransferPoint&);
