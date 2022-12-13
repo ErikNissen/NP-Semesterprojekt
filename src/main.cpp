@@ -91,5 +91,21 @@ int main (int argc, char *argv[]) {
     }
 
 
+
+
+    std::cout << "Create JSON Object" << std::endl;
+    PersistentFileManagement pfm = PersistentFileManagement("test");
+
+    //cout << "Create JSON file" << endl;
+    //pfm.create("test");
+
+    std::cout << "Add data to JSON Object" << std::endl;
+    std::string name = "Erik";
+    pfm.add("name", name);
+    pfm.add("age", 20);
+    pfm.add("height", 1.80);
+    pfm.add("isStudent", true);
+
+
     return 0;
 }

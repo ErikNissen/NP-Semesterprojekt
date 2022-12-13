@@ -75,6 +75,20 @@ Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentage
     setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages();
 }
 
+void saveAsJSONFile(){
+    /*
+    std::cout << "Add data to JSON Object" << std::endl;
+    std::string name = "Erik";
+    pfm.add("name", name);
+    pfm.add("age", 20);
+    pfm.add("height", 1.80);
+    pfm.add("isStudent", true);
+
+    std::cout << "Save JSON Object to file" << endl;
+    pfm.save();
+     */
+}
+
 // getters and setters
 ShelfPair& Inventory::getShelfPairByShelfNumber(const unsigned int shelfNumber) {
     return shelfPairs.at(getShelfPairNumberByShelfNumber(shelfNumber)-1); // the list of shelf pairs starts at 0 but with the member shelfPairNumber = 1

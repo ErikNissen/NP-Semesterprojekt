@@ -229,12 +229,13 @@ PersistentFileManagement::update(string key, U value ) {
 		throw runtime_error("Key does not exist");
 	}
 }
-
-/// <BR><h3>Adds a value to a json object</h3>
+*/
+/*/// <BR><h3>Adds a value to a json object</h3>
 /// \param key The key of the value
 /// \param value The value
-/// \typeparam \b A The type of the value
-template<typename A> void PersistentFileManagement::add(string key, A value) {
+/// \typeparam \b T The type of the value
+template<typename T>
+void PersistentFileManagement::add(const string& key, T value) {
 	// Check if the key already exists
 	if(this->data.contains(key)){
 		throw std::runtime_error("Key already exists. Use the update function to "
@@ -367,6 +368,7 @@ void PersistentFileManagement::update( const std::string& key, json value ) {
 	}
 }
 
+/*
 /// <BR><h3>Adds a value to a json object</h3>
 /// \param key The key of the value
 /// \param value The value
@@ -431,6 +433,7 @@ void PersistentFileManagement::add( const std::string& key, json value ) {
 		this->data[key] = value;
 	}
 }
+ */
 
 
 //Getter

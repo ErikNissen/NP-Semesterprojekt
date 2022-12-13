@@ -41,8 +41,25 @@ public:
 	template<typename S> void search(S search);
 
 	template <typename U> void update(std::string key, U value);
+*/
+	//template <typename A> void add(const std::string& key, A value);
 
-	template <typename A> void add(std::string key, A value);*/
+    //!!! https://stackoverflow.com/questions/495021/why-can-templates-only-be-implemented-in-the-header-file
+    // template is easiest to use with header file declaration. Cpp-declaration does not work for template types.
+    /// <BR><h3>Adds a value to a json object</h3>
+/// \param key The key of the value
+/// \param value The value
+/// \typeparam \b T The type of the value
+    template<typename T>
+    void add(const std::string& key, T value) {
+        // Check if the key already exists
+        if(this->data.contains(key)){
+            throw std::runtime_error("Key already exists. Use the update function to "
+                                     "update the value.");
+        }else{
+            this->data[key] = value;
+        }
+    }
 
 	void search(const std::string& search, bool key);
 	void search(const std::regex& search, bool key);
@@ -53,11 +70,13 @@ public:
 	void update(const std::string& key, bool value);
 	void update(const std::string& key, nlohmann::json value);
 
+    /*
 	void add(const std::string& key, std::string value);
 	void add(const std::string& key, int value);
 	void add(const std::string& key, double value);
 	void add(const std::string& key, bool value);
-	void add(const std::string& key, nlohmann::json value);
+     */
+	//void add(const std::string& key, nlohmann::json value);
 
 	//Getter
 	nlohmann::json getData();
