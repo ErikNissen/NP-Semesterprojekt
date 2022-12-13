@@ -12,9 +12,9 @@ using json = nlohmann::json;
 // Constructor
 /// <BR><h3>Creates a new PersistentFileManagement object</h3>
 /// \param path The path to the file <VAR>(optional)</VAR>
-PersistentFileManagement::PersistentFileManagement(string name) {
+PersistentFileManagement::PersistentFileManagement(const string& newName) {
 	this->basePath = "data\\";
-	this->name = name;
+	this->name = newName;
 	if(filesystem::exists(filesystem::current_path().string() + "\\" +
 	this->basePath +
 	this->name + ".json")) {
@@ -41,16 +41,16 @@ PersistentFileManagement::~PersistentFileManagement() {
 
 /// <BR><h3>Saves a json object to a file</h3>
 /// \param path The path to the file
-void PersistentFileManagement::save(const string& name){
+void PersistentFileManagement::save(const string& newName){
 	// Check if the directory exists
 	if (!filesystem::exists( this->basePath)) {
 		// Create the directory
 		filesystem::create_directory(this->basePath);
 	}else if(!filesystem::exists(filesystem::current_path().string() + "\\"
-	+ this->basePath + name + ".json")){
-		this->create(name);
+	+ this->basePath + newName + ".json")){
+		this->create(newName);
 	}
-	ofstream file(this->basePath + name + ".json");
+	ofstream file(this->basePath + newName + ".json");
 	file << this->data.dump(4);
 	file.close();
 }
@@ -68,17 +68,17 @@ void PersistentFileManagement::save() {
 /// \param name The name of the file
 /// \return The json object
 /// \throws PersistentFileManagement::FileErrorException if the file does not exist
-json PersistentFileManagement::load(const string& name){
+json PersistentFileManagement::load(const string& newValue){
 	// Check if the directory exists
 	if (!filesystem::exists(basePath)) {
 		// Create the directory
 		std::filesystem::create_directory(basePath);
 	}else if(!filesystem::exists(filesystem::current_path().string() + "\\"
-	                             + basePath + name + ".json")){
-		throw PersistentFileManagement::FileErrorException(const_cast<char*>(("No data file found called " + name).c_str()));
+	                             + basePath + newValue + ".json")){
+		throw PersistentFileManagement::FileErrorException(("No data file found called " + newValue));
 	}
 	std::ifstream f(filesystem::current_path().string() + "\\"
-	                + this->basePath + name + ".json");
+	                + this->basePath + newValue + ".json");
 
 	return json::parse(f);
 }
@@ -113,7 +113,7 @@ void PersistentFileManagement::purge(){
 /// <BR><h3>Creates a new json file</h3>
 /// \param name The name of the file
 /// \throws PersistentFileManagement::FileErrorException if the file already exists
-void PersistentFileManagement::create(const string& name){
+void PersistentFileManagement::create(const string& newName){
 	//Check if directory exists
 	if (!filesystem::exists( this->basePath)) {
 		//Directory does not exist
@@ -121,17 +121,17 @@ void PersistentFileManagement::create(const string& name){
 		filesystem::create_directory(this->basePath);
 	}
 	//Create file
-	ofstream _file( this->basePath + name + ".json");
+	ofstream _file( this->basePath + newName + ".json");
 	//Check if file exists
 	if (!filesystem::exists(this->basePath +
-	                        name + ".json")) {
+                                    newName + ".json")) {
 		//File exists
 		//Create file
 		_file << "{}";
 		//Close file
 		_file.close();
 		//Return path
-		cout << "Created file " << PersistentFileManagement::basePath + name + ".json" << endl;
+		cout << "Created file " << PersistentFileManagement::basePath + newName + ".json" << endl;
 	} else {
 		//File exists
 		//Throw error
@@ -359,10 +359,10 @@ void PersistentFileManagement::update( const std::string& key, bool value ) {
 /// \param key The key of the value
 /// \param value The new value
 /// \throws PersistentFileManagement::KeyErrorException if the key does not exist
-void PersistentFileManagement::update( const std::string& key, json value ) {
+void PersistentFileManagement::update( const std::string& key, const json& newValue ) {
 	// Check if the key exists
 	if (this->data.contains(key)) {
-		this->data[key] = value;
+		this->data[key] = newValue;
 	}else{
 		throw PersistentFileManagement::KeyErrorException();
 	}
@@ -444,7 +444,7 @@ json PersistentFileManagement::getData() {
 
 //Setter
 /// <BR><h3>Sets the name of the file</h3>
-void PersistentFileManagement::setName(const string& name ) {
-	this->name = name;
+void PersistentFileManagement::setName(const string& newName ) {
+	this->name = newName;
 	this->create();
 }

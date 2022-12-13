@@ -75,20 +75,27 @@ Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentage
 
     setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages();
 
+    // ToDo: Vorher abfragen, ob es Daten bereits persistent gibt. Falls es sie gibt, daten von JSON laden, falls nicht, von Construktor beziehen und persistente Daten neu anlegen
     saveAsJSONFile();
 }
 
 void Inventory::saveAsJSONFile(){
     PersistentFileManagement persistentFileManagement{"Inventory"};
     std::cout << "Add data to JSON Object" << std::endl;
-    std::string name = "Kim";
-    persistentFileManagement.add("name", name);
-    persistentFileManagement.add("age", 20);
-    persistentFileManagement.add("height", 1.80);
-    persistentFileManagement.add("isStudent", true);
 
-    std::cout << "Save JSON Object to file" << std::endl;
-    //persistentFileManagement.save();
+    // counts
+    persistentFileManagement.add("amountOfShelves", amountOfShelves);
+    persistentFileManagement.add("rowsPerShelf", rowsPerShelf);
+    persistentFileManagement.add("segmentsPerRow", segmentsPerRow);
+
+    // priority percentages
+    persistentFileManagement.add("percentageOfPriorityA", percentageOfPriorityA);
+    persistentFileManagement.add("percentageOfPriorityB", percentageOfPriorityB);
+    persistentFileManagement.add("percentageOfPriorityC", percentageOfPriorityC);
+
+    // inventory
+    persistentFileManagement.add("distanceBetweenShelves", distanceBetweenShelves);
+    persistentFileManagement.add("conveyorBeltVelocity", conveyorBeltVelocity);
 }
 
 // getters and setters

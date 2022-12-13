@@ -54,7 +54,7 @@ int main (int argc, char *argv[]) {
     container.addAmount(container.getAmountOfPlacesForItem() - 1);
 
 
-
+//ToDO: Fehlerkommentare in Englisch übersetzen
     // test reserving segment for container input at the fastest to reach segment
     auto fastestToReachSegmentToAddContainer{inventory.reserveContainerToAddToInventory(container)};
     if (fastestToReachSegmentToAddContainer) {

@@ -13,7 +13,7 @@
 class PersistentFileManagement {
 public:
 	// Constructor
-	explicit PersistentFileManagement(std::string name);
+	explicit PersistentFileManagement(const std::string& name);
 
 	PersistentFileManagement();
 
@@ -68,7 +68,7 @@ public:
 	void update(const std::string& key, int value);
 	void update(const std::string& key, double value);
 	void update(const std::string& key, bool value);
-	void update(const std::string& key, nlohmann::json value);
+	void update(const std::string& key, const nlohmann::json& value);
 
     /*
 	void add(const std::string& key, std::string value);
@@ -87,35 +87,35 @@ public:
 	//Exceptions
 	class KeyErrorException : public std::exception {
 	private:
-		char * message;
+		std::string message;
 
 	public:
-		explicit KeyErrorException(char * msg="Key does not exist"): message(msg){}
-		char * what (){
+		explicit KeyErrorException(std::string msg="Key does not exist"): message(msg){}
+		std::string what (){
 			return message;
 		}
 	};
 
 	class FileErrorException : public std::exception {
 	private:
-		char * message;
+		std::string message;
 
 	public:
-		explicit FileErrorException(char * msg="File already exists"): message(msg){}
-		char * what(){
+		explicit FileErrorException(std::string msg="File already exists"): message(msg){}
+		std::string what(){
 			return message;
 		}
 	};
 
 	class NameErrorException : public std::exception {
 	private:
-		char * message;
+        std::string message;
 
 	public:
-		explicit NameErrorException(char * msg="Name is empty. Please set a name "
+		explicit NameErrorException(std::string msg = "Name is empty. Please set a name "
 									  "with the setName() function."): message
 									  (msg){}
-		char * what(){
+        std::string what(){
 			return message;
 		}
 	};
