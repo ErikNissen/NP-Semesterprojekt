@@ -19,19 +19,19 @@ public:
 	// Destructor
 	~PersistentFileManagement();
 
-	void save(std::string name);
+	void save(const std::string& name);
 
 	void save();
 
-	nlohmann::json load(std::string path);
+	nlohmann::json load(const std::string& path);
 
-	nlohmann::json get(std::string key);
+	nlohmann::json get(const std::string& key);
 
-	void remove(std::string key);
+	void remove(const std::string& key);
 
 	void purge();
 
-	void create(std::string name);
+	void create(const std::string& name);
 
 	void create();
 
@@ -43,26 +43,26 @@ public:
 
 	template <typename A> void add(std::string key, A value);*/
 
-	void search(std::string search, bool key);
-	void search(std::regex search, bool key);
+	void search(const std::string& search, bool key);
+	void search(const std::regex& search, bool key);
 
-	void update(std::string key, std::string value);
-	void update(std::string key, int value);
-	void update(std::string key, double value);
-	void update(std::string key, bool value);
-	void update(std::string key, nlohmann::json value);
+	void update(const std::string& key, const std::string& value);
+	void update(const std::string& key, int value);
+	void update(const std::string& key, double value);
+	void update(const std::string& key, bool value);
+	void update(const std::string& key, nlohmann::json value);
 
-	void add(std::string key, std::string value);
-	void add(std::string key, int value);
-	void add(std::string key, double value);
-	void add(std::string key, bool value);
-	void add(std::string key, nlohmann::json value);
+	void add(const std::string& key, std::string value);
+	void add(const std::string& key, int value);
+	void add(const std::string& key, double value);
+	void add(const std::string& key, bool value);
+	void add(const std::string& key, nlohmann::json value);
 
 	//Getter
 	nlohmann::json getData();
 
 	//Setter
-	void setName(std::string name);
+	void setName(const std::string& name);
 
 	//Exceptions
 	class KeyErrorException : public std::exception {
@@ -70,7 +70,7 @@ public:
 		char * message;
 
 	public:
-		KeyErrorException(char * msg="Key does not exist"): message(msg){}
+		explicit KeyErrorException(char * msg="Key does not exist"): message(msg){}
 		char * what (){
 			return message;
 		}
@@ -81,7 +81,7 @@ public:
 		char * message;
 
 	public:
-		FileErrorException(char * msg="File already exists"): message(msg){}
+		explicit FileErrorException(char * msg="File already exists"): message(msg){}
 		char * what(){
 			return message;
 		}
@@ -92,7 +92,7 @@ public:
 		char * message;
 
 	public:
-		NameErrorException(char * msg="Name is empty. Please set a name "
+		explicit NameErrorException(char * msg="Name is empty. Please set a name "
 									  "with the setName() function."): message
 									  (msg){}
 		char * what(){

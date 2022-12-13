@@ -125,7 +125,6 @@ namespace inventoryLib {
         bool static compareTwoElements(const TimeSegmentMessage& leftElement, const TimeSegmentMessage& rightElement);
 
     public:
-        //!!! Für folgende Methoden nochmal überprüfen, wie Zerstückelung stattfindet, wenn nicht ganze Ladung in einen Container passt
         //!!! Für folgende Methoden aktuelle Position der Bedienhilfen berücksichtigen, falls diese gerade frei sind. Dies aber eher mit Überladung der Methode machen, weil die generelle Regalzeilung ja schon vor dem Warten an der Warteschlange gemacht wird.
         //!!! -> Wenn die Berechnungen soweit implementiert sind, dass auch die Wartezeiten in der Schlange im Voraus bekannt sind, Methoden noch einmal ergänzen !!!
         void reserveSegmentToAddContainer(const SegmentDataMessage &goalSegment);
@@ -134,9 +133,8 @@ namespace inventoryLib {
         void addContainer(const SegmentDataMessage &goalSegment, const Container &newContainer);
         Container takeContainer(const SegmentDataMessage &goalSegment);
 
-        //!!! Vernünftige Handhabe einführen, wenn das Regal keinen freien Container hat, ohne dass es den Aufruf von ShelfPair insgesamt blockiert, weil ja ein anderes Regal einen passenden Platz haben kann!!!
-        std::vector<SegmentDataMessage> getListOfContainersBasedOnUse(const SegmentUse &containerUse, const Item& item);
-        std::optional<TimeSegmentMessage> getFastestToReachContainerBasedOnUse(const SegmentDataMessage& currentSegment, const SegmentUse& containerUse, const Item& item);
+        std::vector<SegmentDataMessage> getListOfSegmentsBasedOnUse(const SegmentUse &containerUse, const Item& item);
+        std::optional<TimeSegmentMessage> getFastestToReachSegmentsBasedOnUse(const SegmentDataMessage& currentSegment, const SegmentUse& containerUse, const Item& item);
         //!!! Folgende Methode noch aufheben, um ggf. die darüber nochmal effizienter zu gestalten !!!
         //TimeSegmentMessage getFastestToReachEmptyContainerAlt(const SegmentDataMessage& currentSegment);
 

@@ -9,7 +9,6 @@ using namespace inventoryLib;
 using namespace messagesLib;
 
 // constructors
-//!!! Bei Initialisierung zusätzlich die Aufteilung nach Prioritäten reservieren !!!
 
 //!!! Anstatt alle Daten einzeln zu übergeben, vllt. Container-Object und Regal-Object usw. mit fertigen Maßen übergeben und anhanddessen Daten beziehen !!!
 Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentageOfPriorityB, unsigned int percentageOfPriorityC, const double conveyorBeltVelocity, const unsigned int numberOfShelfPairs, const unsigned long long int rowsPerShelf, const unsigned long long int segmentsPerRow, const double verticalMaxVelocityInMetersPerSecond, const double verticalAccelerationInMetersPerSquareSeconds, const double horizontalMaxVelocityInMetersPerSecond, const double horizontalAccelerationInMetersPerSquareSeconds, const double distanceBetweenShelfPairs, const double shelfWidthInMeters, const double shelfHeightInMeters, const double shelfDepthInMeters, const double distanceFromFloorToInputInMeters, const double distanceFromFloorToOutputInMeters, const double distanceBetweenSegmentsInMeters, const double segmentWidthInMeters, const double segmentHeightInMeters, const double segmentDepthInMeters, const double containerWidthInMeters, const double containerHeightInMeters, const double containerDepthInMeters){
@@ -17,10 +16,10 @@ Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentage
     for(unsigned int shelfPairNumber{1}; shelfPairNumber <= numberOfShelfPairs; shelfPairNumber++){
         //shelfPairs.push_back({rowsPerShelf, segmentsPerRow});
         shelfPairs.emplace_back(shelfPairNumber, rowsPerShelf, segmentsPerRow, verticalMaxVelocityInMetersPerSecond, verticalAccelerationInMetersPerSquareSeconds, horizontalMaxVelocityInMetersPerSecond, horizontalAccelerationInMetersPerSquareSeconds,
-                              distanceBetweenShelfPairs, shelfWidthInMeters, shelfHeightInMeters, shelfDepthInMeters,
-                              distanceFromFloorToInputInMeters, distanceFromFloorToOutputInMeters, distanceBetweenSegmentsInMeters,
-                              segmentWidthInMeters, segmentHeightInMeters, segmentDepthInMeters, containerWidthInMeters, containerHeightInMeters,
-                              containerDepthInMeters);
+                                distanceBetweenShelfPairs, shelfWidthInMeters, shelfHeightInMeters, shelfDepthInMeters,
+                                distanceFromFloorToInputInMeters, distanceFromFloorToOutputInMeters, distanceBetweenSegmentsInMeters,
+                                segmentWidthInMeters, segmentHeightInMeters, segmentDepthInMeters, containerWidthInMeters, containerHeightInMeters,
+                                containerDepthInMeters);
     }
 
     //!!! Daten, die zum Regal gehören entweder nur hier deklarieren, als Parametern bei Methoden durchschleifen bis zu Shelf, oder nur in Shelf speichern und Attribute, da in einer Ebene höher sind, eine Ebene darüber, dafür Daten in den Konstruktoren durchschleifen und für die Log-Datei über Methode von jeder Klasse eigene Daten holen lassen, die dann über abgestützte Methoden durch Aufrufer weiter ergänzt werden. Letzteres ist eher objektorientiert.
@@ -73,12 +72,10 @@ Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentage
     this->containerDepthInMeters = containerDepthInMeters;
      */
 
-    //!!! Folgende Zeile wirft noch einen Speicherverwaltungsfehler aus (exit code -1073741819)
     setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages();
 }
 
 // getters and setters
-//!!! Besser auf Methode abstützen, die aus der ShelfNumber die ShelfPairNumber berechnet!!!
 ShelfPair& Inventory::getShelfPairByShelfNumber(const unsigned int shelfNumber) {
     return shelfPairs.at(getShelfPairNumberByShelfNumber(shelfNumber)-1); // the list of shelf pairs starts at 0 but with the member shelfPairNumber = 1
 }
@@ -89,46 +86,81 @@ unsigned int Inventory::getShelfPairNumberByShelfNumber(const unsigned int shelf
 
 
 // methods
-    void Inventory::setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages(){
-        unsigned int totalAmountOfShelfSegments{amountOfShelves * static_cast<unsigned int>(rowsPerShelf) * static_cast<unsigned int> (segmentsPerRow)};
-        //!!! Prio-Handhabe ggf. komplett auf Maps oder Liste umstellen und durch Liste iterieren,anstatt alle Werte einzeln zu beziehen!!!
-        unsigned int amountOfSegmentsReservedForPrioA{percentageOfPriorityA * totalAmountOfShelfSegments / 100};
-        unsigned int amountOfSegmentsReservedForPrioB{percentageOfPriorityB * totalAmountOfShelfSegments / 100};
-        unsigned int amountOfSegmentsReservedForPrioC{percentageOfPriorityC * totalAmountOfShelfSegments / 100};
+void Inventory::setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages(){
+    unsigned int totalAmountOfShelfSegments{amountOfShelves * static_cast<unsigned int>(rowsPerShelf) * static_cast<unsigned int> (segmentsPerRow)};
+    //!!! Prio-Handhabe ggf. komplett auf Maps oder Liste umstellen und durch Liste iterieren,anstatt alle Werte einzeln zu beziehen!!!
+    unsigned int amountOfSegmentsReservedForPrioA{percentageOfPriorityA * totalAmountOfShelfSegments / 100};
+    unsigned int amountOfSegmentsReservedForPrioB{percentageOfPriorityB * totalAmountOfShelfSegments / 100};
+    unsigned int amountOfSegmentsReservedForPrioC{percentageOfPriorityC * totalAmountOfShelfSegments / 100};
 
-        /*
-        unsigned int amountOfSegmentsReservedForPrioA{static_cast<unsigned int> (std::round(static_cast<double>(percentageOfPriorityA)/100 * totalAmountOfShelfSegments))};
-        unsigned int amountOfSegmentsReservedForPrioB{static_cast<unsigned int> (std::round(static_cast<double>(percentageOfPriorityB)/100 * totalAmountOfShelfSegments))};
-        unsigned int amountOfSegmentsReservedForPrioC{static_cast<unsigned int> (std::round(static_cast<double>(percentageOfPriorityC)/100 * totalAmountOfShelfSegments))};
-        */
+    /*
+    unsigned int amountOfSegmentsReservedForPrioA{static_cast<unsigned int> (std::round(static_cast<double>(percentageOfPriorityA)/100 * totalAmountOfShelfSegments))};
+    unsigned int amountOfSegmentsReservedForPrioB{static_cast<unsigned int> (std::round(static_cast<double>(percentageOfPriorityB)/100 * totalAmountOfShelfSegments))};
+    unsigned int amountOfSegmentsReservedForPrioC{static_cast<unsigned int> (std::round(static_cast<double>(percentageOfPriorityC)/100 * totalAmountOfShelfSegments))};
+    */
 
-        //!!! Stattdessen Liste aller Bestandteile machen und hier mithilfe von Mapping über alle iterieren. Alternativ Deklarationsschleife als Methode auslagern und da Parameter reinstecken !!!
-        // priorityA
-        initiateContainerPriorities(amountOfSegmentsReservedForPrioA, Priority::A);
+    //!!! Stattdessen Liste aller Bestandteile machen und hier mithilfe von Mapping über alle iterieren. Alternativ Deklarationsschleife als Methode auslagern und da Parameter reinstecken !!!
+    // priorityA
+    initiateContainerPriorities(amountOfSegmentsReservedForPrioA, Priority::A);
 
-        // priorityB
-        initiateContainerPriorities(amountOfSegmentsReservedForPrioB, Priority::B);
+    // priorityB
+    initiateContainerPriorities(amountOfSegmentsReservedForPrioB, Priority::B);
 
-        // priorityC
-        initiateContainerPriorities(amountOfSegmentsReservedForPrioC, Priority::C);
+    // priorityC
+    initiateContainerPriorities(amountOfSegmentsReservedForPrioC, Priority::C);
 
-        //!!! FOR DEBUGGING
-        std::cout << "Prios have been reserved for Containers in Segments." << std::endl;
+    //!!! FOR DEBUGGING
+    std::cout << "Prios have been reserved for Containers in Segments." << std::endl;
+}
+
+//ToDo:Bezeichner überarbeiten und vor allem kürzen!
+//ToDo: Folgende Listen-Methoden nutzen, falls Listen noch woanders weiter ausgewertet werden (z.B. am I-Punkt, um Warteschlangen zu berücksichtigen vor Reservierung)
+//ToDo: Hier noch Rückwege ergänzen
+std::vector<TimeSegmentMessage>
+Inventory::getListOfFastestToReachContainerWithoutSetPriorityPerShelfOnlyShelfWay() {
+    return getListOfFastestToReachSegmentsWayTimePerShelfOnlyShelfWay(SegmentUse::InitPrio, {});
+}
+
+std::vector<TimeSegmentMessage>
+Inventory::getListOfFastestToReachSegmentForContainerInputPerShelfOnlyShelfWay(const Container& container) {
+    return getListOfFastestToReachSegmentsWayTimePerShelfOnlyShelfWay(SegmentUse::AddContainerToSegment, container.getItem());
+}
+
+
+std::vector<TimeSegmentMessage>
+Inventory::getListOfFastestToReachContainerForItemInputPerShelfOnlyShelfWay(const Item& item) {
+    return getListOfFastestToReachSegmentsWayTimePerShelfOnlyShelfWay(SegmentUse::AddItemToContainer, item);
+}
+
+std::vector<TimeSegmentMessage> Inventory::getListOfFastestToReachContainerForItemOutputPerShelfOnlyShelfWay(const Item& item) {
+    return getListOfFastestToReachSegmentsWayTimePerShelfOnlyShelfWay(SegmentUse::GetItemFromContainer, item);
+}
+
+std::vector<TimeSegmentMessage> Inventory::getListOfFastestToReachSegmentsWayTimePerShelfOnlyShelfWay(const SegmentUse& containerUse, const Item& item) {
+    std::vector<TimeSegmentMessage> fastestToReachSegmentPerShelfPairOfAllShelfPairs{};
+    for(ShelfPair shelfPair:shelfPairs){
+        auto fastestToReachSegmentBasedOnUse{shelfPair.getFastestToReachSegmentBasedOnUse(containerUse, item)};
+        if(fastestToReachSegmentBasedOnUse) {
+            fastestToReachSegmentPerShelfPairOfAllShelfPairs.emplace_back(fastestToReachSegmentBasedOnUse.value());
+        }
     }
+    return fastestToReachSegmentPerShelfPairOfAllShelfPairs;
+}
+
+
 
 //!!! Diese Methode berechnet den Weg vom ersten Einlagerungseinstellplatz über das Laufband bis zum jeweiligen Einlagerungseinstellplatz mit ein, aber beachtet dessen Warteschlange mit den jeweiligen Wartezeiten noch nicht. !!!
 //!!! Analoge Methode ergänzen, die separat die Zeiten für die Einlagerung kennt. Dann könnten die für das Log gleich mitgegeben und für den Countdown an den Wartestationen. Ggf. aber auch woanders implementieren. Aber jeweils nur für das Zielsegment des insgesamt kürzesten Weges!!!
 //!!! Beachtet noch nicht die jeweils aktuelle Position oder die Interaktion mit Ausgabeprozessen !!!
-std::optional<TimeSegmentMessage> Inventory::getFastestToReachContainerBasedOnUse(const SegmentUse& containerUse, const Item& item) {
+std::optional<TimeSegmentMessage> Inventory::getFastestToReachSegmentBasedOnUse(const SegmentUse& containerUse, const Item& item) {
 
     double shortestTimeInSeconds {-1};
-    //TimeSegmentMessage* segmentWithFastestWay{nullptr}; //!!! Pointer-Workaround umgehen
 
     std::optional<TimeSegmentMessage> segmentWithFastestWay;
 
     for(ShelfPair shelfPair: shelfPairs){
         //!!! Bezeichner kürzen!!!
-        auto fastestToReachSegmentOfShelfPair{shelfPair.getFastestToReachContainerBasedOnUse(containerUse, item)};
+        auto fastestToReachSegmentOfShelfPair{shelfPair.getFastestToReachSegmentBasedOnUse(containerUse, item)};
 
         if(fastestToReachSegmentOfShelfPair) {
             double neededTimeForReachingSegmentFromInputWaitingPlaceInSeconds{
@@ -143,8 +175,9 @@ std::optional<TimeSegmentMessage> Inventory::getFastestToReachContainerBasedOnUs
                 neededTimeForReachingSegmentFromFirstPairsInputWaitingPlaceInSeconds < shortestTimeInSeconds) {
                 shortestTimeInSeconds = neededTimeForReachingSegmentFromFirstPairsInputWaitingPlaceInSeconds;
                 segmentWithFastestWay = std::optional<TimeSegmentMessage>{{
-                        neededTimeForReachingSegmentFromFirstPairsInputWaitingPlaceInSeconds,
-                        fastestToReachSegmentOfShelfPair->getSegmentDataMessage()}};
+                                                                                  neededTimeForReachingSegmentFromInputWaitingPlaceInSeconds,
+                                                                                  neededTimeForReachingSegmentFromFirstPairsInputWaitingPlaceInSeconds,
+                                                                                  fastestToReachSegmentOfShelfPair->getSegmentDataMessage()}};
             }
         }
     }
@@ -164,26 +197,6 @@ double Inventory::calculateTimeForReachingPairFromFirstPairViaConveyorBeltInSeco
     return static_cast<double>(shelfPairNumber - 1) * (shelfPairs.at(0).getDistanceBetweenShelvesOfPair() + 2 * shelfPairs[0].getShelfDepthInMeters())/conveyorBeltVelocity;
 }
 
-//!!! So abwandeln, dass die Liste aus dem jeweils besten Wert pro Regalpaar ohne Zeiten der Warteschlangen in einer Liste ausgegeben werden. Allerdings müssen Abfragen für Reservierungen und Umsetzung der Reservierung gleichzeitig passieren (MUTEX), damit es nicht zu Fehlverrechnungen kommt!!!
-/*
-std::vector<TimeSegmentMessage> Inventory::getListOfFastestToReachContainersByUseWithoutConveyorBeltForAllShelfPairs(const SegmentDataMessage& currentSegment) {
-    std::vector<TimeSegmentMessage> listOfFastestToReachEmptyContainersForAllPairs{};
-    for(ShelfPair& shelfPair: shelfPairs){
-        listOfFastestToReachEmptyContainersForAllPairs.emplace_back(shelfPair.getFastestToReachEmptyContainer(currentSegment));
-    }
-    return listOfFastestToReachEmptyContainersForAllPairs;
-}
-*/
-
-
-/*
-void Inventory::printListOfFastestToReachEmptyContainersWithoutConveyorBeltForAllShelfPairs(const SegmentDataMessage& currentSegment) {
-    auto listOfFastestToReachEmptyContainersWithoutConveyorBeltForAllShelfPairs{getListOfFastestToReachEmptyContainersWithoutConveyorBeltForAllShelfPairs(currentSegment)};
-    for(auto fastestToReachEmptyContainersForShelfPair: listOfFastestToReachEmptyContainersWithoutConveyorBeltForAllShelfPairs){
-        fastestToReachEmptyContainersForShelfPair.print();
-    }
-}*/
-
 //!!! Methoden zum Setzen der Prioritäten private machen!!!
 void Inventory::setSegmentsPriority(const SegmentDataMessage& segmentDataMessage,
                                     const itemLib::Priority &priority) {
@@ -194,7 +207,7 @@ void Inventory::setSegmentsPriority(const SegmentDataMessage& segmentDataMessage
     setSegmentsPriority(num, row, seg, priority);
 
     //setSegmentsPriority(segmentDataMessage.getShelfNumber(), segmentDataMessage.getRow(), segmentDataMessage.getColumn(), priority);
-    }
+}
 
 void Inventory::setSegmentsPriority(const unsigned int shelfNumber, const unsigned long long int row, const unsigned long long int column,
                                     const Priority& priority) {
@@ -213,23 +226,23 @@ void Inventory::initiateContainerPriorities(const unsigned int amountOfSegmentsR
 
 std::optional<TimeSegmentMessage>
 Inventory::getFastestToReachContainerWithoutSetPriority() {
-    return Inventory::getFastestToReachContainerBasedOnUse(SegmentUse::InitPrio, {});
+    return Inventory::getFastestToReachSegmentBasedOnUse(SegmentUse::InitPrio, {});
 }
 
 std::optional<TimeSegmentMessage>
 Inventory::getFastestToReachSegmentForContainerInput(const Container& container) {
-    return Inventory::getFastestToReachContainerBasedOnUse(SegmentUse::AddContainerToSegment, container.getItem());
+    return Inventory::getFastestToReachSegmentBasedOnUse(SegmentUse::AddContainerToSegment, container.getItem());
 }
 
 
 std::optional<TimeSegmentMessage>
 Inventory::getFastestToReachContainerForItemInput(const Item& item) {
-    return getFastestToReachContainerBasedOnUse(SegmentUse::AddItemToContainer, item);
+    return getFastestToReachSegmentBasedOnUse(SegmentUse::AddItemToContainer, item);
 }
 
 std::optional<TimeSegmentMessage>
 Inventory::getFastestToReachContainerForItemOutput(const Item& item) {
-    return getFastestToReachContainerBasedOnUse(SegmentUse::GetItemFromContainer, item);
+    return getFastestToReachSegmentBasedOnUse(SegmentUse::GetItemFromContainer, item);
 }
 
 
@@ -296,34 +309,7 @@ void Inventory::printShelfSegments() {
     }
 }
 
-/*
-std::optional<TimeSegmentMessage> Inventory::getFastestToReachContainerWithoutSetPriority() {
-    return getFastestToReachContainerWithoutSetPriority();
-}*/
 
-
-/*
-std::optional<TimeSegmentMessage> Inventory::getFastestToReachSegmentForContainerInput(const Container& container) {
-    return getFastestToReachSegmentForContainerInput(container);
-}*/
-
-/*
-std::optional<TimeSegmentMessage> Inventory::getFastestToReachContainerForItemInput(const Item &item) {
-    return getFastestToReachContainerForItemInput(item);
-}
- */
-
-/*
-std::optional<TimeSegmentMessage> Inventory::getFastestToReachContainerForItemOutput(const Item &item) {
-    return getFastestToReachContainerForItemOutput(item);
-}
- */
-
-/*
-std::optional<TimeSegmentMessage>
-Inventory::getFastestToReachContainerBasedOnUse(const SegmentUse &containerUse, const Item &item) {
-    return getFastestToReachContainerBasedOnUse(containerUse, item);
-}*/
 
 
 
