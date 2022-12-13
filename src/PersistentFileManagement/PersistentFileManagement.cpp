@@ -77,7 +77,9 @@ json PersistentFileManagement::load(const string& name){
 	                             + basePath + name + ".json")){
 		throw PersistentFileManagement::FileErrorException(const_cast<char*>(("No data file found called " + name).c_str()));
 	}
-	std::ifstream f(this->basePath + name + ".json");
+	std::ifstream f(filesystem::current_path().string() + "\\"
+	                + this->basePath + name + ".json");
+
 	return json::parse(f);
 }
 
@@ -170,8 +172,10 @@ void PersistentFileManagement::create(){
 			     endl;
 		} else {
 			//File exists
-			//Throw error
-			throw PersistentFileManagement::FileErrorException();
+			// Open file
+			ifstream datafile( filesystem::current_path().string() + "\\" +
+			                   this->basePath + this->name + ".json");
+			this->data = json::parse(datafile);
 		}
 	}
 }
