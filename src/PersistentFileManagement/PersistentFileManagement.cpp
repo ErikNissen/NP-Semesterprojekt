@@ -303,6 +303,7 @@ void PersistentFileManagement::search( const std::regex& search, bool keySearch)
 	}
 }
 
+/*
 /// <BR><h3>Updates a value in a json object</h3>
 /// \param key The key of the value
 /// \param value The new value
@@ -367,6 +368,7 @@ void PersistentFileManagement::update( const std::string& key, const json& newVa
 		throw PersistentFileManagement::KeyErrorException();
 	}
 }
+ */
 
 /*
 /// <BR><h3>Adds a value to a json object</h3>
