@@ -66,8 +66,8 @@ namespace inventoryLib {
         void reserveSegmentToAddContainer(const SegmentDataMessage &goalSegment);
         void reserveSegmentToGetContainer(const SegmentDataMessage &goalSegment);
 
-        void addContainer(const SegmentDataMessage& goalSegment, const Container& newContainer);
-        Container takeContainer(const SegmentDataMessage& goalSegment);
+        void addContainer(const SegmentDataMessage& goalSegment, const Container& newContainer); //lock_guard
+        Container takeContainer(const SegmentDataMessage& goalSegment); //lock_guard
 
         std::optional<TimeSegmentMessage> getFastestToReachSegmentBasedOnUse(const SegmentUse& containerUse, const Item& item); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
 
