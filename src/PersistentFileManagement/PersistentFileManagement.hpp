@@ -96,6 +96,22 @@ public:
 */
     //template <typename A> void add(const std::string& key, A value);
 
+
+    /// <BR><h3>Adds a value to a json object or updates it if it already exists</h3>
+/// \param key The key of the value
+/// \param value The value
+/// \typeparam \b T The type of the value
+    template<typename T>
+    void addOrIfExistentUpdate(const std::string& key, T value) {
+        // Check if the key already exists
+        if(this->data.contains(key)){
+            update(key, value);
+        }else{
+            this->data[key] = value;
+        }
+    }
+
+
     //!!! https://stackoverflow.com/questions/495021/why-can-templates-only-be-implemented-in-the-header-file
     // template is easiest to use with header file declaration. Cpp-declaration does not work for template types.
     /// <BR><h3>Adds a value to a json object</h3>

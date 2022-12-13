@@ -79,23 +79,24 @@ Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentage
     saveAsJSONFile();
 }
 
+//ToDo: Vor dem adden testen, ob Variabla bereits vorhanden ist, falls ja, stattdessen updaten -> dafür eine Methode in PersistentFileManager erstellen
 void Inventory::saveAsJSONFile(){
     PersistentFileManagement persistentFileManagement{"Inventory"};
     std::cout << "Add data to JSON Object" << std::endl;
 
     // counts
-    persistentFileManagement.add("amountOfShelves", amountOfShelves);
-    persistentFileManagement.add("rowsPerShelf", rowsPerShelf);
-    persistentFileManagement.add("segmentsPerRow", segmentsPerRow);
+    persistentFileManagement.addOrIfExistentUpdate("amountOfShelves", amountOfShelves);
+    persistentFileManagement.addOrIfExistentUpdate("rowsPerShelf", rowsPerShelf);
+    persistentFileManagement.addOrIfExistentUpdate("segmentsPerRow", segmentsPerRow);
 
     // priority percentages
-    persistentFileManagement.add("percentageOfPriorityA", percentageOfPriorityA);
-    persistentFileManagement.add("percentageOfPriorityB", percentageOfPriorityB);
-    persistentFileManagement.add("percentageOfPriorityC", percentageOfPriorityC);
+    persistentFileManagement.addOrIfExistentUpdate("percentageOfPriorityA", percentageOfPriorityA);
+    persistentFileManagement.addOrIfExistentUpdate("percentageOfPriorityB", percentageOfPriorityB);
+    persistentFileManagement.addOrIfExistentUpdate("percentageOfPriorityC", percentageOfPriorityC);
 
     // inventory
-    persistentFileManagement.add("distanceBetweenShelves", distanceBetweenShelves);
-    persistentFileManagement.add("conveyorBeltVelocity", conveyorBeltVelocity);
+    persistentFileManagement.addOrIfExistentUpdate("distanceBetweenShelves", distanceBetweenShelves);
+    persistentFileManagement.addOrIfExistentUpdate("conveyorBeltVelocity", conveyorBeltVelocity);
 }
 
 // getters and setters
