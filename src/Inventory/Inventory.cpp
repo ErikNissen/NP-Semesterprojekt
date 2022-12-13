@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include "Inventory.h"
+#include "../PersistentFileManagement/PersistentFileManagement.hpp"
 
 using namespace inventoryLib;
 using namespace messagesLib;
@@ -73,20 +74,21 @@ Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentage
      */
 
     setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages();
+
+    saveAsJSONFile();
 }
 
-void saveAsJSONFile(){
-    /*
+void Inventory::saveAsJSONFile(){
+    PersistentFileManagement persistentFileManagement{"Inventory"};
     std::cout << "Add data to JSON Object" << std::endl;
-    std::string name = "Erik";
-    pfm.add("name", name);
-    pfm.add("age", 20);
-    pfm.add("height", 1.80);
-    pfm.add("isStudent", true);
+    std::string name = "Kim";
+    persistentFileManagement.add("name", name);
+    persistentFileManagement.add("age", 20);
+    persistentFileManagement.add("height", 1.80);
+    persistentFileManagement.add("isStudent", true);
 
-    std::cout << "Save JSON Object to file" << endl;
-    pfm.save();
-     */
+    std::cout << "Save JSON Object to file" << std::endl;
+    //persistentFileManagement.save();
 }
 
 // getters and setters

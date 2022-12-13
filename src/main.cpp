@@ -37,11 +37,11 @@ int main (int argc, char *argv[]) {
 */
     //!!! Für Debugging auf 5 * 5 Matrizen verändert. Projekt-Info ist 54*90
     auto inventory{inventoryLib::Inventory(8, 90, 2, 2.6, 10, 5, 5,
-                             0.8, 0.5, 3.5, 0.4,
-                             1.2, 49.6, 28.0, 0.7,
-                             1.5, 0.0, 0.1,
-                             0.45, 0.45, 0.65, 0.4, 0.4,
-                             0.6)};
+                                           0.8, 0.5, 3.5, 0.4,
+                                           1.2, 49.6, 28.0, 0.7,
+                                           1.5, 0.0, 0.1,
+                                           0.45, 0.45, 0.65, 0.4, 0.4,
+                                           0.6)};
 
     inventory.printShelfSegments();
 
@@ -49,23 +49,27 @@ int main (int argc, char *argv[]) {
 
 
     // test adding containers
-    Item item {1, Priority::A, 5};
-    Container container {item};
-    container.addAmount(container.getAmountOfPlacesForItem()-1);
+    Item item{1, Priority::A, 5};
+    Container container{item};
+    container.addAmount(container.getAmountOfPlacesForItem() - 1);
 
 
 
     // test reserving segment for container input at the fastest to reach segment
     auto fastestToReachSegmentToAddContainer{inventory.reserveContainerToAddToInventory(container)};
-    if(fastestToReachSegmentToAddContainer) {
-        std::cout << "Das aktuell schnellste zu erreichende Segment mit passender Priorität zum Hinzufügen eines Containers: " << std::endl;
+    if (fastestToReachSegmentToAddContainer) {
+        std::cout
+                << "Das aktuell schnellste zu erreichende Segment mit passender Priorität zum Hinzufügen eines Containers: "
+                << std::endl;
         inventory.addContainer(fastestToReachSegmentToAddContainer->getSegmentDataMessage(), container);
-    }
-    else{
-        std::cout << "Aktuell steht kein Segment zum Hinzufügen eines Containers dieser Priorität zur Verfügung." << std::endl;
+    } else {
+        std::cout << "Aktuell steht kein Segment zum Hinzufügen eines Containers dieser Priorität zur Verfügung."
+                  << std::endl;
     }
 
-    std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> after adding container to shelf 1, row 1, segment 1: <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+    std::cout
+            << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> after adding container to shelf 1, row 1, segment 1: <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+            << std::endl;
     inventory.printShelfSegments();
 
     /*
@@ -82,30 +86,12 @@ int main (int argc, char *argv[]) {
 
     // test reserving segment for container output for adding item to fastest to reach container
     auto fastestToReachContainerToGetItems{inventory.reserveContainerOutputFromInventoryToGetItems(item)};
-    if(fastestToReachContainerToGetItems) {
+    if (fastestToReachContainerToGetItems) {
         std::cout << "Der aktuell schnellste zu erreichende Container zum Entnehmen von Items: " << std::endl;
         fastestToReachContainerToGetItems->print();
-    }
-    else{
+    } else {
         std::cout << "Aktuell steht kein Container zum Entnehmen von Items zur Verfügung." << std::endl;
     }
-
-
-
-
-    std::cout << "Create JSON Object" << std::endl;
-    PersistentFileManagement pfm = PersistentFileManagement("test");
-
-    //cout << "Create JSON file" << endl;
-    //pfm.create("test");
-
-    std::cout << "Add data to JSON Object" << std::endl;
-    std::string name = "Erik";
-    pfm.add("name", name);
-    pfm.add("age", 20);
-    pfm.add("height", 1.80);
-    pfm.add("isStudent", true);
-
 
     return 0;
 }

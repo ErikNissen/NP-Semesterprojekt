@@ -156,6 +156,8 @@ namespace inventoryLib {
 
         std::vector<TimeSegmentMessage>
         getListOfFastestToReachContainerForItemOutputPerShelfOnlyShelfWay(const Item &item);
+
+        void saveAsJSONFile();
     };
 }
 
