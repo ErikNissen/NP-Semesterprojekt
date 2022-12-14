@@ -79,6 +79,19 @@ Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentage
     saveAsJSONFile();
 }
 
+
+// getters and setters
+ShelfPair& Inventory::getShelfPairByShelfNumber(const unsigned int shelfNumber) {
+    return shelfPairs.at(getShelfPairNumberByShelfNumber(shelfNumber)-1); // the list of shelf pairs starts at 0 but with the member shelfPairNumber = 1
+}
+
+unsigned int Inventory::getShelfPairNumberByShelfNumber(const unsigned int shelfNumber) {
+    return std::ceil(static_cast<double>(shelfNumber)/2);
+}
+
+
+// methods
+
 void Inventory::saveAsJSONFile(){
     PersistentFileManagement persistentFileManagement{"Inventory"};
     std::cout << "Add data to JSON Object" << std::endl;
@@ -96,19 +109,15 @@ void Inventory::saveAsJSONFile(){
     // inventory
     persistentFileManagement.addOrIfExistentUpdate("distanceBetweenShelves", distanceBetweenShelves);
     persistentFileManagement.addOrIfExistentUpdate("conveyorBeltVelocity", conveyorBeltVelocity);
-}
 
-// getters and setters
-ShelfPair& Inventory::getShelfPairByShelfNumber(const unsigned int shelfNumber) {
-    return shelfPairs.at(getShelfPairNumberByShelfNumber(shelfNumber)-1); // the list of shelf pairs starts at 0 but with the member shelfPairNumber = 1
-}
+    //ToDo: Hier Aufruf der Speicher-Methode der einzelnen ShelfPairs einfügen!
 
-unsigned int Inventory::getShelfPairNumberByShelfNumber(const unsigned int shelfNumber) {
-    return std::ceil(static_cast<double>(shelfNumber)/2);
+    //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
+    //ToDo: Alternativ zur Lösung oben jeweils eine einzelne Datei anlegen, die mit der Kodierung benannt ist!
+
 }
 
 
-// methods
 void Inventory::setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages(){
     unsigned int totalAmountOfShelfSegments{amountOfShelves * static_cast<unsigned int>(rowsPerShelf) * static_cast<unsigned int> (segmentsPerRow)};
     //!!! Prio-Handhabe ggf. komplett auf Maps oder Liste umstellen und durch Liste iterieren,anstatt alle Werte einzeln zu beziehen!!!

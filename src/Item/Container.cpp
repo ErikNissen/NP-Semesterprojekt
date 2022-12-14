@@ -3,6 +3,7 @@
 //
 
 #include "Container.h"
+#include "../PersistentFileManagement/PersistentFileManagement.hpp"
 //
 // Created by Kim Simoski on 27.11.2022.
 //
@@ -14,15 +15,40 @@ Container::Container(const Item& item) {
     timer = Timer();
 }
 
-Container::Container(const Item& item, std::string name) {
+Container::Container(const Item& item, const unsigned int id) {
+    this->id = id;
     this->item = item;
-    this->name = std::move(name);
     timer = Timer();
 }
 
+
 // getters and setters
+unsigned int Container::getId() const {
+    return id;
+}
+
+Timer Container::getTimer() const {
+    return timer;
+}
+
+const float Container::getLength() {
+    return length;
+}
+
+const float Container::getWidth() {
+    return width;
+}
+
+const float Container::getHeight() {
+    return height;
+}
+
 const Item &Container::getItem() const {
     return item;
+}
+
+unsigned int Container::getCurrentAmountOfItem() const {
+    return currentAmountOfItem;
 }
 
 unsigned int Container::getMaxAmountOfItem() {
@@ -42,6 +68,26 @@ void Container::appendItemType(const Item& externalItem) {
 }
 
 // methods
+
+void Container::saveAsJSONFile() const{
+    PersistentFileManagement persistentFileManagement{"Inventory"};  //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
+
+    std::cout << "Add data to JSON Object" << std::endl;
+
+    persistentFileManagement.addOrIfExistentUpdate("id", id);
+
+    persistentFileManagement.addOrIfExistentUpdate("currentAmountOfItem", currentAmountOfItem);
+
+    // measurements
+    persistentFileManagement.addOrIfExistentUpdate("length", length);
+    persistentFileManagement.addOrIfExistentUpdate("width", width);
+    persistentFileManagement.addOrIfExistentUpdate("height", height);
+
+
+    //??ToDo: Hier Aufruf der Speicher-Methode des Countdowns einfügen??
+    //ToDo: Hier Aufruf der Speicher-Methode des Items einfügen!
+}
+
 //!!![MUTEX-NUTZUNG]!!!
 //!!! Checks müssen zusammen mit der direkten Reservierung passender Plätze im Regal in einem Mutex stattfinden, sonst kommt es bei Ein- und/oder Auslagerung zu Doppelbuchungen, zu falschen Sendungen und Überschreitungen maximaler Anzahlen!!!
 // checks for an amount to get in regards of already reserved amounts to get but not amounts to add. Cause latter ones are not yet added. But first ones are not allowed to be booked twice.
@@ -94,6 +140,12 @@ void Container::print() {
     item.print();
     std::cout << "current amount of item: " << currentAmountOfItem << std::endl;
 }
+
+
+
+
+
+
 
 
 

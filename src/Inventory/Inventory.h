@@ -102,8 +102,8 @@ namespace inventoryLib {
 
         // methods
     private:
+        void saveAsJSONFile();
 
-       //void initiateContainerPriorities();
         void setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages();
         void initiateContainerPriorities(unsigned int amountOfSegmentsReservedForPrio, const Priority &priority);
 
@@ -117,7 +117,6 @@ namespace inventoryLib {
         std::optional<TimeSegmentMessage> getFastestToReachContainerForItemOutput(const Item& item); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
 
         std::optional<TimeSegmentMessage> getFastestToReachSegmentBasedOnUse(const SegmentUse& containerUse, const Item& item); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
-
 
         double calculateTimeForReachingPairFromFirstPairViaConveyorBeltInSeconds(unsigned int shelfPairNumber);
 
@@ -156,8 +155,6 @@ namespace inventoryLib {
 
         std::vector<TimeSegmentMessage>
         getListOfFastestToReachContainerForItemOutputPerShelfOnlyShelfWay(const Item &item);
-
-        void saveAsJSONFile();
     };
 }
 

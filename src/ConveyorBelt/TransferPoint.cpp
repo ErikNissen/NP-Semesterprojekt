@@ -6,10 +6,10 @@ TransferPoint::TransferPoint(float _distanceToPackaging) : distanceToPackaging{_
 // Put a Container onto the TransferPoint
 void TransferPoint::addContainer(Container &_container) {
     // Put new Container onto the TransferPoint if there is still room
-    if((1 + containers.size()) * Container::length < this->length) {
-        _container.timer.addSeconds(2.5);
+    if((1 + containers.size()) * _container.getLength() < this->length) {
+        _container.getTimer().addSeconds(2.5);
         containers.push(_container);
-        std::cout << "Added Container \"" << _container.name << "\" to TransferPoint. Took 2.5 seconds. Timer now at: " << _container.timer.timeInSeconds << std::endl;
+        std::cout << "Added Container \"" << _container.getId() << "\" to TransferPoint. Took 2.5 seconds. Timer now at: " << _container.getTimer().getTimeInSeconds() << std::endl;
     }
 }
 
@@ -21,10 +21,10 @@ Container &TransferPoint::removeContainer() {
     }
     // Store the first Container from the queue
     Container& container = containers.front();
-    container.timer.addSeconds(2.5);
+    container.getTimer().addSeconds(2.5);
     // Remove from queue
     containers.pop();
-    std::cout << "Removed Container \"" << container.name << "\" from TransferPoint. Took 2.5 seconds. Timer now at: " << container.timer.timeInSeconds << std::endl;
+    std::cout << "Removed Container \"" << container.getId() << "\" from TransferPoint. Took 2.5 seconds. Timer now at: " << container.getTimer().getTimeInSeconds() << std::endl;
     return container;
 }
 

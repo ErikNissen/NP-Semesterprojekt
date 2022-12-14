@@ -58,6 +58,8 @@ namespace inventoryLib {
                                  unsigned long long int column, const Priority &priority);
 
         // methods
+    private:
+        void saveAsJSONFile();
     public:
         //!!! Für folgende Methoden nochmal überprüfen, wie Zerstückelung stattfindet, wenn nicht ganze Ladung in einen Container passt
         //!!! Für folgende Methoden aktuelle Position der Bedienhilfen berücksichtigen, falls diese gerade frei sind. Dies aber eher mit Überladung der Methode machen, weil die generelle Regalzeilung ja schon vor dem Warten an der Warteschlange gemacht wird.

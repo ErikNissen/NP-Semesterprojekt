@@ -3,6 +3,7 @@
 //
 
 #include "Segment.h"
+#include "PersistentFileManagement.hpp"
 
 
 using namespace inventoryLib;
@@ -40,7 +41,6 @@ void Segment::setContainer(const Container &newContainer) {
 }
 
 
-
 Priority Segment::getPriority() const {
     return priority;
 }
@@ -72,6 +72,31 @@ void Segment::setSegmentMarkedForContainerOutput(bool newSegmentMarkedForContain
 
 
 // methods
+
+void Segment::saveAsJSONFile(){
+    PersistentFileManagement persistentFileManagement{"Inventory"};  //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
+
+    std::cout << "Add data to JSON Object" << std::endl;
+
+    //ToDo: Auskommentierte Attribute eingliedern, falls sie relevant sind und dafür in den Konstruktor aufnehmen (siehe Konstruktor von Shelf)!
+    /*
+    persistentFileManagement.addOrIfExistentUpdate("distanceBetweenSegmentsInMeters", distanceBetweenSegmentsInMeters);
+
+    persistentFileManagement.addOrIfExistentUpdate("segmentWidthInMeters", segmentWidthInMeters);
+    persistentFileManagement.addOrIfExistentUpdate("segmentHeightInMeters", segmentHeightInMeters);
+    persistentFileManagement.addOrIfExistentUpdate("segmentDepthInMeters", segmentDepthInMeters);
+    */
+
+    // flags
+    persistentFileManagement.addOrIfExistentUpdate("segmentReservedForContainerInput", segmentReservedForContainerInput);
+    persistentFileManagement.addOrIfExistentUpdate("segmentReservedForContainerOutput", segmentReservedForContainerOutput);
+
+    //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
+    //ToDo: Alternativ zur Lösung oben jeweils eine einzelne Datei anlegen, die mit der Kodierung benannt ist!
+    persistentFileManagement.addOrIfExistentUpdate("priority", priority);
+
+    //ToDo: Hier Aufruf der Speicher-Methode des einzelnen Container einfügen!
+}
 
 
 void Segment::deleteReservationFromSegmentToAddContainer() {

@@ -3,6 +3,7 @@
 //
 
 #include "ShelfPair.h"
+#include "PersistentFileManagement.hpp"
 
 using namespace inventoryLib;
 using namespace messagesLib;
@@ -59,6 +60,19 @@ void ShelfPair::setSegmentsPriority(const unsigned int shelfNumber, const unsign
 }
 
 // methods
+
+void ShelfPair::saveAsJSONFile(){
+    PersistentFileManagement persistentFileManagement{"Inventory"};
+    std::cout << "Add data to JSON Object" << std::endl;
+
+    //ToDo: Hier Aufruf der Speicher-Methode der einzelnen Shelves einfügen!
+
+    //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
+    //ToDo: Alternativ zur Lösung oben jeweils eine einzelne Datei anlegen, die mit der Kodierung benannt ist!
+
+}
+
+
 //!!! Berücksichtigt noch nicht, dass Eingabe und Ausgabe unterschiedliche Höhen und damit unterschiedliche Strecken haben!!!
 std::optional<TimeSegmentMessage> ShelfPair::getFastestToReachSegmentBasedOnUse(const SegmentUse& containerUse, const Item& item) {
     auto timeSegmentMessageOfFastestWayToSegmentShelfLeft{

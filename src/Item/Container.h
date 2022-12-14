@@ -17,24 +17,35 @@ using namespace itemLib;
 class Container {
     // attributes
 private:
+    unsigned int id{};
     Item item{};
     unsigned int currentAmountOfItem{};
 
-public:
     Timer timer; // Tracks the time a Container is getting transported
+
+    // measurements
     constexpr static float length = 0.4;
     constexpr static float width = 0.6;
     constexpr static float height = 0.4;
-    std::string name = "Container";
+
 
     // constructors
 public:
     explicit Container(const Item& item);
-    explicit Container(const Item& item, std::string name);
+    explicit Container(const Item& item, unsigned int id);
+
+    unsigned int getId() const;
 
     // getters and setters
 public:
-    const Item &getItem() const;
+
+    [[nodiscard]] unsigned int getCurrentAmountOfItem() const;
+    [[nodiscard]] Timer getTimer() const;
+    static const float getLength();
+    static const float getWidth();
+    static const float getHeight();
+
+    [[nodiscard]] const Item &getItem() const;
     unsigned int getMaxAmountOfItem(); // gets max amount of contained item
     Priority getItemsPriority();
     void appendItemType(const Item& item);
@@ -44,8 +55,10 @@ public:
 
     // methods
 private:
+    void saveAsJSONFile() const;
     [[nodiscard]] bool containsAmountToGet(unsigned int amount) const;
     bool containsPlaceForAmountToAdd(unsigned int amount);
+
 public:
     bool containsItemsOfSameItemKind(const Item& item);
     [[nodiscard]] bool isEmpty() const;

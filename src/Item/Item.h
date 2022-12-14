@@ -37,11 +37,11 @@ namespace itemLib {
 
         // methods
     private:
+        void saveAsJSONFile();
         void printPriority();
 
     public:
         void print();
-
     };
 }
 
