@@ -3,7 +3,7 @@
 //
 
 #include "Segment.h"
-
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
 
 using namespace inventoryLib;
 
@@ -176,7 +176,16 @@ void Segment::printPriority() {
     }
 }
 
-
+std::string Segment::toString() {
+	nlohmann::json data;
+	data["priority"] = this->priority;
+	data["Container"] = nlohmann::json::parse(this->container.toString());
+	data["segmentReservedForContainerInput"] =
+			this->segmentReservedForContainerInput;
+	data["segmentReservedForContainerOutput"] =
+			this->segmentReservedForContainerOutput;
+	return data.dump();
+}
 
 
 

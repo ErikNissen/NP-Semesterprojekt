@@ -72,6 +72,9 @@ namespace inventoryLib {
         std::optional<TimeSegmentMessage> getFastestToReachSegmentBasedOnUse(const SegmentUse& containerUse, const Item& item); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
 
         void printAllShelfSegments();
+
+		// ToDo Erik Nissen
+		std::string toString();
     };
 }
 

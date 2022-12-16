@@ -92,7 +92,7 @@ namespace inventoryLib {
 
         void print();
         void printPriority();
-
+		std::string toString();
 
 
 

@@ -59,6 +59,8 @@ public:
     void addAmount(unsigned int amount);
     void takeAmount(unsigned int amount);
     void print();
+	// ToDo Erik Nissen
+	std::string toString();
 };
 
 #endif //NUPPROJECT_CONTAINER_H

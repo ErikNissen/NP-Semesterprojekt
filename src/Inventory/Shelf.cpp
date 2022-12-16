@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <vector>
 #include <optional>
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
 
 
 using namespace inventoryLib;
@@ -282,7 +283,43 @@ void Shelf::printShelfSegments() {
     }
 }
 
+std::string Shelf::toString() {
+	nlohmann::json data, matrix;
+	std::stringstream ss;
+	for(auto i = 0; i < this->matrix.size(); ++i){
+		for (auto j = this->matrix[i].size(); j <= this->matrix.size(); ++j){
+			matrix[i] = j;
+		}
+	}
+	data["Matrix"] = matrix;
+	data["rowsPerShelf"] = this->rowsPerShelf;
+	data["segmentsPerRow"] = this->segmentsPerRow;
+	data["verticalMaxVelocityInMetersPerSecond"] =
+			this->verticalMaxVelocityInMetersPerSecond;
+	data["verticalAccelerationInMetersPerSquareSeconds"] =
+			this->verticalAccelerationInMetersPerSquareSeconds;
+	data["horizontalMaxVelocityInMetersPerSecond"] =
+			this->horizontalMaxVelocityInMetersPerSecond;
+	data["horizontalAccelerationInMetersPerSquareSeconds"] =
+			this->horizontalAccelerationInMetersPerSquareSeconds;
+	data["shelfWidthInMeters"] = this->shelfWidthInMeters;
+	data["shelfHeightInMeters"] = this->shelfHeightInMeters;
+	data["shelfDepthInMeters"] = this->shelfDepthInMeters;
+	data["distanceFromFloorToInputInMeters"] =
+			this->distanceFromFloorToInputInMeters;
+	data["distanceFromFloorToOutputInMeters"] =
+			this->distanceFromFloorToOutputInMeters;
+	data["distanceBetweenSegmentsInMeters"] =
+			this->distanceBetweenSegmentsInMeters;
+	data["segmentWidthInMeters"] = this->segmentWidthInMeters;
+	data["segmentHeightInMeters"] = this->segmentHeightInMeters;
+	data["segmentDepthInMeters"] = this->segmentDepthInMeters;
+	data["containerWidthInMeters"] = this->containerWidthInMeters;
+	data["containerHeightInMeters"] = this->containerHeightInMeters;
+	data["containerDepthInMeters"] = this->containerDepthInMeters;
 
+	return data.dump();
+}
 
 
 

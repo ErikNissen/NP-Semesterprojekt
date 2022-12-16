@@ -5,6 +5,7 @@
 #include "PersistentFileManagement.hpp"
 #include <iostream>
 #include <string>
+#include <chrono>
 
 using namespace std;
 using json = nlohmann::json;
@@ -14,6 +15,7 @@ using json = nlohmann::json;
 /// \param path The path to the file <VAR>(optional)</VAR>
 PersistentFileManagement::PersistentFileManagement(string name) {
 	this->basePath = "data\\";
+	this->logPath = "log\\";
 	this->name = name;
 	if(filesystem::exists(filesystem::current_path().string() + "\\" +
 	this->basePath +
@@ -27,6 +29,7 @@ PersistentFileManagement::PersistentFileManagement(string name) {
 
 PersistentFileManagement::PersistentFileManagement() {
 	this->basePath = "data\\";
+	this->logPath = "log\\";
 	this->data = json::object();
 }
 
@@ -179,70 +182,6 @@ void PersistentFileManagement::create(){
 		}
 	}
 }
-
-
-// Template functions
-
-/// <BR><h3>Searches for a value in a json object</h3>
-/// \param key The key of the value (string or regex)
-/// \typeparam \b S The type of the value (string or regex)
-/*template<typename S> void PersistentFileManagement::search(S search) {
-	assert(typeid(search) == typeid(string) || typeid(search) == typeid(regex));
-
-	int counter = 0;
-
-	if(typeid(search) == typeid(string)){
-		for (auto& element : this->data.items()) {
-			if(element.value() == search){
-				cout << "[Found] " << element.key() << " : " << element.value()
-				<< endl;
-				counter++;
-			}
-		}
-	}else if(typeid(search) == typeid(regex)){
-		for (auto& element : this->data.items()) {
-			if(regex_search(element.value(), search)){
-				cout << "[Found] " << element.key() << " : " << element.value()
-				<< endl;
-				counter++;
-			}
-		}
-	}else{
-		throw runtime_error("Invalid search type");
-	}
-
-	if(counter == 0){
-		cout << "No results found" << endl;
-	}
-}
-
-/// <BR><h3>Updates a value in a json object</h3>
-/// \param key The key of the value
-/// \param value The new value
-/// \typeparam \b U The type of the value
-template<typename U> void
-PersistentFileManagement::update(string key, U value ) {
-	// Check if the key exists
-	if (this->data.contains(key)) {
-		this->data[key] = value;
-	}else{
-		throw runtime_error("Key does not exist");
-	}
-}
-
-/// <BR><h3>Adds a value to a json object</h3>
-/// \param key The key of the value
-/// \param value The value
-/// \typeparam \b A The type of the value
-template<typename A> void PersistentFileManagement::add(string key, A value) {
-	// Check if the key already exists
-	if(this->data.contains(key)){
-		throw std::runtime_error("Key already exists. Use the update function to "
-		                         "update the value.");
-	}else{
-		this->data[key] = value;
-	}
-}*/
 
 /// <BR><h3>Search for a value or key.</h3>
 /// \param search The value or key to search for
@@ -430,6 +369,40 @@ void PersistentFileManagement::add( const std::string& key, json value ) {
 	}else{
 		this->data[key] = value;
 	}
+}
+
+
+void PersistentFileManagement::log(
+		std::chrono::duration<std::chrono::steady_clock> minTime,
+		std::chrono::duration<std::chrono::steady_clock> maxTime,
+		inventoryLib::Inventory &inventory
+) {
+	// Calculate the median time
+	//auto medianTime{minTime + (maxTime - minTime) / 2};
+
+	// Open the file
+	std::ofstream file;
+	string filename{filesystem::current_path().string() + "\\" +
+			this->logPath + this->name + ".log"};
+
+	// Check if the file exists
+	if (filesystem::exists(filename)) {
+		// Open the file in append mode
+		file.open(filename, std::ios::app);
+	}else{
+		// Open the file in write mode
+		file.open(filename, std::ios::out);
+	}
+
+	json inventoryJson = json::parse(inventory.toString());
+	json log;
+	log["Inventory"] = inventoryJson;
+	/*log["minTime"] = minTime;
+	log["maxTime"] = maxTime;
+	log["medianTime"] = medianTime;*/
+	cout << inventoryJson.dump(1);
+	file << inventoryJson.dump();
+	file.close();
 }
 
 

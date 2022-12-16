@@ -156,6 +156,9 @@ namespace inventoryLib {
 
         std::vector<TimeSegmentMessage>
         getListOfFastestToReachContainerForItemOutputPerShelfOnlyShelfWay(const Item &item);
+
+		// ToDo Erik Nissen
+		std::string toString();
     };
 }
 

@@ -139,6 +139,9 @@ namespace inventoryLib {
         //TimeSegmentMessage getFastestToReachEmptyContainerAlt(const SegmentDataMessage& currentSegment);
 
         void printShelfSegments();
+
+		// ToDo Erik Nissen
+	    std::string toString();
     };
 }
 

@@ -9,6 +9,8 @@
 #include <fstream>
 #include <regex>
 #include "../../_deps/json-src/single_include/nlohmann/json.hpp"
+#include "../../src/Inventory/Inventory.h"
+#include <chrono>
 
 class PersistentFileManagement {
 public:
@@ -36,14 +38,6 @@ public:
 
 	void create();
 
-	// Template functions
-	/*
-	template<typename S> void search(S search);
-
-	template <typename U> void update(std::string key, U value);
-
-	template <typename A> void add(std::string key, A value);*/
-
 	void search(const std::string& search, bool key);
 	void search(const std::regex& search, bool key);
 
@@ -58,6 +52,10 @@ public:
 	void add(const std::string& key, double value);
 	void add(const std::string& key, bool value);
 	void add(const std::string& key, nlohmann::json value);
+
+	void log(std::chrono::duration<std::chrono::steady_clock> minTime,
+	         std::chrono::duration<std::chrono::steady_clock> maxTime,
+			 inventoryLib::Inventory& inventory);
 
 	//Getter
 	nlohmann::json getData();
@@ -104,6 +102,7 @@ public:
 private:
 	std::string name;
 	std::string basePath;
+	std::string logPath;
 	nlohmann::json data;
 };
 

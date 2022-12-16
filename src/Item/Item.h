@@ -41,6 +41,8 @@ namespace itemLib {
 
     public:
         void print();
+		// ToDo Erik Nissen
+		std::string toString();
 
     };
 }

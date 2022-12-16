@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include "Inventory.h"
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
 
 using namespace inventoryLib;
 using namespace messagesLib;
@@ -309,7 +310,24 @@ void Inventory::printShelfSegments() {
     }
 }
 
+std::string Inventory::toString() {
+	nlohmann::json data, sP;
+	std::stringstream ss;
+	for(auto i = 0; i < this->shelfPairs.size(); ++i){
+		sP[i] = nlohmann::json::parse(this->shelfPairs[i].toString());
+	}
+	data["shelfPairs"] = sP;
+	data["amountOfShelves"] = this->amountOfShelves;
+	data["rowsPerShelf"] = this->rowsPerShelf;
+	data["segmentsPerRow"] = this->segmentsPerRow;
+	data["conveyorBeltVelocity"] = this->conveyorBeltVelocity;
+	data["distanceBetweenShelves"] = this->distanceBetweenShelves;
+	data["percentageOfPriorityA"] = this->percentageOfPriorityA;
+	data["percentageOfPriorityB"] = this->percentageOfPriorityB;
+	data["percentageOfPriorityC"] = this->percentageOfPriorityC;
 
+	return data.dump();
+}
 
 
 

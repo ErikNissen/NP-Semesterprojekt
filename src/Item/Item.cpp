@@ -3,6 +3,7 @@
 //
 
 #include "Item.h"
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
 
 using namespace  itemLib;
 
@@ -66,6 +67,14 @@ void Item::printPriority() {
     }
 }
 
+std::string Item::toString(){
+	nlohmann::json data;
+	data["itemID"] = this->itemID;
+	data["Priority"] = this->priority;
+	data["maxAmountPerContainer"] = this->maxAmountPerContainer;
+
+	return data.dump();
+}
 
 
 

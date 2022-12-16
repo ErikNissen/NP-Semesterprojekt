@@ -3,6 +3,7 @@
 //
 
 #include "Container.h"
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
 //
 // Created by Kim Simoski on 27.11.2022.
 //
@@ -95,15 +96,14 @@ void Container::print() {
     std::cout << "current amount of item: " << currentAmountOfItem << std::endl;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
+std::string Container::toString() {
+	nlohmann::json data;
+	data["Item"] = nlohmann::json::parse(this->item.toString());
+	data["currentAmountOfItem"] = this->currentAmountOfItem;
+	data["length"] = this->length;
+	data["width"] = this->width;
+	data["height"] = this->height;
+	data["name"] = this->name;
+	data["timer"] = this->timer.timeInSeconds;
+	return data.dump();
+}
