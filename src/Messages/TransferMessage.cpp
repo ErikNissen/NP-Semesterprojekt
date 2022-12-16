@@ -20,3 +20,7 @@ unsigned int TransferMessage::getAmountToTransfer() const {
 TransferMessage::TransferMessage(const itemLib::Item &item, unsigned int amountToTransfer) : item(item),
                                                                                              amountToTransfer(
                                                                                                      amountToTransfer) {}
+
+void TransferMessage::setAmountToTransfer(unsigned int newAmount) {
+    amountToTransfer = newAmount;
+}

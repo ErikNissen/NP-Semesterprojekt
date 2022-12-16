@@ -7,15 +7,6 @@
 
 IPoint::IPoint(inventoryLib::Inventory &inventory) : inv{inventory}, conveyor{ConveyorBeltStore()} {}
 
-// Check if there is a non-full Container with the same ItemType already in the Inventory and initiate its Output
-std::optional<TimeSegmentMessage> IPoint::checkForNonFullContainersInInventory(const Item &itemType) {
-    auto answer{inv.reserveContainerOutputFromInventoryToAddItems(itemType)};
-    if(answer) {
-        ///TODO: tell the thread of this ShelfPair to wait for answer->getNeededTimeWithoutWaitingInQueueInSeconds() and then call takeContainer() to put it onto outputTransferPoint
-    }
-    return answer;
-}
-
 // Generate new Containers and fill them with Items
 std::vector<Container> IPoint::generateContainersForItems(const Item &item, unsigned int itemCount) {
     std::vector<Container> newContainers;
@@ -40,49 +31,80 @@ std::vector<Container> IPoint::generateContainersForItems(const Item &item, unsi
     return newContainers;
 }
 
-// Actually send a Container to a TransferPoint via the storing ConveyorBelt
-void IPoint::dispatchContainer(Container &container, TransferPoint &tp) {
-    conveyor.transportContainer(container, tp);
+// Check if there is a non-full Container with the same ItemType already in the Inventory and initiate its Output
+std::optional<TimeSegmentMessage> IPoint::checkForNonFullContainersInInventory(TransferMessage& tm) {
+    auto answer{inv.reserveContainerOutputFromInventoryToAddItems(tm.getItem())};
+    // If there is such a container, request it to be output (to the KPoint which then sends it here)
+    if(answer) {
+        ///TODO: tell the thread of this ShelfPair to wait for answer->getNeededTimeWithoutWaitingInQueueInSeconds() and then call takeContainer() to put it onto outputTransferPoint
+    // if not, generate new Containers until all the items fit in and send them to Inventory
+    } else {
+        auto containers {generateContainersForItems(tm.getItem(), tm.getAmountToTransfer())};
+        for (auto &c : containers) {
+            storeContainerInInventory(c);
+        }
+    }
+    return answer;
 }
 
-/// This method is only allowed to run once at a time (so the ConveyorBelt doesn't get overfilled). TODO: lock with Mutex.
 // Reserve >one< Container to be stored in the Inventory and if reservation was successful, send it to the correct TransferPoint via ConveyorBelt
 void IPoint::storeContainerInInventory(Container &container) {
     auto answer {inv.reserveContainerToAddToInventory(container)};
     if(answer) {
+        /////// IMPORTANT: ///////
+        ///TODO: call transportContainer() via std::async with the amount of time the belt needs to get the Container to the TransferPoint (?) This means a thread for each Container on Belt (too many?)
         // put Container onto ConveyorBelt and send it to the correct TransferPoint
-        dispatchContainer(container, inv.getShelfPairByShelfNumber(answer->getShelfPairNumber()).getInputTransferPoint());
+        conveyor.transportContainer(container, inv.getShelfPairByShelfNumber(answer->getShelfPairNumber()).getInputTransferPoint());
         // wait before putting the next Container onto the ConveyorBelt
-        Sleep(250);
+        Sleep(500);
     }
 }
 
-/// This is the main public method that gets called to store a certain amount of items in Inventory. How they are distributed to different Containers is handled by this method.
-// Initiate the storing of a certain amount of Items into the Inventory.
-// If possible and useful, existing Containers in Inventory will be filled before new Containers are then generated for the rest of the items.
-void IPoint::storeItemsInInventory(itemLib::Item item, const unsigned int totalItemCount) {
-    std::vector<Container> containers {};
-    int itemCount {static_cast<int>(totalItemCount)};
-    // If the Items can fit perfectly into new >full< containers, there is no point in filling an existing one.
-    if(!(itemCount % item.getMaxAmountPerContainer())) {
-        // Check if there is a non-full Container in the Inventory with the same ItemType
-        auto res {this->checkForNonFullContainersInInventory(item)};
-        // If so, retrieve it and reduce the amount of Items to put in new Containers accordingly.
-        if(res) {
-            ///TODO: implement as method (in SegmentMessage) like the following to get amount of free space in the Container that gets retrieved
-            /// (basically the same as takeContainer() but without functionality, just return a reference)
-            // reduce the itemCount by the amount that can fit into the already existing Container
-            // itemCount -= inv.getContainer(res->getSegmentDataMessage()).getFreeSpaceInContainer();
+/// Send a task to the I-Point for storing certain amount of Items in the Inventory
+void IPoint::sendTaskForStoringItems(TransferMessage &tm) {
+    tasks.emplace_back(tm);
+    checkForNonFullContainersInInventory(tm);
+}
 
-            ///TODO: If there was a non-full Container that can be filled, that filling can't be done right here but must later be initiated by the K-Point once the Container actually gets there.
-            /// That means the K-Point must somehow know that the Container needs to be filled and with how many items, once it gets there (store this info within the Container?).
+void IPoint::addContainer(Container &container) {
+    containersToCheck.emplace(container);
+}
+
+/// TODO: let a thread call this method repeatedly in a while() or implement while() in this method (whatever makes more sense)
+/// when false is returned, there are currently no Containers in the queue. The while() should wait a bit before trying again (to reduce the load)
+// Process the next Container in line (check if there are fitting tasks for the kind of Item contained and try to fulfill them)
+bool IPoint::processNextContainerInQueue() {
+    if(!containersToCheck.empty()) {
+        // Store the first Container from the queue
+        Container container = containersToCheck.front();
+        // Remove from queue
+        containersToCheck.pop();
+        // Look through all tasks to see if some fit the ItemType in the Container
+        for(auto &task : tasks) {
+            if(task.getItem().getItemId() == container.getItem().getItemId()) {
+                unsigned int amountToAdd {std::min(container.getAmountOfPlacesForItem(), task.getAmountToTransfer())};
+                container.addAmount(amountToAdd);
+                task.setAmountToTransfer(task.getAmountToTransfer() - amountToAdd);
+                // If the Task is not done, send another request to Inventory
+                if(task.getAmountToTransfer() > 0) {
+                    checkForNonFullContainersInInventory(task);
+                }
+                // If Container is full, no other Tasks need to be checked for this Container
+                if(!container.containsPlaceForAtLeastOnePieceOfThisItemToAdd(container.getItem())) {
+                    break;
+                }
+            }
         }
-    }
-    // If not all Items can fit into the existing Containers, or there are none, generate new Containers.
-    if(itemCount > 0) {
-        containers = generateContainersForItems(item, itemCount);
-    }
-    for(Container& c : containers) {
-        storeContainerInInventory(c);
+        /// TODO: check if this actually works
+        // Remove tasks that have had their requirements fulfilled from the vector
+        tasks.erase(std::remove_if(tasks.begin(), tasks.end(),[](TransferMessage& tm) {
+            return tm.getAmountToTransfer() == 0;
+        }), tasks.end());
+
+        storeContainerInInventory(container);
+
+        return true;
+    } else {
+        return false;
     }
 }
