@@ -13,8 +13,8 @@ Container& ConveyorBeltRetrieve::transportContainer(TransferPoint &_transferPoin
     float timeOfTransport = _transferPoint.getDistance() / this->getSpeed();
     // Retrieve the Container from the TransferPoint
     Container& container = _transferPoint.removeContainer();
-    container.timer.addSeconds(timeOfTransport);
-    std::cout << "Transported Container \"" << container.name << "\" via ConveyorBelt. Took " << timeOfTransport <<
-              " seconds. Timer now at: " << container.timer.timeInSeconds << std::endl;
+    container.getTimer().addSeconds(timeOfTransport);
+    std::cout << "Transported Container \"" << container.getId() << "\" via ConveyorBelt. Took " << timeOfTransport <<
+              " seconds. Timer now at: " << container.getTimer().getTimeInSeconds() << std::endl;
     return container;
 }

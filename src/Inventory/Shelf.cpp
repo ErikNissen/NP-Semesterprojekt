@@ -25,7 +25,7 @@ Shelf::Shelf(const unsigned int shelfNumber, const unsigned long long int rowsPe
              const double segmentWidthInMeters, const double segmentHeightInMeters, const double segmentDepthInMeters, const double containerWidthInMeters, const double containerHeightInMeters,
              const double containerDepthInMeters){
 
-    this->shelfNumber = shelfNumber;
+
 
     // initiate shelf
     //!!! Bezeichner überdenken !!!
@@ -40,6 +40,9 @@ Shelf::Shelf(const unsigned int shelfNumber, const unsigned long long int rowsPe
             matrix.at(row).at(container) = std::make_shared<Segment>(Segment{Priority::N});
         }
     }
+
+    // identification
+    this->shelfNumber = shelfNumber;
 
     // counts
     this->rowsPerShelf = rowsPerShelf;
@@ -94,6 +97,46 @@ void Shelf::setSegmentsPriority(const unsigned long long int row, const unsigned
 
 
 // methods
+
+void Shelf::saveAsJSONFile(){
+    PersistentFileManagement persistentFileManagement{"Inventory"};  //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
+
+    std::cout << "Add data to JSON Object" << std::endl;
+
+    // identification
+    persistentFileManagement.addOrIfExistentUpdate("shelfNumber", shelfNumber);
+    persistentFileManagement.addOrIfExistentUpdate("rowsPerShelf", rowsPerShelf);
+    persistentFileManagement.addOrIfExistentUpdate("segmentsPerRow", segmentsPerRow);
+
+
+    // measurements
+    persistentFileManagement.addOrIfExistentUpdate("verticalMaxVelocityInMetersPerSecond", verticalMaxVelocityInMetersPerSecond);
+    persistentFileManagement.addOrIfExistentUpdate("verticalAccelerationInMetersPerSquareSeconds", verticalAccelerationInMetersPerSquareSeconds);
+
+    persistentFileManagement.addOrIfExistentUpdate("horizontalMaxVelocityInMetersPerSecond", horizontalMaxVelocityInMetersPerSecond);
+    persistentFileManagement.addOrIfExistentUpdate("horizontalAccelerationInMetersPerSquareSeconds", horizontalAccelerationInMetersPerSquareSeconds);
+
+    // shelf
+    persistentFileManagement.addOrIfExistentUpdate("shelfWidthInMeters", shelfWidthInMeters);
+    persistentFileManagement.addOrIfExistentUpdate("shelfHeightInMeters", shelfHeightInMeters);
+    persistentFileManagement.addOrIfExistentUpdate("shelfDepthInMeters", shelfDepthInMeters);
+
+    persistentFileManagement.addOrIfExistentUpdate("distanceFromFloorToInputInMeters", distanceFromFloorToInputInMeters);
+    persistentFileManagement.addOrIfExistentUpdate("distanceFromFloorToOutputInMeters", distanceFromFloorToOutputInMeters);
+
+    persistentFileManagement.addOrIfExistentUpdate("segmentsPerRow", segmentsPerRow);
+
+
+    //ToDo: Hier save-Methode von Segment aufrufen (dabei über Kodierung Einzigartigkeit der Value-Keys garantieren oder alternativ jeweils eine eigene Klasse erstellen mit unikatem verschlüsseltem Namen, der über Methode erstellt und entschlüsselt werden kann)
+
+    /*
+    // container
+    persistentFileManagement.addOrIfExistentUpdate("containerWidthInMeters", containerWidthInMeters);
+    persistentFileManagement.addOrIfExistentUpdate("containerHeightInMeters", containerHeightInMeters);
+    persistentFileManagement.addOrIfExistentUpdate("containerDepthInMeters", containerDepthInMeters);
+    */
+
+}
 
 void Shelf::reserveSegmentToAddContainer(const SegmentDataMessage &goalSegment) {
     matrix.at(goalSegment.getRow()).at(goalSegment.getColumn())->reserveSegmentToAddContainer();
