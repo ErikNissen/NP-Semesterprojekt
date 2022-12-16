@@ -31,8 +31,9 @@ private:
     ConveyorBeltStore conveyor;
     std::vector<TransferMessage> tasks;
     std::queue<Container> containersToCheck;
+    unsigned int currentContainerId = 1;
     std::optional<TimeSegmentMessage> checkForNonFullContainersInInventory(TransferMessage&);
-    static std::vector<Container> generateContainersForItems(const itemLib::Item&, unsigned int itemCount);
+    std::vector<Container> generateContainersForItems(const itemLib::Item&, unsigned int itemCount);
 };
 
 

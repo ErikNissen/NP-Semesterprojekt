@@ -34,20 +34,21 @@ public:
     explicit Container(const Item& item);
     explicit Container(const Item& item, unsigned int id, unsigned int currentAmount);
 
-    unsigned int getId() const;
+    [[nodiscard]] unsigned int getId() const;
 
     // getters and setters
 public:
 
     [[nodiscard]] unsigned int getCurrentAmountOfItem() const;
+    [[nodiscard]] unsigned int getAmountOfPlacesForItem() const;
     [[nodiscard]] Timer getTimer() const;
     static const float getLength();
     static const float getWidth();
     static const float getHeight();
 
     [[nodiscard]] const Item &getItem() const;
-    unsigned int getMaxAmountOfItem(); // gets max amount of contained item
-    Priority getItemsPriority();
+    [[nodiscard]] unsigned int getMaxAmountOfItem() const; // gets max amount of contained item
+    [[nodiscard]] Priority getItemsPriority() const;
     void appendItemType(const Item& item);
 
 

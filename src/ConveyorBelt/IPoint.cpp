@@ -22,10 +22,11 @@ std::vector<Container> IPoint::generateContainersForItems(const Item &item, unsi
     // Create as many full containers as possible and one last container with the rest of the items
     for(int i = 1; i <= amountOfContainers; i++){
         if(i != amountOfContainers) {
-            newContainers.emplace_back(Container(item, item.getMaxAmountPerContainer()));
+            newContainers.emplace_back(Container(item, currentContainerId, item.getMaxAmountPerContainer()));
         } else {
-            newContainers.emplace_back(Container(item, amountOfItemsInLastContainer));
+            newContainers.emplace_back(Container(item, currentContainerId, amountOfItemsInLastContainer));
         }
+        currentContainerId++;
     }
 
     return newContainers;

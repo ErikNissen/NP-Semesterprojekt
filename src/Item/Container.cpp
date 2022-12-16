@@ -4,10 +4,6 @@
 
 #include "Container.h"
 #include "../PersistentFileManagement/PersistentFileManagement.hpp"
-//
-// Created by Kim Simoski on 27.11.2022.
-//
-
 
 // constructors
 Container::Container(const Item& item) {
