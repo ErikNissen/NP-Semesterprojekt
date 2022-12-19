@@ -5,6 +5,8 @@ project(NP_Semesterprojekt)
 
 set(CMAKE_CXX_STANDARD ${CPP_VERSION})
 
+add_compile_options(-w)
+
 add_executable(NP_Semesterprojekt
         src/main.cpp
         src/PersistentFileManagement/PersistentFileManagement.cpp
