@@ -9,9 +9,9 @@
 #include <fstream>
 #include <regex>
 #include <utility>
-#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
-#include "../../src/Inventory/Inventory.h"
 #include <chrono>
+#include <string>
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
 
 class PersistentFileManagement {
 public:
@@ -39,26 +39,11 @@ public:
 
 	void create();
 
-	void search(const std::string& search, bool key);
-	void search(const std::regex& search, bool key);
-
-	void update(const std::string& key, const std::string& value);
-	void update(const std::string& key, int value);
-	void update(const std::string& key, double value);
-	void update(const std::string& key, bool value);
-	void update(const std::string& key, nlohmann::json value);
-
-	void add(const std::string& key, std::string value);
-	void add(const std::string& key, int value);
-	void add(const std::string& key, double value);
-	void add(const std::string& key, bool value);
-	void add(const std::string& key, nlohmann::json value);
-
 	void log(std::chrono::duration<int> minTime,
 	         std::chrono::duration<int> maxTime,
-			 inventoryLib::Inventory& inventory);
+			 std::string inventory);
 
-	/// <BR><h3>Updates a value in a json object</h3>
+/// <BR><h3>Updates a value in a json object</h3>
 /// \param key The key of the value
 /// \param value The new value
 /// \typeparam \b U The type of the value
@@ -72,45 +57,26 @@ public:
 		}
 	}
 
-	/// <BR><h3>Searches for a value in a json object</h3>
-/// \param key The key of the value (string or regex)
-/// \typeparam \b S The type of the value (string or regex)
+/// <BR><h3>Searches for a value in a json object</h3>
+/// \param key The key of the value
+/// \typeparam \b S The type of the value
 	template<typename S> void search(S search) {
-		assert(typeid(search) == typeid(std::string) || typeid(search) == typeid(std::regex));
-
 		int counter = 0;
-
-		if(typeid(search) == typeid(std::string)){
-			for (auto& element : this->data.items()) {
-				if(element.value() == search){
-					std::cout << "[Found] " << element.key() << " : " << element.value()
-					          << std::endl;
-					counter++;
-				}
+		for (auto& element : this->data.items()) {
+			if(element.value() == search){
+				std::cout << "[Found] " << element.key() << " : " << element.value()
+				          << std::endl;
+				counter++;
 			}
-		}else if(typeid(search) == typeid(std::regex)){
-			for (auto& element : this->data.items()) {
-				if(regex_search(element.value(), search)){
-					std::cout << "[Found] " << element.key() << " : " << element.value()
-					          << std::endl;
-					counter++;
-				}
-			}
-		}else{
-			throw std::runtime_error("Invalid search type");
-		}
-
-		if(counter == 0){
-			std::cout << "No results found" << std::endl;
 		}
 	}
 
-	//!!! https://stackoverflow.com/questions/495021/why-can-templates-only-be-implemented-in-the-header-file
-	// template is easiest to use with header file declaration. Cpp-declaration does not work for template types.
-	/// <BR><h3>Adds a value to a json object</h3>
-	/// \param key The key of the value
-	/// \param value The value
-	/// \typeparam \b T The type of the value
+//!!! https://stackoverflow.com/questions/495021/why-can-templates-only-be-implemented-in-the-header-file
+// template is easiest to use with header file declaration. Cpp-declaration does not work for template types.
+/// <BR><h3>Adds a value to a json object</h3>
+/// \param key The key of the value
+/// \param value The value
+/// \typeparam \b T The type of the value
 	template<typename T>
 	void add(const std::string& key, T value) {
 		// Check if the key already exists
@@ -122,10 +88,10 @@ public:
 		}
 	}
 
-	/// <BR><h3>Adds a value to a json object or updates it if it already exists</h3>
-	/// \param key The key of the value
-	/// \param value The value
-	/// \typeparam \b T The type of the value
+/// <BR><h3>Adds a value to a json object or updates it if it already exists</h3>
+/// \param key The key of the value
+/// \param value The value
+/// \typeparam \b T The type of the value
 	template<typename T>
 	void addOrIfExistentUpdate(const std::string& key, T value) {
 		// Check if the key already exists

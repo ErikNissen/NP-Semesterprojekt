@@ -3,7 +3,6 @@
 //
 
 #include "Container.h"
-#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
 //
 // Created by Kim Simoski on 27.11.2022.
 //
@@ -149,7 +148,7 @@ std::string Container::toString() {
 	data["length"] = this->length;
 	data["width"] = this->width;
 	data["height"] = this->height;
-	data["name"] = this->name;
-	data["timer"] = this->timer.timeInSeconds;
+	data["id"] = this->id;
+	data["timer"] = this->timer.getTimeInSeconds();
 	return data.dump();
 }

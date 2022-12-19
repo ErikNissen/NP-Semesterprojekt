@@ -4,8 +4,6 @@
 
 #include "SegmentDataMessage.h"
 
-#include <cmath>
-
 using namespace messagesLib;
 
     // constructors

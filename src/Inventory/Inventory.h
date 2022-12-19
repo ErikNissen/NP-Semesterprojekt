@@ -7,6 +7,9 @@
 
 #include "ShelfPair.h"
 #include "SegmentUse.h"
+#include "../PersistentFileManagement/PersistentFileManagement.hpp"
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
+#include <cmath>
 
 namespace inventoryLib {
     /*

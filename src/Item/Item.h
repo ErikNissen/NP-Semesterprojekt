@@ -7,6 +7,8 @@
 
 #include <bits/stdc++.h>
 #include "Priority.h"
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
+#include "../PersistentFileManagement/PersistentFileManagement.hpp"
 
 namespace itemLib {
 

@@ -1,6 +1,4 @@
 #include "ConveyorBeltStore.h"
-#include "../Item/Container.h"
-#include "TransferPoint.h"
 
 ConveyorBeltStore::ConveyorBeltStore() : ConveyorBelt() {}
 

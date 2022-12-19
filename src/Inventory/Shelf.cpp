@@ -3,12 +3,7 @@
 //
 
 #include "Shelf.h"
-#include <cmath>
-#include <algorithm>
-#include <iomanip>
-#include <vector>
-#include <optional>
-#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
+
 
 
 using namespace inventoryLib;

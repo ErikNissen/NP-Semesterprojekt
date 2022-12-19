@@ -42,7 +42,15 @@ int main (int argc, char *argv[]) {
                                            0.45, 0.45, 0.65, 0.4, 0.4,
                                            0.6)};
 
+	auto pfm = PersistentFileManagement("log");
+
+	using namespace std::chrono_literals;
+	std::chrono::duration<int> minTime = std::chrono::seconds(5s);
+	std::chrono::duration<int> maxTime = std::chrono::seconds(7s);
+	pfm.log(minTime, maxTime, inventory.toString());
+
     inventory.printShelfSegments();
+
 
 
 

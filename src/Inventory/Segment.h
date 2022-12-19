@@ -6,7 +6,8 @@
 #define NUPPROJECT_SHELFCONTAINER_H
 
 #include "../Item/Priority.h"
-
+#include "../PersistentFileManagement/PersistentFileManagement.hpp"
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
 #include "../Item/Item.h"
 #include "../Messages/TransferMessage.h"
 #include "../Item/Container.h"

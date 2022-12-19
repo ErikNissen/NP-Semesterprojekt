@@ -12,5 +12,6 @@ target_include_directories(Inventory
 target_link_libraries(Inventory
         Item
         PersistentFileManagement
+        ConveyorBelt
         )
 

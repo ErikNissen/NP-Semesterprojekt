@@ -9,6 +9,8 @@
 #include "Shelf.h"
 #include "SegmentUse.h"
 #include "../ConveyorBelt/TransferPoint.h"
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
+#include "../PersistentFileManagement/PersistentFileManagement.hpp"
 #include <exception>
 #include <iostream>
 
