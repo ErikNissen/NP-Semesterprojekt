@@ -13,9 +13,6 @@
 #ifndef NP_SEMESTERPROJEKT_IPOINT_H
 #define NP_SEMESTERPROJEKT_IPOINT_H
 
-#include "Item.h"
-#include "Container.h"
-#include "TransferPoint.h"
 #include "Inventory.h"
 #include "ConveyorBeltStore.h"
 

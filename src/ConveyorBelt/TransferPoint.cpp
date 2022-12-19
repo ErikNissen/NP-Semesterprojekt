@@ -28,6 +28,12 @@ Container &TransferPoint::removeContainer() {
     return container;
 }
 
+void TransferPoint::addContainerForRetrieving(Container &_container) {
+    _container.getTimer().addSeconds(2.5);
+    std::cout << "Removed Container \"" << _container.getId() << "\" from TransferPoint. Took 2.5 seconds. Timer now at: " << _container.getTimer().getTimeInSeconds() << std::endl;
+    //conveyor.transportContainer(_container, this->getDistance());
+}
+
 float TransferPoint::getDistance() const {
     return distanceToPackaging;
 }

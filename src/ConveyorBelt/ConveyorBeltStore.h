@@ -6,7 +6,6 @@
 #define NP_SEMESTERPROJEKT_CONVEYORBELTSTORE_H
 
 #include "ConveyorBelt.h"
-
 #include "TransferPoint.h"
 
 

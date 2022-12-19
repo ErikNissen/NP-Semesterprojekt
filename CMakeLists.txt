@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD ${CPP_VERSION})
 add_executable(NP_Semesterprojekt
         src/main.cpp
         src/PersistentFileManagement/PersistentFileManagement.cpp
-        )
+        src/Warehouse.cpp)
 
 add_subdirectory(src)
 

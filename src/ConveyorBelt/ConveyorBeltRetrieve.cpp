@@ -3,18 +3,15 @@
 //
 
 #include "ConveyorBeltRetrieve.h"
-#include "../Item/Container.h"
 
-ConveyorBeltRetrieve::ConveyorBeltRetrieve() : ConveyorBelt() {}
+ConveyorBeltRetrieve::ConveyorBeltRetrieve(KPoint& _kPoint) : ConveyorBelt(), kPoint{_kPoint} {}
 
 // Transport a Container from a TransferPoint to the K-Point
-Container& ConveyorBeltRetrieve::transportContainer(TransferPoint &_transferPoint) {
+void ConveyorBeltRetrieve::transportContainer(Container &_container, float distance) {
     // Calculate the time it takes to transport the Container the TransferPoint to the K-Point
-    float timeOfTransport = _transferPoint.getDistance() / this->getSpeed();
-    // Retrieve the Container from the TransferPoint
-    Container& container = _transferPoint.removeContainer();
-    container.getTimer().addSeconds(timeOfTransport);
-    std::cout << "Transported Container \"" << container.getId() << "\" via ConveyorBelt. Took " << timeOfTransport <<
-              " seconds. Timer now at: " << container.getTimer().getTimeInSeconds() << std::endl;
-    return container;
+    float timeOfTransport = distance / this->getSpeed();
+    _container.getTimer().addSeconds(timeOfTransport);
+    std::cout << "Transported Container \"" << _container.getId() << "\" via ConveyorBelt. Took " << timeOfTransport <<
+              " seconds. Timer now at: " << _container.getTimer().getTimeInSeconds() << std::endl;
+    kPoint.addContainer(_container);
 }
