@@ -10,10 +10,11 @@
 #include "../Item/Container.h"
 #include "TransferPoint.h"
 
-class ConveyorBeltRetrieve : public ConveyorBelt {
+class [[maybe_unused]] ConveyorBeltRetrieve : public ConveyorBelt {
 public:
     ConveyorBeltRetrieve();
-    Container& transportContainer(TransferPoint&);
+
+	[[maybe_unused]] Container& transportContainer(TransferPoint&);
 };
 
 

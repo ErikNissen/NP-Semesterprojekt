@@ -48,10 +48,10 @@ namespace inventoryLib {
 
         // getters and setters
     public:
-        [[nodiscard]] Priority getPriority() const;
+	    [[maybe_unused]] [[nodiscard]] Priority getPriority() const;
         void setPriority(const Priority &priority);
 
-        [[nodiscard]] const Container &getContainer() const;
+	    [[maybe_unused]] [[nodiscard]] const Container &getContainer() const;
         void setContainer(const Container &newContainer);
 
         //ToDO: Setter der flags hinterher private machen

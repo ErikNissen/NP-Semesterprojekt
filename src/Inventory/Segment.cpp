@@ -8,10 +8,7 @@
 using namespace inventoryLib;
 
 // constructors
-Segment::Segment(){
-    priority = Priority::N;
-    //item = Item();
-}
+Segment::Segment() = default;
 
 Segment::Segment(const Priority& priority) {
     this->priority = priority;
@@ -30,7 +27,7 @@ bool Segment::containsContainer() {
 
 
 //ToDO: Hier überdenken, ob die Rückgabe es eine Referenz oder ein Nullpointer werden soll. Letzteres würde den Konstruktor komplizierter machen
-const Container &Segment::getContainer() const {
+[[maybe_unused]] const Container &Segment::getContainer() const {
     return container;
 }
 
@@ -40,7 +37,7 @@ void Segment::setContainer(const Container &newContainer) {
 }
 
 
-Priority Segment::getPriority() const {
+[[maybe_unused]] Priority Segment::getPriority() const {
     return priority;
 }
 

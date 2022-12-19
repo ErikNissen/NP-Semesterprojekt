@@ -18,13 +18,14 @@ class TransferPoint {
 public:
     explicit TransferPoint(float _distanceToPackaging);
     std::queue<Container> containers;
-    void addContainer(Container&);
-    Container& removeContainer();
+    void addContainer(const Container&);
+
+	[[maybe_unused]] Container& removeContainer();
     [[nodiscard]] float getDistance() const;
 private:
-    float length = 2.3;
-    float width = 0.7;
-    float distanceToPackaging; // distance to the K/I -Point
+    float length = 2.3f;
+    float width = 0.7f;
+	[[maybe_unused]] float distanceToPackaging; // distance to the K/I -Point
 };
 
 

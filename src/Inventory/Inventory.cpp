@@ -85,14 +85,14 @@ ShelfPair& Inventory::getShelfPairByShelfNumber(const unsigned int shelfNumber) 
     return shelfPairs.at(getShelfPairNumberByShelfNumber(shelfNumber)-1); // the list of shelf pairs starts at 0 but with the member shelfPairNumber = 1
 }
 
-unsigned int Inventory::getShelfPairNumberByShelfNumber(const unsigned int shelfNumber) {
+[[maybe_unused]] unsigned int Inventory::getShelfPairNumberByShelfNumber(const unsigned int shelfNumber) {
     return std::ceil(static_cast<double>(shelfNumber)/2);
 }
 
 
 // methods
 
-void Inventory::saveAsJSONFile(){
+void Inventory::saveAsJSONFile() const{
     PersistentFileManagement pfm{ "Inventory"};
     std::cout << "Add data to JSON Object" << std::endl;
 
@@ -148,23 +148,23 @@ void Inventory::setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercenta
 //ToDo:Bezeichner überarbeiten und vor allem kürzen!
 //ToDo: Folgende Listen-Methoden nutzen, falls Listen noch woanders weiter ausgewertet werden (z.B. am I-Punkt, um Warteschlangen zu berücksichtigen vor Reservierung)
 //ToDo: Hier noch Rückwege ergänzen
-std::vector<TimeSegmentMessage>
+[[maybe_unused]] std::vector<TimeSegmentMessage>
 Inventory::getListOfFastestToReachContainerWithoutSetPriorityPerShelfOnlyShelfWay() {
     return getListOfFastestToReachSegmentsWayTimePerShelfOnlyShelfWay(SegmentUse::InitPrio, {});
 }
 
-std::vector<TimeSegmentMessage>
+[[maybe_unused]] std::vector<TimeSegmentMessage>
 Inventory::getListOfFastestToReachSegmentForContainerInputPerShelfOnlyShelfWay(const Container& container) {
     return getListOfFastestToReachSegmentsWayTimePerShelfOnlyShelfWay(SegmentUse::AddContainerToSegment, container.getItem());
 }
 
 
-std::vector<TimeSegmentMessage>
+[[maybe_unused]] std::vector<TimeSegmentMessage>
 Inventory::getListOfFastestToReachContainerForItemInputPerShelfOnlyShelfWay(const Item& item) {
     return getListOfFastestToReachSegmentsWayTimePerShelfOnlyShelfWay(SegmentUse::AddItemToContainer, item);
 }
 
-std::vector<TimeSegmentMessage> Inventory::getListOfFastestToReachContainerForItemOutputPerShelfOnlyShelfWay(const Item& item) {
+[[maybe_unused]] std::vector<TimeSegmentMessage> Inventory::getListOfFastestToReachContainerForItemOutputPerShelfOnlyShelfWay(const Item& item) {
     return getListOfFastestToReachSegmentsWayTimePerShelfOnlyShelfWay(SegmentUse::GetItemFromContainer, item);
 }
 
@@ -280,7 +280,7 @@ Inventory::getFastestToReachContainerForItemOutput(const Item& item) {
 
 //ToDO: Segmente müssen reserviert werden für: Ausgabe des Containers zum Befüllen, Ausgabe des Containers zum Herausnehmen, Einfügen des Containers in ein Segment
 
-std::optional<TimeSegmentMessage> Inventory::reserveContainerToAddToInventory(const Container& container) {
+[[maybe_unused]] std::optional<TimeSegmentMessage> Inventory::reserveContainerToAddToInventory(const Container& container) {
     auto fastestToReachContainer{getFastestToReachSegmentForContainerInput(container)};
     if(fastestToReachContainer) {
         reserveSegmentToAddContainer(fastestToReachContainer->getSegmentDataMessage());
@@ -290,7 +290,7 @@ std::optional<TimeSegmentMessage> Inventory::reserveContainerToAddToInventory(co
 
 //ToDO: Im besten Fall diese Methode erst beim Punkt aufrufen, der das Laufband mit ansteuert und dafür noch eine Ebene aufrufen, die das schnellste zu erreichende Segment unter Berücksichtung der Warteschlangen berechnet
 //!!! Die Methoden zum Reservieren evtl. so anpassen, dass noch vor dem Aufruf die aktuellen Wartezeiten in den Schlangen berücksichtigt werden können, was so direkt nicht der Fall ist. Aber zwischen Abfrage der Liste und Reservierung darf keine Zeit liegen. Dann müsste ggf. das Laufband beides gleichzeitig in einer Methode machen, die ein Mutex ist !!!
-std::optional<TimeSegmentMessage> Inventory::reserveContainerOutputFromInventoryToGetItems(const Item& item) {
+[[maybe_unused]] std::optional<TimeSegmentMessage> Inventory::reserveContainerOutputFromInventoryToGetItems(const Item& item) {
     auto fastestToReachContainer{getFastestToReachContainerForItemOutput(item)};
     if(fastestToReachContainer) {
         reserveSegmentToGetContainer(fastestToReachContainer->getSegmentDataMessage());
@@ -300,7 +300,7 @@ std::optional<TimeSegmentMessage> Inventory::reserveContainerOutputFromInventory
 
 //ToDO: Im besten Fall diese Methode erst beim Punkt aufrufen, der das Laufband mit ansteuert und dafür noch eine Ebene aufrufen, die das schnellste zu erreichende Segment unter Berücksichtung der Warteschlangen berechnet
 //!!! Die Methoden zum Reservieren evtl. so anpassen, dass noch vor dem Aufruf die aktuellen Wartezeiten in den Schlangen berücksichtigt werden können, was so direkt nicht der Fall ist. Aber zwischen Abfrage der Liste und Reservierung darf keine Zeit liegen. Dann müsste ggf. das Laufband beides gleichzeitig in einer Methode machen, die ein Mutex ist !!!
-std::optional<TimeSegmentMessage> Inventory::reserveContainerOutputFromInventoryToAddItems(const Item& item) {
+[[maybe_unused]] std::optional<TimeSegmentMessage> Inventory::reserveContainerOutputFromInventoryToAddItems(const Item& item) {
     auto fastestToReachContainer{getFastestToReachContainerForItemInput(item)};
     if(fastestToReachContainer) {
         reserveSegmentToGetContainer(fastestToReachContainer->getSegmentDataMessage());
@@ -321,20 +321,19 @@ void Inventory::reserveSegmentToGetContainer(const SegmentDataMessage &goalSegme
 }
 
 //!!! for getting called after waiting at a shelfPairs input waiting point
-void Inventory::addContainer(const SegmentDataMessage &goalSegment, const Container &newContainer) {
+[[maybe_unused]] void Inventory::addContainer(const SegmentDataMessage &goalSegment, const Container &newContainer) {
     ShelfPair& shelfPair{getShelfPairByShelfNumber(goalSegment.getShelfNumber())};
     shelfPair.addContainer(goalSegment, newContainer);
 }
 
 //!!! for getting called after waiting at a shelfPairs input waiting point
-Container Inventory::takeContainer(const SegmentDataMessage &goalSegment) {
+[[maybe_unused]] Container Inventory::takeContainer(const SegmentDataMessage &goalSegment) {
     ShelfPair& shelfPair{getShelfPairByShelfNumber(goalSegment.getShelfNumber())};
     return shelfPair.takeContainer(goalSegment);
 }
 
 
-
-void Inventory::printShelfSegments() {
+[[maybe_unused]] void Inventory::printShelfSegments() {
     std::cout << "!! All shelf segments: " << std::endl;
     for(auto shelfPair:shelfPairs){
         shelfPair.printAllShelfSegments();
