@@ -9,6 +9,7 @@
 #include "../Messages/TimeSegmentMessage.h"
 #include "Segment.h"
 #include "SegmentUse.h"
+#include "PersistentFileManagement.hpp"
 
 #ifndef NUPPROJECT_SHELF_H
 #define NUPPROJECT_SHELF_H
@@ -104,6 +105,9 @@ namespace inventoryLib {
 
         // methods
     private:
+
+
+
         // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
         double calculateWayTimeToSegmentInSeconds(const SegmentDataMessage& currentSegment, const SegmentDataMessage& goalSegment);
 
@@ -139,6 +143,11 @@ namespace inventoryLib {
         //TimeSegmentMessage getFastestToReachEmptyContainerAlt(const SegmentDataMessage& currentSegment);
 
         void printShelfSegments();
+
+		// ToDo Erik Nissen
+	    std::string toString();
+
+        void saveAsJSONFile();
     };
 }
 

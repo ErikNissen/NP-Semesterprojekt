@@ -38,10 +38,6 @@ namespace inventoryLib {
         bool segmentReservedForContainerInput{false};
         bool segmentReservedForContainerOutput{false};
 
-        // getters and setters
-
-
-
 
         // constructors
     public:
@@ -57,7 +53,7 @@ namespace inventoryLib {
         [[nodiscard]] const Container &getContainer() const;
         void setContainer(const Container &newContainer);
 
-        //ToDO Setter der flags hinterher private machen
+        //ToDO: Setter der flags hinterher private machen
         void setSegmentReservedForContainerInput(bool segmentReservedForContainerInput);
         void setSegmentMarkedForContainerOutput(bool segmentMarkedForContainerOutput);
 
@@ -69,6 +65,8 @@ namespace inventoryLib {
 
         //methods
     private:
+        void saveAsJSONFile();
+
         void deleteReservationFromSegmentToAddContainer();
         void deleteReservationFromSegmentToGetContainer();
 
@@ -92,7 +90,7 @@ namespace inventoryLib {
 
         void print();
         void printPriority();
-
+		std::string toString();
 
 
 

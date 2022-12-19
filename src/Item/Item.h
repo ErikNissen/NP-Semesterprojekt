@@ -5,7 +5,7 @@
 #ifndef NUPPROJECT_ITEM_H
 #define NUPPROJECT_ITEM_H
 
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 #include "Priority.h"
 
 namespace itemLib {
@@ -37,10 +37,13 @@ namespace itemLib {
 
         // methods
     private:
+        void saveAsJSONFile();
         void printPriority();
 
     public:
         void print();
+		// ToDo Erik Nissen
+		std::string toString();
 
     };
 }

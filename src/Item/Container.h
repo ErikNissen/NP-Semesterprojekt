@@ -17,35 +17,47 @@ using namespace itemLib;
 class Container {
     // attributes
 private:
+    unsigned int id{};
     Item item{};
-    unsigned int currentAmountOfItem{};
+    unsigned int currentAmountOfItem;
 
-public:
     Timer timer; // Tracks the time a Container is getting transported
+
+    // measurements
     constexpr static float length = 0.4;
     constexpr static float width = 0.6;
     constexpr static float height = 0.4;
-    std::string name = "Container";
+
 
     // constructors
 public:
     explicit Container(const Item& item);
-    explicit Container(const Item& item, std::string name);
+    explicit Container(const Item& item, unsigned int id, unsigned int currentAmount);
+
+    [[nodiscard]] unsigned int getId() const;
 
     // getters and setters
 public:
-    const Item &getItem() const;
-    unsigned int getMaxAmountOfItem(); // gets max amount of contained item
-    Priority getItemsPriority();
-    void appendItemType(const Item& item);
-    unsigned int getAmountOfPlacesForItem();
 
+    [[nodiscard]] unsigned int getCurrentAmountOfItem() const;
+    [[nodiscard]] unsigned int getAmountOfPlacesForItem() const;
+    [[nodiscard]] Timer getTimer() const;
+    static const float getLength();
+    static const float getWidth();
+    static const float getHeight();
+
+    [[nodiscard]] const Item &getItem() const;
+    [[nodiscard]] unsigned int getMaxAmountOfItem() const; // gets max amount of contained item
+    [[nodiscard]] Priority getItemsPriority() const;
+    void appendItemType(const Item& item);
 
 
     // methods
 private:
+    void saveAsJSONFile() const;
     [[nodiscard]] bool containsAmountToGet(unsigned int amount) const;
     bool containsPlaceForAmountToAdd(unsigned int amount);
+
 public:
     bool containsItemsOfSameItemKind(const Item& item);
     [[nodiscard]] bool isEmpty() const;
@@ -59,6 +71,8 @@ public:
     void addAmount(unsigned int amount);
     void takeAmount(unsigned int amount);
     void print();
+	// ToDo Erik Nissen
+	std::string toString();
 };
 
 #endif //NUPPROJECT_CONTAINER_H

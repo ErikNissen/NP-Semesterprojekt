@@ -9,8 +9,16 @@
 
 
 class Timer {
-public:
+    //attributes
+private:
     float timeInSeconds = 0;
+
+      // getters and setters
+public:
+    float getTimeInSeconds() const;
+
+    // methods
+public:
     void addSeconds(float);
     void printSeconds() const;
 };

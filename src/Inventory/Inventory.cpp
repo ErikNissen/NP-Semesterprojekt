@@ -4,6 +4,8 @@
 
 #include <cmath>
 #include "Inventory.h"
+#include "../PersistentFileManagement/PersistentFileManagement.hpp"
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
 
 using namespace inventoryLib;
 using namespace messagesLib;
@@ -73,7 +75,11 @@ Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentage
      */
 
     setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages();
+
+    // ToDo: Vorher abfragen, ob es Daten bereits persistent gibt. Falls es sie gibt, daten von JSON laden, falls nicht, von Construktor beziehen und persistente Daten neu anlegen
+    saveAsJSONFile();
 }
+
 
 // getters and setters
 ShelfPair& Inventory::getShelfPairByShelfNumber(const unsigned int shelfNumber) {
@@ -86,6 +92,33 @@ unsigned int Inventory::getShelfPairNumberByShelfNumber(const unsigned int shelf
 
 
 // methods
+
+void Inventory::saveAsJSONFile(){
+    PersistentFileManagement persistentFileManagement{"Inventory"};
+    std::cout << "Add data to JSON Object" << std::endl;
+
+    // counts
+    persistentFileManagement.addOrIfExistentUpdate("amountOfShelves", amountOfShelves);
+    persistentFileManagement.addOrIfExistentUpdate("rowsPerShelf", rowsPerShelf);
+    persistentFileManagement.addOrIfExistentUpdate("segmentsPerRow", segmentsPerRow);
+
+    // priority percentages
+    persistentFileManagement.addOrIfExistentUpdate("percentageOfPriorityA", percentageOfPriorityA);
+    persistentFileManagement.addOrIfExistentUpdate("percentageOfPriorityB", percentageOfPriorityB);
+    persistentFileManagement.addOrIfExistentUpdate("percentageOfPriorityC", percentageOfPriorityC);
+
+    // inventory
+    persistentFileManagement.addOrIfExistentUpdate("distanceBetweenShelves", distanceBetweenShelves);
+    persistentFileManagement.addOrIfExistentUpdate("conveyorBeltVelocity", conveyorBeltVelocity);
+
+    //ToDo: Hier Aufruf der Speicher-Methode der einzelnen ShelfPairs einfügen!
+
+    //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
+    //ToDo: Alternativ zur Lösung oben jeweils eine einzelne Datei anlegen, die mit der Kodierung benannt ist!
+
+}
+
+
 void Inventory::setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages(){
     unsigned int totalAmountOfShelfSegments{amountOfShelves * static_cast<unsigned int>(rowsPerShelf) * static_cast<unsigned int> (segmentsPerRow)};
     //!!! Prio-Handhabe ggf. komplett auf Maps oder Liste umstellen und durch Liste iterieren,anstatt alle Werte einzeln zu beziehen!!!
@@ -309,7 +342,24 @@ void Inventory::printShelfSegments() {
     }
 }
 
+std::string Inventory::toString() {
+	nlohmann::json data, sP;
+	std::stringstream ss;
+	for(auto i = 0; i < this->shelfPairs.size(); ++i){
+		sP[i] = nlohmann::json::parse(this->shelfPairs[i].toString());
+	}
+	data["shelfPairs"] = sP;
+	data["amountOfShelves"] = this->amountOfShelves;
+	data["rowsPerShelf"] = this->rowsPerShelf;
+	data["segmentsPerRow"] = this->segmentsPerRow;
+	data["conveyorBeltVelocity"] = this->conveyorBeltVelocity;
+	data["distanceBetweenShelves"] = this->distanceBetweenShelves;
+	data["percentageOfPriorityA"] = this->percentageOfPriorityA;
+	data["percentageOfPriorityB"] = this->percentageOfPriorityB;
+	data["percentageOfPriorityC"] = this->percentageOfPriorityC;
 
+	return data.dump();
+}
 
 
 
