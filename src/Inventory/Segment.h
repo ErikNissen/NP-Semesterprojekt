@@ -29,8 +29,9 @@ namespace inventoryLib {
     class Segment {
 
 // attributes
+//ToDo: Container evtl. stattdessen als Unique-Pointer umsetzen und dafür move-Befehle zum Bewegen nutzen und Konstruktoren anpassen
     private:
-        //ToDo: Container evtl. stattdessen als Unique-Pointer umsetzen und dafür move-Befehle zum Bewegen nutzen und Konstruktoren anpassen
+        unsigned int segmentId{};
         Priority priority{Priority::N};
         Container container{Item()};
 
@@ -43,15 +44,23 @@ namespace inventoryLib {
         // constructors
     public:
         Segment();
+        explicit Segment(unsigned int shelfNumber, unsigned int rowNumber, unsigned int columnNumber);
+        explicit Segment(unsigned int id);
 
-        explicit Segment(const Priority& priority);
+        //ToDo: Constructors löschen, die nicht benötigt werden
+        explicit Segment(unsigned int shelfNumber, unsigned int rowNumber, unsigned int columnNumber, const Priority& priority);
+        explicit Segment(unsigned int id, const Priority& priority);
+        Segment(unsigned int id, const Priority &priority, const Container &container);
 
         // getters and setters
     public:
-        [[nodiscard]] Priority getPriority() const;
+
+        [[nodiscard]] unsigned int getId() const;
+
+	    [[maybe_unused]] [[nodiscard]] Priority getPriority() const;
         void setPriority(const Priority &priority);
 
-        [[nodiscard]] const Container &getContainer() const;
+	    [[maybe_unused]] [[nodiscard]] const Container &getContainer() const;
         void setContainer(const Container &newContainer);
 
         //ToDO: Setter der flags hinterher private machen
@@ -66,13 +75,21 @@ namespace inventoryLib {
 
         //methods
     private:
-        void saveAsJSONFile();
+
 
         void deleteReservationFromSegmentToAddContainer();
         void deleteReservationFromSegmentToGetContainer();
 
 
     public:
+
+        //ToDo: evtl. später private machen, falls die Methode nur im eigenen Constructor und Destructor aufgerufen werden
+        void saveAsJSONFile();
+
+        unsigned int encodeSegmentId(const unsigned int shelfNumber, const unsigned int rowNumber, const unsigned int columnNumber);
+        unsigned int getShelfNumberFromSegmentId();
+        unsigned int getRowNumberFromSegmentId();
+        unsigned int getColumnNumberFromSegmentId();
 
         void reserveSegmentToGetContainer();
         void reserveSegmentToAddContainer();
@@ -129,7 +146,6 @@ namespace inventoryLib {
         void addAmount(const TransferMessage &transferMessage);
         void takeAmount(const TransferMessage &transferMessage);
          */
-
 
     };
 }
