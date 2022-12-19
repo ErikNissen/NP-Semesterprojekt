@@ -440,14 +440,38 @@ void PersistentFileManagement::add( const std::string& key, json value ) {
 }
  */
 
+template<typename T1, typename T2>
+using mul = std::ratio_multiply<T1, T2>;
 
 void PersistentFileManagement::log(
-		std::chrono::duration<std::chrono::steady_clock> minTime,
-		std::chrono::duration<std::chrono::steady_clock> maxTime,
+		std::chrono::duration<int> minTime,
+		std::chrono::duration<int> maxTime,
 		inventoryLib::Inventory &inventory
 ) {
 	// Calculate the median time
-	//auto medianTime{minTime + (maxTime - minTime) / 2};
+	auto medTime{minTime + (maxTime - minTime) / 2};
+
+	auto minHrs = chrono::duration_cast<chrono::hours>(minTime);
+	auto minMins = chrono::duration_cast<chrono::minutes>(minTime - minHrs);
+	auto minSecs = chrono::duration_cast<chrono::seconds>(minTime - minHrs -
+			minMins);
+	auto minMs = chrono::duration_cast<chrono::milliseconds>(minTime -
+			minHrs - minMins - minSecs);
+
+	auto maxHrs = chrono::duration_cast<chrono::hours>(maxTime);
+	auto maxMins = chrono::duration_cast<chrono::minutes>(maxTime - maxHrs);
+	auto maxSecs = chrono::duration_cast<chrono::seconds>(maxTime - maxHrs -
+	                                                      maxMins);
+	auto maxMs = chrono::duration_cast<chrono::milliseconds>(maxTime -
+	                                                         maxHrs - maxMins - maxSecs);
+
+	auto medHrs = chrono::duration_cast<chrono::hours>(medTime);
+	auto medMins = chrono::duration_cast<chrono::minutes>(medTime - medHrs);
+	auto medSecs = chrono::duration_cast<chrono::seconds>(medTime - medHrs -
+	                                                      medMins);
+	auto medMs = chrono::duration_cast<chrono::milliseconds>(medTime -
+	                                                         medHrs - medMins - medSecs);
+	stringstream ss;
 
 	// Open the file
 	std::ofstream file;
@@ -466,12 +490,22 @@ void PersistentFileManagement::log(
 	json inventoryJson = json::parse(inventory.toString());
 	json log;
 	log["Inventory"] = inventoryJson;
-	/*log["minTime"] = minTime;
-	log["maxTime"] = maxTime;
-	log["medianTime"] = medianTime;*/
+	ss << minHrs.count() << ":" << minMins.count() << ":" << minSecs.count()
+	<< "." << minMs.count();
+	log["minTime"] = ss.str();
+	ss.clear();
+	ss << maxHrs.count() << ":" << maxMins.count() << ":" << maxSecs.count()
+	   << "." << maxMs.count();
+	log["maxTime"] = ss.str();
+	ss.clear();
+	ss << medHrs.count() << ":" << medMins.count() << ":" << medSecs.count()
+	   << "." << medMs.count();
+	log["medianTime"] = ss.str();
+
+	ss.clear();
 	cout << inventoryJson.dump(1);
-	file << inventoryJson.dump();
-	file.close();
+	//file << inventoryJson.dump();
+	//file.close();
 }
 
 
@@ -485,3 +519,4 @@ json PersistentFileManagement::getData() {
 /// <BR><h3>Sets the name of the file</h3>
 void PersistentFileManagement::setName(const string& newName ) {
 	this->name = newName;
+}
