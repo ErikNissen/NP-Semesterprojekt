@@ -4,10 +4,10 @@
 
 #include "KPoint.h"
 
-KPoint::KPoint(inventoryLib::Inventory &inventory, IPoint& _iPoint) : inv{inventory}, iPoint{_iPoint} {}
+[[maybe_unused]] KPoint::KPoint(inventoryLib::Inventory &inventory, IPoint& _iPoint) : inv{inventory}, iPoint{_iPoint} {}
 
 // Add a Container to the KPoint for processing (this is mainly (only?) used by the RetrievingConveyorBelt)
-void KPoint::addContainer(Container &container) {
+[[maybe_unused]] void KPoint::addContainer(Container &container) {
     containersToCheck.push(container);
 }
 
@@ -24,7 +24,7 @@ auto KPoint::sendTaskToInventory(TransferMessage &tm) {
 /// TODO: let a thread call this method repeatedly in a while() or implement while() in this method (whatever makes more sense)
 /// when false is returned, there are currently no Containers in the queue. The while() should wait a bit before trying again (to reduce the load)
 // Process the next Container in line (check if there are fitting tasks for the kind of Item contained and try to fulfill them)
-bool KPoint::processNextContainerInQueue() {
+[[maybe_unused]] bool KPoint::processNextContainerInQueue() {
     if(!containersToCheck.empty()) {
         // Store the first Container from the queue
         Container container = containersToCheck.front();
@@ -64,7 +64,7 @@ bool KPoint::processNextContainerInQueue() {
 }
 
 /// Send a task to the K-Point for removing certain amount of Items from the Inventory
-void KPoint::sendTaskForRetrievingItems(TransferMessage &tm) {
+[[maybe_unused]] void KPoint::sendTaskForRetrievingItems(TransferMessage &tm) {
     // Store the task within the KPoint, so it can later be executed when a fitting Container gets here
     tasks.emplace_back(tm);
     sendTaskToInventory(tm);

@@ -7,6 +7,7 @@
 ConveyorBeltRetrieve::ConveyorBeltRetrieve(KPoint& _kPoint) : ConveyorBelt(), kPoint{_kPoint} {}
 
 // Transport a Container from a TransferPoint to the K-Point
+[[maybe_unused]] Container& ConveyorBeltRetrieve::transportContainer(TransferPoint &_transferPoint) {
 void ConveyorBeltRetrieve::transportContainer(Container &_container, float distance) {
     // Calculate the time it takes to transport the Container the TransferPoint to the K-Point
     float timeOfTransport = distance / this->getSpeed();

@@ -8,10 +8,7 @@
 using namespace inventoryLib;
 
 // constructors
-Segment::Segment(){
-    priority = Priority::N;
-    //item = Item();
-}
+Segment::Segment() = default;
 
 //ToDo: Die Contructors löschen, die nicht gebraucht werden
 Segment::Segment(unsigned int shelfNumber, unsigned int rowNumber, unsigned int columnNumber):Segment(encodeSegmentId(shelfNumber, rowNumber, columnNumber)) {
@@ -86,7 +83,7 @@ unsigned int Segment::getId() const {
 }
 
 //ToDO: Hier überdenken, ob die Rückgabe es eine Referenz oder ein Nullpointer werden soll. Letzteres würde den Konstruktor komplizierter machen
-const Container &Segment::getContainer() const {
+[[maybe_unused]] const Container &Segment::getContainer() const {
     return container;
 }
 
@@ -97,7 +94,7 @@ void Segment::setContainer(const Container &newContainer) {
 }
 
 
-Priority Segment::getPriority() const {
+[[maybe_unused]] Priority Segment::getPriority() const {
     return priority;
 }
 

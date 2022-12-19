@@ -10,8 +10,11 @@
 #include "TransferPoint.h"
 #include "KPoint.h"
 
-class ConveyorBeltRetrieve : public ConveyorBelt {
+class [[maybe_unused]] ConveyorBeltRetrieve : public ConveyorBelt {
 public:
+    ConveyorBeltRetrieve();
+
+	[[maybe_unused]] Container& transportContainer(TransferPoint&);
     explicit ConveyorBeltRetrieve(KPoint&);
     KPoint kPoint;
     void transportContainer(Container&, float distance);

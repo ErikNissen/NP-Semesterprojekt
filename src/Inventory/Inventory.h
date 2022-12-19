@@ -30,16 +30,16 @@ namespace inventoryLib {
 
 
         // counts
-        unsigned int amountOfShelves;
+        [[maybe_unused]] unsigned int amountOfShelves;
 
-        unsigned long long int rowsPerShelf;
-        unsigned long long int segmentsPerRow;
+	    [[maybe_unused]] unsigned long long int rowsPerShelf;
+	    [[maybe_unused]] unsigned long long int segmentsPerRow;
 
 
         // measurements
 
         // conveyor belt
-        double conveyorBeltVelocity; // needed for finding the matching segment with the shortest way by regarding the way between shelf pairs
+        [[maybe_unused]] double conveyorBeltVelocity; // needed for finding the matching segment with the shortest way by regarding the way between shelf pairs
 
         /*
         // transport vehicle
@@ -52,11 +52,11 @@ namespace inventoryLib {
         //!!! evtl. alle Objekte mit Höhe, Breite, Tiefe mit gemeinsamer Vererbung umsetzen !!!
         */
         // inventory
-        double distanceBetweenShelves;
+        [[maybe_unused]] double distanceBetweenShelves;
 
-        unsigned int percentageOfPriorityA;
-        unsigned int percentageOfPriorityB;
-        unsigned int percentageOfPriorityC;
+	    [[maybe_unused]] unsigned int percentageOfPriorityA;
+	    [[maybe_unused]] unsigned int percentageOfPriorityB;
+	    [[maybe_unused]] unsigned int percentageOfPriorityC;
 
         /*
         // shelf
@@ -113,7 +113,7 @@ namespace inventoryLib {
 
         // getters and setters
     private:
-        static unsigned int getShelfPairNumberByShelfNumber(unsigned int shelfNumber);
+	    [[maybe_unused]] static unsigned int getShelfPairNumberByShelfNumber(unsigned int shelfNumber);
 
         void setSegmentsPriority(const SegmentDataMessage &segmentDataMessage, const Priority &priority);
         void setSegmentsPriority(unsigned int shelfNumber, unsigned long long int row, unsigned long long int column, const Priority& priority);
@@ -121,7 +121,7 @@ namespace inventoryLib {
 
         // methods
     private:
-        void saveAsJSONFile();
+        void saveAsJSONFile() const;
 
         void setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages();
         void initiateContainerPriorities(unsigned int amountOfSegmentsReservedForPrio, const Priority &priority);
@@ -146,33 +146,36 @@ namespace inventoryLib {
 
         //!!! Für die folgenden beiden Methoden aktuelle Position der Bedienhilfen berücksichtigen, falls diese gerade frei sind. Dies aber eher mit Überladung der Methode machen, weil die generelle Regalzeilung ja schon vor dem Warten an der Warteschlange gemacht wird.
         //!!! -> Wenn die Berechnungen soweit implementiert sind, dass auch die Wartezeiten in der Schlange im Voraus bekannt sind, Methoden noch einmal ergänzen !!!
-        std::optional<TimeSegmentMessage> reserveContainerOutputFromInventoryToGetItems(const Item& item);
-        std::optional<TimeSegmentMessage> reserveContainerOutputFromInventoryToAddItems(const Item &item);
-        std::optional<TimeSegmentMessage> reserveContainerToAddToInventory(const Container& container);
+        [[maybe_unused]] std::optional<TimeSegmentMessage> reserveContainerOutputFromInventoryToGetItems(const Item& item);
+
+	    [[maybe_unused]] std::optional<TimeSegmentMessage> reserveContainerOutputFromInventoryToAddItems(const Item &item);
+
+	    [[maybe_unused]] std::optional<TimeSegmentMessage> reserveContainerToAddToInventory(const Container& container);
 
 
         void reserveSegmentToAddContainer(const SegmentDataMessage &goalSegment);
         void reserveSegmentToGetContainer(const SegmentDataMessage &goalSegment);
 
-        void addContainer(const SegmentDataMessage& goalSegment, const Container& newContainer);
-        Container takeContainer(const SegmentDataMessage& goalSegment);
+	    [[maybe_unused]] void addContainer(const SegmentDataMessage& goalSegment, const Container& newContainer);
+
+	    [[maybe_unused]] Container takeContainer(const SegmentDataMessage& goalSegment);
 
         //ToDo: Diese Methode in AlternativMethoden für verschiedene SegmentUse's nutzen und evtl. später anstatt der anderen nutzen!
         //!!! Diese Methode in ConveyorBelt oder an I-Punkt aufrufen, damit dieser anhand der Warteschlangen nochmal berechnen kann, welches Segment insgesamt inklusive der Warteschlangen zum Zeitpunkt des Ankommens am optimalsten ist!!!
         std::vector<TimeSegmentMessage> getListOfFastestToReachSegmentsWayTimePerShelfOnlyShelfWay(const SegmentUse &containerUse, const Item &item);
 
-        void printShelfSegments();
+	    [[maybe_unused]] void printShelfSegments();
 
         //ToDO: Folgende Listen-Methoden nutzen, falls Listen noch woanders weiter ausgewertet werden (z.B. am I-Punkt, um Warteschlangen zu berücksichtigen vor Reservierung)
-        std::vector<TimeSegmentMessage> getListOfFastestToReachContainerWithoutSetPriorityPerShelfOnlyShelfWay();
+        [[maybe_unused]] std::vector<TimeSegmentMessage> getListOfFastestToReachContainerWithoutSetPriorityPerShelfOnlyShelfWay();
 
-        std::vector<TimeSegmentMessage>
+	    [[maybe_unused]] std::vector<TimeSegmentMessage>
         getListOfFastestToReachSegmentForContainerInputPerShelfOnlyShelfWay(const Container &container);
 
-        std::vector<TimeSegmentMessage>
+	    [[maybe_unused]] std::vector<TimeSegmentMessage>
         getListOfFastestToReachContainerForItemInputPerShelfOnlyShelfWay(const Item &item);
 
-        std::vector<TimeSegmentMessage>
+	    [[maybe_unused]] std::vector<TimeSegmentMessage>
         getListOfFastestToReachContainerForItemOutputPerShelfOnlyShelfWay(const Item &item);
 
 		// ToDo Erik Nissen

@@ -18,12 +18,15 @@
 #include "IPoint.h"
 
 
-class KPoint {
+class [[maybe_unused]] KPoint {
 public:
-    explicit KPoint(inventoryLib::Inventory&, IPoint&);
-    void addContainer(Container&);
-    bool processNextContainerInQueue();
-    void sendTaskForRetrievingItems(TransferMessage&);
+	[[maybe_unused]] explicit KPoint(inventoryLib::Inventory&, IPoint&);
+
+	[[maybe_unused]] void addContainer(Container&);
+
+	[[maybe_unused]] bool processNextContainerInQueue();
+
+	[[maybe_unused]] void sendTaskForRetrievingItems(TransferMessage&);
 private:
     auto sendTaskToInventory(TransferMessage&);
     std::queue<Container> containersToCheck;
