@@ -3,7 +3,10 @@
 //
 
 #include "Container.h"
-#include "../PersistentFileManagement/PersistentFileManagement.hpp"
+//
+// Created by Kim Simoski on 27.11.2022.
+//
+
 
 // constructors
 Container::Container(const Item& item) {
@@ -136,4 +139,16 @@ bool Container::isEmpty() const {
 void Container::print() {
     item.print();
     std::cout << "current amount of item: " << currentAmountOfItem << std::endl;
+}
+
+std::string Container::toString() {
+	nlohmann::json data;
+	data["Item"] = nlohmann::json::parse(this->item.toString());
+	data["currentAmountOfItem"] = this->currentAmountOfItem;
+	data["length"] = this->length;
+	data["width"] = this->width;
+	data["height"] = this->height;
+	data["id"] = this->id;
+	data["timer"] = this->timer.getTimeInSeconds();
+	return data.dump();
 }

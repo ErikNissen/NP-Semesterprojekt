@@ -4,8 +4,6 @@
 
 #include "TimeSegmentMessage.h"
 
-#include <cmath>       /* ceil */
-
 using namespace messagesLib;
 
     // constructors

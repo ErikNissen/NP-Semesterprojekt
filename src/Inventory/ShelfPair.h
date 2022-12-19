@@ -9,6 +9,8 @@
 #include "Shelf.h"
 #include "SegmentUse.h"
 #include "../ConveyorBelt/TransferPoint.h"
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
+#include "../PersistentFileManagement/PersistentFileManagement.hpp"
 #include <exception>
 #include <iostream>
 
@@ -83,6 +85,9 @@ namespace inventoryLib {
         std::optional<TimeSegmentMessage> getFastestToReachSegmentBasedOnUse(const SegmentUse& containerUse, const Item& item); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
 
         void printAllShelfSegments();
+
+		// ToDo Erik Nissen
+		std::string toString();
     };
 }
 

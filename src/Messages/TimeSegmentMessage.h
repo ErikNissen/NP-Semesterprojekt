@@ -7,6 +7,7 @@
 
 
 #include "SegmentDataMessage.h"
+#include <cmath>       /* ceil */
 
 namespace messagesLib {
 

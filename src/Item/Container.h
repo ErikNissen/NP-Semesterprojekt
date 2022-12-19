@@ -8,6 +8,9 @@
 #include "Priority.h"
 #include "Item.h"
 #include "Timer.h"
+#include "Container.h"
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
+#include "../PersistentFileManagement/PersistentFileManagement.hpp"
 
 
 // container for containing items with amounts and priorities in a shelf segment per container
@@ -71,6 +74,8 @@ public:
     void addAmount(unsigned int amount);
     void takeAmount(unsigned int amount);
     void print();
+	// ToDo Erik Nissen
+	std::string toString();
 };
 
 #endif //NUPPROJECT_CONTAINER_H

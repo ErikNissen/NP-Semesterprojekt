@@ -2,9 +2,9 @@
 // Created by Kim Simoski on 19.11.2022.
 //
 
-#include <cmath>
+
 #include "Inventory.h"
-#include "../PersistentFileManagement/PersistentFileManagement.hpp"
+
 
 using namespace inventoryLib;
 using namespace messagesLib;
@@ -93,22 +93,22 @@ unsigned int Inventory::getShelfPairNumberByShelfNumber(const unsigned int shelf
 // methods
 
 void Inventory::saveAsJSONFile(){
-    PersistentFileManagement persistentFileManagement{"Inventory"};
+    PersistentFileManagement pfm{ "Inventory"};
     std::cout << "Add data to JSON Object" << std::endl;
 
     // counts
-    persistentFileManagement.addOrIfExistentUpdate("amountOfShelves", amountOfShelves);
-    persistentFileManagement.addOrIfExistentUpdate("rowsPerShelf", rowsPerShelf);
-    persistentFileManagement.addOrIfExistentUpdate("segmentsPerRow", segmentsPerRow);
+    pfm.addOrIfExistentUpdate( "amountOfShelves", amountOfShelves);
+    pfm.addOrIfExistentUpdate( "rowsPerShelf", rowsPerShelf);
+    pfm.addOrIfExistentUpdate( "segmentsPerRow", segmentsPerRow);
 
     // priority percentages
-    persistentFileManagement.addOrIfExistentUpdate("percentageOfPriorityA", percentageOfPriorityA);
-    persistentFileManagement.addOrIfExistentUpdate("percentageOfPriorityB", percentageOfPriorityB);
-    persistentFileManagement.addOrIfExistentUpdate("percentageOfPriorityC", percentageOfPriorityC);
+    pfm.addOrIfExistentUpdate( "percentageOfPriorityA", percentageOfPriorityA);
+    pfm.addOrIfExistentUpdate( "percentageOfPriorityB", percentageOfPriorityB);
+    pfm.addOrIfExistentUpdate( "percentageOfPriorityC", percentageOfPriorityC);
 
     // inventory
-    persistentFileManagement.addOrIfExistentUpdate("distanceBetweenShelves", distanceBetweenShelves);
-    persistentFileManagement.addOrIfExistentUpdate("conveyorBeltVelocity", conveyorBeltVelocity);
+    pfm.addOrIfExistentUpdate( "distanceBetweenShelves", distanceBetweenShelves);
+    pfm.addOrIfExistentUpdate( "conveyorBeltVelocity", conveyorBeltVelocity);
 
     //ToDo: Hier Aufruf der Speicher-Methode der einzelnen ShelfPairs einfügen!
 
@@ -341,7 +341,24 @@ void Inventory::printShelfSegments() {
     }
 }
 
+std::string Inventory::toString() {
+	nlohmann::json data, sP;
+	std::stringstream ss;
+	for(auto i = 0; i < this->shelfPairs.size(); ++i){
+		sP[i] = nlohmann::json::parse(this->shelfPairs[i].toString());
+	}
+	data["shelfPairs"] = sP;
+	data["amountOfShelves"] = this->amountOfShelves;
+	data["rowsPerShelf"] = this->rowsPerShelf;
+	data["segmentsPerRow"] = this->segmentsPerRow;
+	data["conveyorBeltVelocity"] = this->conveyorBeltVelocity;
+	data["distanceBetweenShelves"] = this->distanceBetweenShelves;
+	data["percentageOfPriorityA"] = this->percentageOfPriorityA;
+	data["percentageOfPriorityB"] = this->percentageOfPriorityB;
+	data["percentageOfPriorityC"] = this->percentageOfPriorityC;
 
+	return data.dump();
+}
 
 
 

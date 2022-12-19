@@ -3,7 +3,7 @@
 //
 
 #include "ShelfPair.h"
-#include "PersistentFileManagement.hpp"
+
 
 using namespace inventoryLib;
 using namespace messagesLib;
@@ -133,6 +133,16 @@ TransferPoint &ShelfPair::getInputTransferPoint() {
 }
 
 
+std::string ShelfPair::toString() {
+	nlohmann::json data;
+	data["shelfLeft"] = nlohmann::json::parse(this->shelfLeft.toString());
+    data["shelfRight"] = nlohmann::json::parse(this->shelfRight.toString());
+	data["currentRow"] = this->currentRow;
+	data["currentColumn"] = this->currentColumn;
+	data["shelfPairNumber"] = this->shelfPairNumber;
+	data["distanceBetweenShelvesOfPair"] = this->distanceBetweenShelvesOfPair;
+	return data.dump();
+}
 
 
 
