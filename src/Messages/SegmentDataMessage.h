@@ -6,6 +6,7 @@
 #define NUPPROJECT_SEGMENTDATAMESSAGE_H
 
 #include <iostream>
+#include <cmath>
 
 namespace messagesLib {
     /*

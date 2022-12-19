@@ -8,6 +8,9 @@
 
 #include "Shelf.h"
 #include "SegmentUse.h"
+#include "../ConveyorBelt/TransferPoint.h"
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
+#include "../PersistentFileManagement/PersistentFileManagement.hpp"
 #include <exception>
 #include <iostream>
 
@@ -32,6 +35,12 @@ namespace inventoryLib {
 
         // measurement
         double distanceBetweenShelvesOfPair;
+
+        // TransferPoint to remove Containers from and put them into the Shelf
+        TransferPoint inputTransferPoint;
+
+        // TransferPoint to put Containers on to send them to KPoint
+        TransferPoint outputTransferPoint;
 
         // constructors
     public:
@@ -68,6 +77,8 @@ namespace inventoryLib {
         [[nodiscard]] unsigned int getShelfPairNumber() const;
         [[nodiscard]] double getDistanceBetweenShelvesOfPair() const;
         double getShelfDepthInMeters();
+        [[nodiscard]] TransferPoint& getInputTransferPoint();
+        [[nodiscard]] TransferPoint& getOutputTransferPoint();
 
         void setSegmentsPriority(unsigned int shelfNumber, unsigned long long int row,
                                  unsigned long long int column, const Priority &priority);
@@ -91,6 +102,9 @@ namespace inventoryLib {
         std::optional<TimeSegmentMessage> getFastestToReachSegmentBasedOnUse(const SegmentUse& containerUse, const Item& item); // based on the vertical speed and vertical difference and horizontal speed and horizontal difference
 
         void printAllShelfSegments();
+
+		// ToDo Erik Nissen
+		std::string toString();
     };
 }
 

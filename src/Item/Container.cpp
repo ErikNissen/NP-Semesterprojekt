@@ -42,9 +42,10 @@ Container::Container(const Item& item) {
     timer = Timer();
 }
 
-Container::Container(const Item& item, const unsigned int id) {
+Container::Container(const Item& item, const unsigned int id, const unsigned int currentAmount) {
     this->containerId = id;
     this->item = item;
+    this->currentAmountOfItem = currentAmount;
     timer = Timer();
 }
 
@@ -74,19 +75,19 @@ const Item &Container::getItem() const {
     return item;
 }
 
+unsigned int Container::getMaxAmountOfItem() const {
+    return item.getMaxAmountPerContainer();
+}
+
 unsigned int Container::getCurrentAmountOfItem() const {
     return currentAmountOfItem;
 }
 
-unsigned int Container::getMaxAmountOfItem() {
-    return item.getMaxAmountPerContainer();
-}
-
-unsigned int Container::getAmountOfPlacesForItem() {
+unsigned int Container::getAmountOfPlacesForItem() const {
     return item.getMaxAmountPerContainer() - currentAmountOfItem;
 }
 
-Priority Container::getItemsPriority() {
+Priority Container::getItemsPriority() const {
     return item.getPriority();
 }
 
@@ -172,23 +173,14 @@ void Container::print() {
     std::cout << "current amount of item: " << currentAmountOfItem << std::endl;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+std::string Container::toString() {
+	nlohmann::json data;
+	data["Item"] = nlohmann::json::parse(this->item.toString());
+	data["currentAmountOfItem"] = this->currentAmountOfItem;
+	data["length"] = this->length;
+	data["width"] = this->width;
+	data["height"] = this->height;
+	data["id"] = this->containerId;
+	data["timer"] = this->timer.getTimeInSeconds();
+	return data.dump();
+}

@@ -24,6 +24,7 @@ namespace messagesLib {
     public:
         [[nodiscard]] const itemLib::Item &getItem() const;
         [[nodiscard]] unsigned int getAmountToTransfer() const;
+        void setAmountToTransfer(unsigned int);
 
         // constructors
         TransferMessage() = default;

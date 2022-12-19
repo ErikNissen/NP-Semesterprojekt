@@ -3,7 +3,7 @@
 //
 
 #include "ShelfPair.h"
-#include "PersistentFileManagement.hpp"
+
 
 using namespace inventoryLib;
 using namespace messagesLib;
@@ -28,8 +28,10 @@ ShelfPair::ShelfPair(const unsigned int shelfPairNumber, const unsigned long lon
                      const double distanceBetweenShelvesOfPair, const double shelfWidthInMeters, const double shelfHeightInMeters, const double shelfDepthInMeters,
                      const double distanceFromFloorToInputInMeters, const double distanceFromFloorToOutputInMeters, const double distanceBetweenSegmentsInMeters,
                      const double segmentWidthInMeters, const double segmentHeightInMeters, const double segmentDepthInMeters, const double containerWidthInMeters, const double containerHeightInMeters,
-                     const double containerDepthInMeters){
-
+                     const double containerDepthInMeters) :
+                     inputTransferPoint(TransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f ))),
+                     outputTransferPoint(TransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f )))
+{
     // log data
     this-> shelfPairNumber = shelfPairNumber;
 
@@ -162,7 +164,25 @@ void ShelfPair::printAllShelfSegments() {
     shelfRight.printShelfSegments();
 }
 
+TransferPoint &ShelfPair::getOutputTransferPoint() {
+    return outputTransferPoint;
+}
 
+TransferPoint &ShelfPair::getInputTransferPoint() {
+    return inputTransferPoint;
+}
+
+
+std::string ShelfPair::toString() {
+	nlohmann::json data;
+	data["shelfLeft"] = nlohmann::json::parse(this->shelfLeft.toString());
+    data["shelfRight"] = nlohmann::json::parse(this->shelfRight.toString());
+	data["currentRow"] = this->currentRow;
+	data["currentColumn"] = this->currentColumn;
+	data["shelfPairNumber"] = this->shelfPairNumber;
+	data["distanceBetweenShelvesOfPair"] = this->distanceBetweenShelvesOfPair;
+	return data.dump();
+}
 
 
 

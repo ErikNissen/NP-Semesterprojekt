@@ -8,6 +8,9 @@
 #include "Priority.h"
 #include "Item.h"
 #include "Timer.h"
+#include "Container.h"
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
+#include "../PersistentFileManagement/PersistentFileManagement.hpp"
 
 
 // container for containing items with amounts and priorities in a shelf segment per container
@@ -19,7 +22,7 @@ class Container {
 private:
     unsigned int containerId{};
     Item item{};
-    unsigned int currentAmountOfItem{};
+    unsigned int currentAmountOfItem;
 
     Timer timer; // Tracks the time a Container is getting transported
 
@@ -33,25 +36,24 @@ private:
 public:
     explicit Container(unsigned int id);
     explicit Container(const Item& item);
-    explicit Container(const Item& item, unsigned int id);
+    explicit Container(const Item& item, unsigned int id, unsigned int currentAmount);
 
-    unsigned int getId() const;
+    [[nodiscard]] unsigned int getId() const;
 
     // getters and setters
 public:
 
     [[nodiscard]] unsigned int getCurrentAmountOfItem() const;
+    [[nodiscard]] unsigned int getAmountOfPlacesForItem() const;
     [[nodiscard]] Timer getTimer() const;
     static const float getLength();
     static const float getWidth();
     static const float getHeight();
 
     [[nodiscard]] const Item &getItem() const;
-    unsigned int getMaxAmountOfItem(); // gets max amount of contained item
-    Priority getItemsPriority();
+    [[nodiscard]] unsigned int getMaxAmountOfItem() const; // gets max amount of contained item
+    [[nodiscard]] Priority getItemsPriority() const;
     void appendItemType(const Item& item);
-    unsigned int getAmountOfPlacesForItem();
-
 
 
     // methods
@@ -76,6 +78,8 @@ public:
     void addAmount(unsigned int amount);
     void takeAmount(unsigned int amount);
     void print();
+	// ToDo Erik Nissen
+	std::string toString();
 };
 
 #endif //NUPPROJECT_CONTAINER_H

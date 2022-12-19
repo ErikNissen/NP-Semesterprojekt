@@ -5,11 +5,17 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <cmath>
+#include <algorithm>
+#include <iomanip>
+#include <vector>
+#include <optional>
 #include "../Messages/SegmentDataMessage.h"
 #include "../Messages/TimeSegmentMessage.h"
 #include "Segment.h"
 #include "SegmentUse.h"
-#include "PersistentFileManagement.hpp"
+#include "../PersistentFileManagement/PersistentFileManagement.hpp"
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
 
 #ifndef NUPPROJECT_SHELF_H
 #define NUPPROJECT_SHELF_H
@@ -67,8 +73,6 @@ namespace inventoryLib {
 
         double distanceFromFloorToInputInMeters;
         double distanceFromFloorToOutputInMeters;
-
-
 
         // segment
         double distanceBetweenSegmentsInMeters;
@@ -156,6 +160,10 @@ namespace inventoryLib {
         void printShelfSegments();
 
         void saveAsJSONFile() const;
+		// ToDo Erik Nissen
+	    std::string toString();
+
+        void saveAsJSONFile();
     };
 }
 

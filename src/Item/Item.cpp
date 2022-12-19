@@ -3,7 +3,8 @@
 //
 
 #include "Item.h"
-#include "PersistentFileManagement.hpp"
+
+
 
 using namespace  itemLib;
 
@@ -87,6 +88,14 @@ void Item::printPriority() {
     }
 }
 
+std::string Item::toString(){
+	nlohmann::json data;
+	data["itemID"] = this->itemID;
+	data["Priority"] = this->priority;
+	data["maxAmountPerContainer"] = this->maxAmountPerContainer;
+
+	return data.dump();
+}
 
 
 

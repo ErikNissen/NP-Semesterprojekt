@@ -5,8 +5,10 @@
 #ifndef NUPPROJECT_ITEM_H
 #define NUPPROJECT_ITEM_H
 
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 #include "Priority.h"
+#include "../../_deps/json-src/single_include/nlohmann/json.hpp"
+#include "../PersistentFileManagement/PersistentFileManagement.hpp"
 
 namespace itemLib {
 
@@ -46,6 +48,9 @@ namespace itemLib {
         void saveAsJSONFile() const;
 
         void print();
+		// ToDo Erik Nissen
+		std::string toString();
+
     };
 }
 

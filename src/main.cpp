@@ -3,7 +3,6 @@
 #include "Inventory.h"
 #include "ConveyorBeltStore.h"
 #include "ConveyorBeltRetrieve.h"
-#include "Inventory.h"
 #include "PersistentFileManagement/PersistentFileManagement.hpp"
 
 int main (int argc, char *argv[]) {
@@ -36,7 +35,6 @@ int main (int argc, char *argv[]) {
     // -------------------------------------------------------------------------------
 */
     //!!! Für Debugging auf 5 * 5 Matrizen verändert. Projekt-Info ist 54*90
-/*
     auto inventory{inventoryLib::Inventory(8, 90, 2, 2.6, 10, 5, 5,
                                            0.8, 0.5, 3.5, 0.4,
                                            1.2, 49.6, 28.0, 0.7,
@@ -44,9 +42,17 @@ int main (int argc, char *argv[]) {
                                            0.45, 0.45, 0.65, 0.4, 0.4,
                                            0.6)};
 
-*/
-    inventoryLib::Inventory inventory{};
-    inventory.printShelfSegments();
+	auto pfm = PersistentFileManagement("log");
+
+	using namespace std::chrono_literals;
+	std::chrono::duration<int> minTime = std::chrono::seconds(5s);
+	std::chrono::duration<int> maxTime = std::chrono::seconds(7s);
+	pfm.log(minTime, maxTime, inventory.toString());
+
+
+    //inventoryLib::Inventory inventory{};
+    //inventory.printShelfSegments();
+
 
 
 
@@ -87,8 +93,6 @@ int main (int argc, char *argv[]) {
     }
     */
 
-/*
-
     // test reserving segment for container output for adding item to fastest to reach container
     auto fastestToReachContainerToGetItems{inventory.reserveContainerOutputFromInventoryToGetItems(item)};
     if (fastestToReachContainerToGetItems) {
@@ -97,8 +101,6 @@ int main (int argc, char *argv[]) {
     } else {
         std::cout << "Aktuell steht kein Container zum Entnehmen von Items zur Verfügung." << std::endl;
     }
-
-    */
 
     return 0;
 }

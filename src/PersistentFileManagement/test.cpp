@@ -1,21 +1,21 @@
-#include "PersistentFileManagement.cpp"
+#include "PersistentFileManagement.hpp"
 #include <iostream>
 
 using namespace std;
 
 int main() {
 	cout << "Create JSON Object" << endl;
-	PersistentFileManagement pfm = PersistentFileManagement("test");
+	auto pfm = PersistentFileManagement("test");
 
 	//cout << "Create JSON file" << endl;
 	//pfm.create("test");
 
 	cout << "Add data to JSON Object" << endl;
 	string name = "Erik";
-	pfm.add("name", name);
-	pfm.add("age", 20);
-	pfm.add("height", 1.80);
-	pfm.add("isStudent", true);
+	pfm.add<string>("name", name);
+	pfm.add<int>("age", 20);
+	pfm.add<float>("height", 1.80);
+	pfm.add<bool>("isStudent", true);
 
 	cout << "Save JSON Object to file" << endl;
 	pfm.save();
@@ -24,10 +24,10 @@ int main() {
 	pfm.load("test");
 
 	cout << "Search (String)" << endl;
-	pfm.search("name", true);
-	pfm.search("age", true);
-	pfm.search("height", true);
-	pfm.search("isStudent", true);
+	pfm.search<string>("name");
+	pfm.search<string>("age");
+	pfm.search<string>("height");
+	pfm.search<string>("isStudent");
 
 	cout << "Get data from JSON Object" << endl;
 	cout << pfm.get("name") << endl;
@@ -37,22 +37,14 @@ int main() {
 
 	cout << "Update data in JSON Object" << endl;
 	name = "Erik Nissen";
-	pfm.update("name", name);
-	pfm.update("age", 21);
-	pfm.update("height", 1.81);
-	pfm.update("isStudent", false);
-
-	cout << "Search (Regex)" << endl;
-	// contains "E"
-	pfm.search(regex("E"), false);
-
-	// contains not "a"
-	pfm.search(regex("[^a]"), false);
+	pfm.update<string>("name", name);
+	pfm.update<int>("age", 21);
+	pfm.update<float>("height", 1.81);
+	pfm.update<bool>("isStudent", false);
 
 	cout << "Delete data in JSON Object" << endl;
 	pfm.remove("name");
 	pfm.remove("age");
 	pfm.remove("height");
 	pfm.remove("isStudent");
-
 }

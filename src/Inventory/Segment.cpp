@@ -3,7 +3,6 @@
 //
 
 #include "Segment.h"
-#include "PersistentFileManagement.hpp"
 
 
 using namespace inventoryLib;
@@ -292,7 +291,16 @@ void Segment::printPriority() {
     }
 }
 
-
+std::string Segment::toString() {
+	nlohmann::json data;
+	data["priority"] = this->priority;
+	data["Container"] = nlohmann::json::parse(this->container.toString());
+	data["segmentReservedForContainerInput"] =
+			this->segmentReservedForContainerInput;
+	data["segmentReservedForContainerOutput"] =
+			this->segmentReservedForContainerOutput;
+	return data.dump();
+}
 
 
 
