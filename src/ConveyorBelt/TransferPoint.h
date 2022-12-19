@@ -19,7 +19,7 @@ public:
     TransferPoint() = default;
     explicit TransferPoint(float _distanceToPackaging);
     std::queue<Container> containers;
-    void addContainer(Container&);
+    void addContainer(const Container &_container);
 	[[maybe_unused]] Container& removeContainer();
     void addContainerForRetrieving(Container&);
     [[nodiscard]] float getDistance() const;
