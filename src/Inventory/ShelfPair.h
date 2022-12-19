@@ -37,10 +37,10 @@ namespace inventoryLib {
         double distanceBetweenShelvesOfPair;
 
         // TransferPoint to remove Containers from and put them into the Shelf
-        TransferPoint inputTransferPoint;
+        TransferPoint inputTransferPoint{};
 
         // TransferPoint to put Containers on to send them to KPoint
-        TransferPoint outputTransferPoint;
+        TransferPoint outputTransferPoint{};
 
         // constructors
     public:

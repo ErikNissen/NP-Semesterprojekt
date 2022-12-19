@@ -162,8 +162,6 @@ namespace inventoryLib {
         void saveAsJSONFile() const;
 		// ToDo Erik Nissen
 	    std::string toString();
-
-        void saveAsJSONFile();
     };
 }
 

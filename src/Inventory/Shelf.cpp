@@ -416,9 +416,11 @@ std::string Shelf::toString() {
 	data["segmentWidthInMeters"] = this->segmentWidthInMeters;
 	data["segmentHeightInMeters"] = this->segmentHeightInMeters;
 	data["segmentDepthInMeters"] = this->segmentDepthInMeters;
-	data["containerWidthInMeters"] = this->containerWidthInMeters;
+	/*
+    data["containerWidthInMeters"] = this->containerWidthInMeters;
 	data["containerHeightInMeters"] = this->containerHeightInMeters;
 	data["containerDepthInMeters"] = this->containerDepthInMeters;
+	 */
 
 	return data.dump();
 }

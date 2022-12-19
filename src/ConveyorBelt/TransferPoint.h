@@ -16,6 +16,7 @@
 
 class TransferPoint {
 public:
+    TransferPoint() = default;
     explicit TransferPoint(float _distanceToPackaging);
     std::queue<Container> containers;
     void addContainer(Container&);
@@ -26,7 +27,7 @@ private:
     //ConveyorBeltRetrieve conveyor;
     float length = 2.3;
     float width = 0.7;
-    float distanceToPackaging; // distance to the K/I -Point
+    float distanceToPackaging{}; // distance to the K/I -Point
 };
 
 

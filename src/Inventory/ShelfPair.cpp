@@ -9,26 +9,32 @@ using namespace inventoryLib;
 using namespace messagesLib;
 
 // constructors
+
+
 ShelfPair::ShelfPair(const unsigned int shelfPairNumber){
     PersistentFileManagement persistentFileManagement{"ShelfPair" + std::to_string(shelfPairNumber)};
     std::cout << "Load data from JSON Object" << std::endl;
 
     this->shelfPairNumber = persistentFileManagement.get("shelfPairNumber");
 
-    //ToDo: Hier Aufruf der Speicher-Methode der einzelnen Shelves einfügen!
-    shelfLeft = Shelf(shelfPairNumber * 2);
-    shelfRight = Shelf(shelfPairNumber * 2 -1);
+    this->shelfLeft = Shelf(shelfPairNumber * 2);
+    this->shelfRight = Shelf(shelfPairNumber * 2 -1);
 
+    //ToDo: Hardcoded numbers durch Parameter ersetzen!!!
+    this->inputTransferPoint = TransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f ));
+    this->outputTransferPoint = TransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f ));
 }
 
 
 //For Loading from JSON
+
 ShelfPair::ShelfPair(const unsigned int shelfPairNumber, const unsigned long long int rowsPerShelf, const unsigned long long int segmentsPerRow,
                      const double verticalMaxVelocityInMetersPerSecond, const double verticalAccelerationInMetersPerSquareSeconds, const double horizontalMaxVelocityInMetersPerSecond, const double horizontalAccelerationInMetersPerSquareSeconds,
                      const double distanceBetweenShelvesOfPair, const double shelfWidthInMeters, const double shelfHeightInMeters, const double shelfDepthInMeters,
                      const double distanceFromFloorToInputInMeters, const double distanceFromFloorToOutputInMeters, const double distanceBetweenSegmentsInMeters,
                      const double segmentWidthInMeters, const double segmentHeightInMeters, const double segmentDepthInMeters, const double containerWidthInMeters, const double containerHeightInMeters,
                      const double containerDepthInMeters) :
+//ToDo: Harcoded numbers durch Parameter ersetzen!!!
                      inputTransferPoint(TransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f ))),
                      outputTransferPoint(TransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f )))
 {
