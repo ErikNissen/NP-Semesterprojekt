@@ -1,5 +1,4 @@
 #include "ShelfPair.h"
-#include "ConveyorBeltRetrieve.h"
 
 
 using namespace inventoryLib;
@@ -9,9 +8,9 @@ using namespace conveyorLib;
 // constructors
 
 
-ShelfPair::ShelfPair(const unsigned int shelfPairNumber, ConveyorBeltRetrieve& _conveyor):
-        inputTransferPoint(_conveyor, 12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f )),
-        outputTransferPoint(_conveyor, 12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f ))
+ShelfPair::ShelfPair(const unsigned int shelfPairNumber):
+        inputTransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f )),
+        outputTransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f ))
 {
     PersistentFileManagement persistentFileManagement{"ShelfPair" + std::to_string(shelfPairNumber)};
     std::cout << "Load data from JSON Object" << std::endl;
@@ -30,9 +29,9 @@ ShelfPair::ShelfPair(const unsigned int shelfPairNumber, const unsigned long lon
                      const double distanceBetweenShelvesOfPair, const double shelfWidthInMeters, const double shelfHeightInMeters, const double shelfDepthInMeters,
                      const double distanceFromFloorToInputInMeters, const double distanceFromFloorToOutputInMeters, const double distanceBetweenSegmentsInMeters,
                      const double segmentWidthInMeters, const double segmentHeightInMeters, const double segmentDepthInMeters, const double containerWidthInMeters, const double containerHeightInMeters,
-                     const double containerDepthInMeters, ConveyorBeltRetrieve& _conveyor) :
-                     inputTransferPoint(TransferPoint(_conveyor, 12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f ))),
-                     outputTransferPoint(TransferPoint(_conveyor, 12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f )))
+                     const double containerDepthInMeters) :
+                     inputTransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f )),
+                     outputTransferPoint( 12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f ))
 {
     // log data
     this-> shelfPairNumber = shelfPairNumber;
@@ -58,13 +57,13 @@ ShelfPair::ShelfPair(const unsigned int shelfPairNumber, const unsigned long lon
                      const double distanceFromFloorToInputInMeters, const double distanceFromFloorToOutputInMeters,
                      const double distanceBetweenSegmentsInMeters, const double segmentWidthInMeters, double segmentHeightInMeters,
                      const double segmentDepthInMeters, const double containerWidthInMeters, double containerHeightInMeters,
-                     const double containerDepthInMeters, const Shelf &shelfLeft, const Shelf &shelfRight, ConveyorBeltRetrieve& _conveyor) :
+                     const double containerDepthInMeters, const Shelf &shelfLeft, const Shelf &shelfRight) :
                      ShelfPair(shelfPairNumber, rowsPerShelf, segmentsPerRow,
 verticalMaxVelocityInMetersPerSecond, verticalAccelerationInMetersPerSquareSeconds, horizontalMaxVelocityInMetersPerSecond, horizontalAccelerationInMetersPerSquareSeconds,
 distanceBetweenShelvesOfPair, shelfWidthInMeters, shelfHeightInMeters, shelfDepthInMeters,
 distanceFromFloorToInputInMeters, distanceFromFloorToOutputInMeters, distanceBetweenSegmentsInMeters,
 segmentWidthInMeters, segmentHeightInMeters, segmentDepthInMeters, containerWidthInMeters, containerHeightInMeters,
-containerDepthInMeters, _conveyor){
+containerDepthInMeters){
 
     this->shelfLeft = shelfLeft;
     this->shelfRight = shelfRight;

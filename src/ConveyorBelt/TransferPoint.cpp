@@ -2,7 +2,7 @@
 
 using namespace conveyorLib;
 
-TransferPoint::TransferPoint(ConveyorBeltRetrieve& _conveyor, float _distanceToPackaging) : conveyor{_conveyor}, distanceToPackaging{_distanceToPackaging} {}
+TransferPoint::TransferPoint(float _distanceToPackaging) : distanceToPackaging{_distanceToPackaging} {}
 
 /// Put a Container onto the TransferPoint (this is only used by the StoringConveyorBelt)
 void TransferPoint::addContainer(Container &_container) {
@@ -34,7 +34,6 @@ Container &TransferPoint::removeContainer() {
 void TransferPoint::addContainerForRetrieving(Container &_container) {
     _container.getTimer().addSeconds(2.5);
     std::cout << "Removed Container \"" << _container.getId() << "\" from TransferPoint. Took 2.5 seconds. Timer now at: " << _container.getTimer().getTimeInSeconds() << std::endl;
-    conveyor.transportContainer(_container, distanceToPackaging);
 }
 
 float TransferPoint::getDistance() const {

@@ -12,7 +12,7 @@ using namespace messagesLib;
 // constructors
 
 // for loading from json file
-Inventory::Inventory(conveyorLib::ConveyorBeltRetrieve& _conveyor) {
+Inventory::Inventory() {
 
 
     PersistentFileManagement persistentFileManagement{"Inventory"};
@@ -36,7 +36,7 @@ Inventory::Inventory(conveyorLib::ConveyorBeltRetrieve& _conveyor) {
     std::vector<ShelfPair> loadedShelfPairs{};
 
     for(unsigned int i{1}; i<= amountOfShelves/2; i++){
-        loadedShelfPairs.emplace_back(ShelfPair(i, _conveyor));
+        loadedShelfPairs.emplace_back(ShelfPair(i));
     }
 
     this->shelfPairs = loadedShelfPairs;
@@ -49,7 +49,7 @@ Inventory::Inventory(conveyorLib::ConveyorBeltRetrieve& _conveyor) {
 }
 
 //!!! Anstatt alle Daten einzeln zu übergeben, vllt. Container-Object und Regal-Object usw. mit fertigen Maßen übergeben und anhanddessen Daten beziehen !!!
-Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentageOfPriorityB, unsigned int percentageOfPriorityC, const double conveyorBeltVelocity, const unsigned int numberOfShelfPairs, const unsigned long long int rowsPerShelf, const unsigned long long int segmentsPerRow, const double verticalMaxVelocityInMetersPerSecond, const double verticalAccelerationInMetersPerSquareSeconds, const double horizontalMaxVelocityInMetersPerSecond, const double horizontalAccelerationInMetersPerSquareSeconds, const double distanceBetweenShelfPairs, const double shelfWidthInMeters, const double shelfHeightInMeters, const double shelfDepthInMeters, const double distanceFromFloorToInputInMeters, const double distanceFromFloorToOutputInMeters, const double distanceBetweenSegmentsInMeters, const double segmentWidthInMeters, const double segmentHeightInMeters, const double segmentDepthInMeters, const double containerWidthInMeters, const double containerHeightInMeters, const double containerDepthInMeters, conveyorLib::ConveyorBeltRetrieve& _conveyor){
+Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentageOfPriorityB, unsigned int percentageOfPriorityC, const double conveyorBeltVelocity, const unsigned int numberOfShelfPairs, const unsigned long long int rowsPerShelf, const unsigned long long int segmentsPerRow, const double verticalMaxVelocityInMetersPerSecond, const double verticalAccelerationInMetersPerSquareSeconds, const double horizontalMaxVelocityInMetersPerSecond, const double horizontalAccelerationInMetersPerSquareSeconds, const double distanceBetweenShelfPairs, const double shelfWidthInMeters, const double shelfHeightInMeters, const double shelfDepthInMeters, const double distanceFromFloorToInputInMeters, const double distanceFromFloorToOutputInMeters, const double distanceBetweenSegmentsInMeters, const double segmentWidthInMeters, const double segmentHeightInMeters, const double segmentDepthInMeters, const double containerWidthInMeters, const double containerHeightInMeters, const double containerDepthInMeters){
     // initiate shelfs
     for(unsigned int shelfPairNumber{1}; shelfPairNumber <= numberOfShelfPairs; shelfPairNumber++){
         //shelfPairs.push_back({rowsPerShelf, segmentsPerRow});
@@ -57,7 +57,7 @@ Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentage
                                 distanceBetweenShelfPairs, shelfWidthInMeters, shelfHeightInMeters, shelfDepthInMeters,
                                 distanceFromFloorToInputInMeters, distanceFromFloorToOutputInMeters, distanceBetweenSegmentsInMeters,
                                 segmentWidthInMeters, segmentHeightInMeters, segmentDepthInMeters, containerWidthInMeters, containerHeightInMeters,
-                                containerDepthInMeters, _conveyor);
+                                containerDepthInMeters);
     }
 
     //!!! Daten, die zum Regal gehören entweder nur hier deklarieren, als Parametern bei Methoden durchschleifen bis zu Shelf, oder nur in Shelf speichern und Attribute, da in einer Ebene höher sind, eine Ebene darüber, dafür Daten in den Konstruktoren durchschleifen und für die Log-Datei über Methode von jeder Klasse eigene Daten holen lassen, die dann über abgestützte Methoden durch Aufrufer weiter ergänzt werden. Letzteres ist eher objektorientiert.

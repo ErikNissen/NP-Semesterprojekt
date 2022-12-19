@@ -52,7 +52,7 @@ namespace inventoryLib {
         //ToDo: Constructors die nicht gebraucht werden, hinterher löschen
         ShelfPair() = default;
 
-        explicit ShelfPair(unsigned int shelfPairNumber, conveyorLib::ConveyorBeltRetrieve& _conveyor);
+        explicit ShelfPair(unsigned int shelfPairNumber);
 
         //ShelfPair(unsigned long long int rows, unsigned long long int columns);
 
@@ -65,7 +65,7 @@ namespace inventoryLib {
                   double distanceBetweenSegmentsInMeters,
                   double segmentWidthInMeters, double segmentHeightInMeters, double segmentDepthInMeters,
                   double containerWidthInMeters, double containerHeightInMeters,
-                  double containerDepthInMeters, conveyorLib::ConveyorBeltRetrieve&);
+                  double containerDepthInMeters);
 
         //ToDo: Parameter löschen, die in tieferer Ebene mit geladen werden
         ShelfPair(unsigned int shelfPairNumber, unsigned long long int rowsPerShelf, unsigned long long int segmentsPerRow,
@@ -73,7 +73,7 @@ namespace inventoryLib {
                              double distanceBetweenShelvesOfPair, double shelfWidthInMeters, double shelfHeightInMeters, double shelfDepthInMeters,
                              double distanceFromFloorToInputInMeters, double distanceFromFloorToOutputInMeters, double distanceBetweenSegmentsInMeters,
                              double segmentWidthInMeters, double segmentHeightInMeters, double segmentDepthInMeters, const double containerWidthInMeters, double containerHeightInMeters,
-                             double containerDepthInMeters, const Shelf& shelfLeft, const Shelf& shelfRight, conveyorLib::ConveyorBeltRetrieve&);
+                             double containerDepthInMeters, const Shelf& shelfLeft, const Shelf& shelfRight);
 
         // getters and setters
     public:

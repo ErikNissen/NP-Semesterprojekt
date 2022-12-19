@@ -11,7 +11,7 @@ Warehouse::Warehouse() : inventory{inventoryLib::Inventory(
         1.2, 49.6, 28.0, 0.7,
         1.5, 0.0, 0.1,
         0.45, 0.45, 0.65, 0.4, 0.4,
-        0.6, conveyorRetrieve)},
+        0.6)},
         iPoint {inventory}, kPoint{inventory, iPoint}, conveyorRetrieve{kPoint}
         {
             inventory.printShelfSegments();
