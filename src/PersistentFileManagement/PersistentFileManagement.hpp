@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <regex>
 #include <utility>
 #include <chrono>
 #include <string>
@@ -15,60 +16,39 @@
 class PersistentFileManagement {
 public:
 	// Constructor
-	/// <BR><h3>Creates a new PersistentFileManagement object</h3>
-/// \param path The path to the file <VAR>(optional)</VAR>
-	explicit PersistentFileManagement(const std::string_view & name);
+	explicit PersistentFileManagement(const std::string& name);
 
 	PersistentFileManagement();
 
 	// Destructor
 	~PersistentFileManagement();
 
-	/// <BR><h3>Saves a json object to a file</h3>
-/// \param path The path to the file
 	void save(const std::string& name);
 
-	/// <BR><h3>Saves a json object to a file</h3>
 	void save();
 
-	/// <BR><h3>Loads a json object from a file</h3>
-/// \param name The name of the file
-/// \return The json object
-/// \throws PersistentFileManagement::FileErrorException if the file does not exist
 	nlohmann::json load(const std::string& path);
 
-	/// <BR><h3>Gets a value from a json object</h3>
-/// \param key The key of the value
 	nlohmann::json get(const std::string& key);
 
-	/// <BR><h3>Deletes a key from a json object</h3>
-/// \param key The key to delete
-/// \throws PersistentFileManagement::KeyErrorException if the key does not exist
 	void remove(const std::string& key);
 
-	/// <BR><h3>Purges all data from json object</h3>
-	[[maybe_unused]] void purge();
+	void purge();
 
-	/// <BR><h3>Creates a new json file</h3>
-/// \param name The name of the file
-/// \throws PersistentFileManagement::FileErrorException if the file already exists
 	void create(const std::string& name);
 
-	/// <BR><h3>Creates a new json file</h3>
-/// \throws PersistentFileManagement::FileErrorException if the file already exists
-/// \throws PersistentFileManagement::NameErrorException if no name was given
 	void create();
 
-	int log(std::chrono::duration<int> minTime,
+	void log(std::chrono::duration<int> minTime,
 	         std::chrono::duration<int> maxTime,
-			 const std::string& inventory);
+			 std::string inventory);
 
 /// <BR><h3>Updates a value in a json object</h3>
 /// \param key The key of the value
 /// \param value The new value
 /// \typeparam \b U The type of the value
 	template<typename U> void
-	update(std::string const& key, U value ) {
+	update(std::string key, U value ) {
 		// Check if the key exists
 		if (this->data.contains(key)) {
 			this->data[key] = value;
@@ -123,39 +103,31 @@ public:
 	}
 
 	//Getter
-	/// <BR><h3>Returns the json object of this instance.</h3>
-	[[maybe_unused]] nlohmann::json getData();
+	nlohmann::json getData();
 
 	//Setter
-	/// <BR><h3>Sets the name of the file</h3>
-	[[maybe_unused]] void setName(const std::string_view & name);
+	void setName(const std::string& name);
 
 	//Exceptions
-	class KeyErrorException : public std::exception
-	{
-	private:
-		std::string message = "Key not found in data";
-
-	public:
-		KeyErrorException() = default;
-
-	[[nodiscard]]	const char* what() const noexcept override
-		{
-			return message.c_str();
-		}
-	};
-
-	class FileErrorException : public std::exception
-	{
+	class KeyErrorException : public std::exception {
 	private:
 		std::string message;
 
 	public:
-		explicit FileErrorException(std::string  newMessage) : message(std::move(newMessage)) {}
+		explicit KeyErrorException(std::string msg="Key does not exist"): message(std::move(msg)){}
+		std::string what (){
+			return message;
+		}
+	};
 
-		[[nodiscard]] const char* what() const noexcept override
-		{
-			return message.c_str();
+	class FileErrorException : public std::exception {
+	private:
+		std::string message;
+
+	public:
+		explicit FileErrorException(std::string msg="File already exists"): message(std::move(msg)){}
+		std::string what(){
+			return message;
 		}
 	};
 

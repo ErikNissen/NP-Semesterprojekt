@@ -7,8 +7,7 @@ TransferPoint::TransferPoint(ConveyorBeltRetrieve& _conveyor, float _distanceToP
 /// Put a Container onto the TransferPoint (this is only used by the StoringConveyorBelt)
 void TransferPoint::addContainer(Container &_container) {
     // Put new Container onto the TransferPoint if there is still room
-    if(static_cast<float>((1 + containers.size())) * Container::getLength() <
-	this->length) {
+    if((1 + containers.size()) * _container.getLength() < this->length) {
         _container.getTimer().addSeconds(2.5);
         containers.push(_container);
         std::cout << "Added Container \"" << _container.getId() << "\" to TransferPoint. Took 2.5 seconds. Timer now at: " << _container.getTimer().getTimeInSeconds() << std::endl;

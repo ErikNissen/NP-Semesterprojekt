@@ -11,46 +11,6 @@ using namespace messagesLib;
 
 // constructors
 
-// for loading from json file
-Inventory::Inventory() {
-
-
-    PersistentFileManagement persistentFileManagement{"Inventory"};
-    std::cout << "Load data from JSON Object" << std::endl;
-
-    // counts
-    this->amountOfShelves = persistentFileManagement.get("amountOfShelves");
-    this->rowsPerShelf = persistentFileManagement.get("rowsPerShelf");
-    this->segmentsPerRow = persistentFileManagement.get("segmentsPerRow");
-
-    // priority percentages
-    this->percentageOfPriorityA = persistentFileManagement.get("percentageOfPriorityA");
-    this->percentageOfPriorityB = persistentFileManagement.get("percentageOfPriorityB");
-    this->percentageOfPriorityC = persistentFileManagement.get("percentageOfPriorityC");
-
-
-    // inventory
-    this->distanceBetweenShelves = persistentFileManagement.get("distanceBetweenShelves");
-    this->conveyorBeltVelocity = persistentFileManagement.get("conveyorBeltVelocity");
-
-    // reinitialize shelf pairs from loaded json file
-    std::vector<ShelfPair> loadedShelfPairs{};
-
-
-
-    for(unsigned int i{1}; i<= amountOfShelves/2; i++){
-        loadedShelfPairs.emplace_back(ShelfPair(i));
-    }
-
-    this->shelfPairs = loadedShelfPairs;
-
-    //ToDo: Alternativer Versuch, um shelfPairs direkt zu setzen, anstatt erst einen neuen Vector zwischenzuspeichern. Löschen, falls nicht der optimale Weg.
-    /*
-    for(ShelfPair& shelfPair:shelfPairs){
-        shelfPair = ShelfPair(shelfPair.getShelfPairNumber());
-    }*/
-}
-
 //!!! Anstatt alle Daten einzeln zu übergeben, vllt. Container-Object und Regal-Object usw. mit fertigen Maßen übergeben und anhanddessen Daten beziehen !!!
 Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentageOfPriorityB, unsigned int percentageOfPriorityC, const double conveyorBeltVelocity, const unsigned int numberOfShelfPairs, const unsigned long long int rowsPerShelf, const unsigned long long int segmentsPerRow, const double verticalMaxVelocityInMetersPerSecond, const double verticalAccelerationInMetersPerSquareSeconds, const double horizontalMaxVelocityInMetersPerSecond, const double horizontalAccelerationInMetersPerSquareSeconds, const double distanceBetweenShelfPairs, const double shelfWidthInMeters, const double shelfHeightInMeters, const double shelfDepthInMeters, const double distanceFromFloorToInputInMeters, const double distanceFromFloorToOutputInMeters, const double distanceBetweenSegmentsInMeters, const double segmentWidthInMeters, const double segmentHeightInMeters, const double segmentDepthInMeters, const double containerWidthInMeters, const double containerHeightInMeters, const double containerDepthInMeters, conveyorLib::ConveyorBeltRetrieve& _conveyor){
     // initiate shelfs
@@ -119,37 +79,20 @@ Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentage
     saveAsJSONFile();
 }
 
-// for loading from JSON-File
-Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentageOfPriorityB,
-                     unsigned int percentageOfPriorityC, double conveyorBeltVelocity, unsigned int numberOfShelfPairs,
-                     unsigned long long int rowsPerShelf, unsigned long long int segmentsPerRow,
-                     double verticalMaxVelocityInMetersPerSecond, double verticalAccelerationInMetersPerSquareSeconds,
-                     double horizontalMaxVelocityInMetersPerSecond,
-                     double horizontalAccelerationInMetersPerSquareSeconds, double distanceBetweenShelfPairs,
-                     double shelfWidthInMeters, double shelfHeightInMeters, double shelfDepthInMeters,
-                     double distanceFromFloorToInputInMeters, double distanceFromFloorToOutputInMeters,
-                     double distanceBetweenSegmentsInMeters, double segmentWidthInMeters, double segmentHeightInMeters,
-                     double segmentDepthInMeters, double containerWidthInMeters, double containerHeightInMeters,
-                     double containerDepthInMeters, const std::vector<ShelfPair>& shelfPairs):
-
-    Inventory(percentageOfPriorityA, percentageOfPriorityB, percentageOfPriorityC, conveyorBeltVelocity, numberOfShelfPairs, rowsPerShelf, segmentsPerRow, verticalMaxVelocityInMetersPerSecond, verticalAccelerationInMetersPerSquareSeconds, horizontalMaxVelocityInMetersPerSecond, horizontalAccelerationInMetersPerSquareSeconds, distanceBetweenShelfPairs, shelfWidthInMeters, shelfHeightInMeters, shelfDepthInMeters, distanceFromFloorToInputInMeters, distanceFromFloorToOutputInMeters, distanceBetweenSegmentsInMeters, segmentWidthInMeters, segmentHeightInMeters, segmentDepthInMeters, containerWidthInMeters, containerHeightInMeters, containerDepthInMeters){
-        this->shelfPairs = shelfPairs;
-    }
-
 
 // getters and setters
 ShelfPair& Inventory::getShelfPairByShelfNumber(const unsigned int shelfNumber) {
     return shelfPairs.at(getShelfPairNumberByShelfNumber(shelfNumber)-1); // the list of shelf pairs starts at 0 but with the member shelfPairNumber = 1
 }
 
-[[maybe_unused]] unsigned int Inventory::getShelfPairNumberByShelfNumber(const unsigned int shelfNumber) {
+unsigned int Inventory::getShelfPairNumberByShelfNumber(const unsigned int shelfNumber) {
     return std::ceil(static_cast<double>(shelfNumber)/2);
 }
 
 
 // methods
 
-void Inventory::saveAsJSONFile() const{
+void Inventory::saveAsJSONFile(){
     PersistentFileManagement pfm{ "Inventory"};
     std::cout << "Add data to JSON Object" << std::endl;
 
@@ -167,14 +110,12 @@ void Inventory::saveAsJSONFile() const{
     pfm.addOrIfExistentUpdate( "distanceBetweenShelves", distanceBetweenShelves);
     pfm.addOrIfExistentUpdate( "conveyorBeltVelocity", conveyorBeltVelocity);
 
-    //ToDo: Hier Aufruf der Speicher-Methode der einzelnen ShelfPairs einfügen! / Alternativ immer jeweils intern im Konstruktor aufrufen. Dann müssten aber z.B. bei Container, die nicht immer im gleichen Segment sind, die Zuordnung zum Segment kodiert werden als Name, Attribut oder Liste
-    for(ShelfPair shelfPair:shelfPairs){
-        shelfPair.saveAsJSONFile();
-    }
+    //ToDo: Hier Aufruf der Speicher-Methode der einzelnen ShelfPairs einfügen!
+
+    //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
+    //ToDo: Alternativ zur Lösung oben jeweils eine einzelne Datei anlegen, die mit der Kodierung benannt ist!
+
 }
-
-
-
 
 
 void Inventory::setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercentages(){
@@ -207,23 +148,23 @@ void Inventory::setSegmentPrioritiesBasedOnFastestToReachSegmentsAndPrioPercenta
 //ToDo:Bezeichner überarbeiten und vor allem kürzen!
 //ToDo: Folgende Listen-Methoden nutzen, falls Listen noch woanders weiter ausgewertet werden (z.B. am I-Punkt, um Warteschlangen zu berücksichtigen vor Reservierung)
 //ToDo: Hier noch Rückwege ergänzen
-[[maybe_unused]] std::vector<TimeSegmentMessage>
+std::vector<TimeSegmentMessage>
 Inventory::getListOfFastestToReachContainerWithoutSetPriorityPerShelfOnlyShelfWay() {
     return getListOfFastestToReachSegmentsWayTimePerShelfOnlyShelfWay(SegmentUse::InitPrio, {});
 }
 
-[[maybe_unused]] std::vector<TimeSegmentMessage>
+std::vector<TimeSegmentMessage>
 Inventory::getListOfFastestToReachSegmentForContainerInputPerShelfOnlyShelfWay(const Container& container) {
     return getListOfFastestToReachSegmentsWayTimePerShelfOnlyShelfWay(SegmentUse::AddContainerToSegment, container.getItem());
 }
 
 
-[[maybe_unused]] std::vector<TimeSegmentMessage>
+std::vector<TimeSegmentMessage>
 Inventory::getListOfFastestToReachContainerForItemInputPerShelfOnlyShelfWay(const Item& item) {
     return getListOfFastestToReachSegmentsWayTimePerShelfOnlyShelfWay(SegmentUse::AddItemToContainer, item);
 }
 
-[[maybe_unused]] std::vector<TimeSegmentMessage> Inventory::getListOfFastestToReachContainerForItemOutputPerShelfOnlyShelfWay(const Item& item) {
+std::vector<TimeSegmentMessage> Inventory::getListOfFastestToReachContainerForItemOutputPerShelfOnlyShelfWay(const Item& item) {
     return getListOfFastestToReachSegmentsWayTimePerShelfOnlyShelfWay(SegmentUse::GetItemFromContainer, item);
 }
 
@@ -339,7 +280,7 @@ Inventory::getFastestToReachContainerForItemOutput(const Item& item) {
 
 //ToDO: Segmente müssen reserviert werden für: Ausgabe des Containers zum Befüllen, Ausgabe des Containers zum Herausnehmen, Einfügen des Containers in ein Segment
 
-[[maybe_unused]] std::optional<TimeSegmentMessage> Inventory::reserveContainerToAddToInventory(const Container& container) {
+std::optional<TimeSegmentMessage> Inventory::reserveContainerToAddToInventory(const Container& container) {
     auto fastestToReachContainer{getFastestToReachSegmentForContainerInput(container)};
     if(fastestToReachContainer) {
         reserveSegmentToAddContainer(fastestToReachContainer->getSegmentDataMessage());
@@ -349,7 +290,7 @@ Inventory::getFastestToReachContainerForItemOutput(const Item& item) {
 
 //ToDO: Im besten Fall diese Methode erst beim Punkt aufrufen, der das Laufband mit ansteuert und dafür noch eine Ebene aufrufen, die das schnellste zu erreichende Segment unter Berücksichtung der Warteschlangen berechnet
 //!!! Die Methoden zum Reservieren evtl. so anpassen, dass noch vor dem Aufruf die aktuellen Wartezeiten in den Schlangen berücksichtigt werden können, was so direkt nicht der Fall ist. Aber zwischen Abfrage der Liste und Reservierung darf keine Zeit liegen. Dann müsste ggf. das Laufband beides gleichzeitig in einer Methode machen, die ein Mutex ist !!!
-[[maybe_unused]] std::optional<TimeSegmentMessage> Inventory::reserveContainerOutputFromInventoryToGetItems(const Item& item) {
+std::optional<TimeSegmentMessage> Inventory::reserveContainerOutputFromInventoryToGetItems(const Item& item) {
     auto fastestToReachContainer{getFastestToReachContainerForItemOutput(item)};
     if(fastestToReachContainer) {
         reserveSegmentToGetContainer(fastestToReachContainer->getSegmentDataMessage());
@@ -359,7 +300,7 @@ Inventory::getFastestToReachContainerForItemOutput(const Item& item) {
 
 //ToDO: Im besten Fall diese Methode erst beim Punkt aufrufen, der das Laufband mit ansteuert und dafür noch eine Ebene aufrufen, die das schnellste zu erreichende Segment unter Berücksichtung der Warteschlangen berechnet
 //!!! Die Methoden zum Reservieren evtl. so anpassen, dass noch vor dem Aufruf die aktuellen Wartezeiten in den Schlangen berücksichtigt werden können, was so direkt nicht der Fall ist. Aber zwischen Abfrage der Liste und Reservierung darf keine Zeit liegen. Dann müsste ggf. das Laufband beides gleichzeitig in einer Methode machen, die ein Mutex ist !!!
-[[maybe_unused]] std::optional<TimeSegmentMessage> Inventory::reserveContainerOutputFromInventoryToAddItems(const Item& item) {
+std::optional<TimeSegmentMessage> Inventory::reserveContainerOutputFromInventoryToAddItems(const Item& item) {
     auto fastestToReachContainer{getFastestToReachContainerForItemInput(item)};
     if(fastestToReachContainer) {
         reserveSegmentToGetContainer(fastestToReachContainer->getSegmentDataMessage());
@@ -380,19 +321,20 @@ void Inventory::reserveSegmentToGetContainer(const SegmentDataMessage &goalSegme
 }
 
 //!!! for getting called after waiting at a shelfPairs input waiting point
-[[maybe_unused]] void Inventory::addContainer(const SegmentDataMessage &goalSegment, const Container &newContainer) {
+void Inventory::addContainer(const SegmentDataMessage &goalSegment, const Container &newContainer) {
     ShelfPair& shelfPair{getShelfPairByShelfNumber(goalSegment.getShelfNumber())};
     shelfPair.addContainer(goalSegment, newContainer);
 }
 
 //!!! for getting called after waiting at a shelfPairs input waiting point
-[[maybe_unused]] Container Inventory::takeContainer(const SegmentDataMessage &goalSegment) {
+Container Inventory::takeContainer(const SegmentDataMessage &goalSegment) {
     ShelfPair& shelfPair{getShelfPairByShelfNumber(goalSegment.getShelfNumber())};
     return shelfPair.takeContainer(goalSegment);
 }
 
 
-[[maybe_unused]] void Inventory::printShelfSegments() {
+
+void Inventory::printShelfSegments() {
     std::cout << "!! All shelf segments: " << std::endl;
     for(auto shelfPair:shelfPairs){
         shelfPair.printAllShelfSegments();
@@ -417,10 +359,6 @@ std::string Inventory::toString() {
 
 	return data.dump();
 }
-
-
-
-
 
 
 

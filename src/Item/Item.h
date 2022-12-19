@@ -28,8 +28,7 @@ namespace itemLib {
         // constructors
     public:
         Item() = default;
-        explicit Item(const unsigned int itemId);
-        //explicit Item(const Priority& priority);
+        explicit Item(const Priority& priority);
         Item(unsigned int itemId, Priority priority, unsigned int maxAmountPerContainer);
 
         // getters and setters
@@ -40,13 +39,10 @@ namespace itemLib {
 
         // methods
     private:
+        void saveAsJSONFile();
         void printPriority();
 
     public:
-
-        //ToDo: evtl. später wieder private machen, falls die Methode nur in Constructor und Destructor aufgerufen wird
-        void saveAsJSONFile() const;
-
         void print();
 		// ToDo Erik Nissen
 		std::string toString();

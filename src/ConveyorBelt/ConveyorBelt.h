@@ -14,7 +14,7 @@ public:
     ConveyorBelt();
     [[nodiscard]] float getSpeed() const;
 protected:
-    const float speed = 2.6f;
+    const float speed = 2.6;
 };
 
 

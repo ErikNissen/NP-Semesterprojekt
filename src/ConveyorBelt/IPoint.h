@@ -25,7 +25,7 @@ namespace messagesLib {
 
 class IPoint {
 public:
-	[[maybe_unused]] explicit IPoint(inventoryLib::Inventory&);
+    explicit IPoint(inventoryLib::Inventory&);
     void storeContainerInInventory(Container&);
     void sendTaskForStoringItems(messagesLib::TransferMessage&);
     void addContainer(Container&);

@@ -10,55 +10,9 @@ using namespace inventoryLib;
 // constructors
 //!!! Konstruktor für Initialisierung aus Persistenten Daten mit komplettem Datensatz erstellen und von Inventar durch entsprechende Konstruktoren durchreichen, die aus einer JSON lesen !!!
 
-//ToDo: Constructor löschen, falls nicht verwendet!
-/*
- Shelf::Shelf(){
-//ToDo: Load from JSON-File!
-    PersistentFileManagement persistentFileManagement{"Inventory"};
-    std::cout << "Load data from JSON Object" << std::endl;
+/*Shelf::Shelf(const unsigned long long int rows, const unsigned long long int columns) {     // Constructor
+    matrix = {rows, std::vector<int>(columns)};
 }*/
-
-// for loading from json file
-Shelf::Shelf(unsigned int shelfNumber){
-    PersistentFileManagement persistentFileManagement{"Shelf" + std::to_string(shelfNumber)};
-
-    std::cout << "Load data from JSON Object" << std::endl;
-
-    // identification
-    this->shelfNumber = persistentFileManagement.get("shelfNumber");
-    this->rowsPerShelf = persistentFileManagement.get("rowsPerShelf");
-    this->segmentsPerRow = persistentFileManagement.get("segmentsPerRow");
-
-    // measurements
-    this->verticalMaxVelocityInMetersPerSecond = persistentFileManagement.get("verticalMaxVelocityInMetersPerSecond");
-    this->verticalAccelerationInMetersPerSquareSeconds = persistentFileManagement.get("verticalAccelerationInMetersPerSquareSeconds");
-
-    this->horizontalMaxVelocityInMetersPerSecond = persistentFileManagement.get("horizontalMaxVelocityInMetersPerSecond");
-    this->horizontalAccelerationInMetersPerSquareSeconds = persistentFileManagement.get("horizontalAccelerationInMetersPerSquareSeconds");
-
-    // shelf
-
-    this->shelfWidthInMeters = persistentFileManagement.get("shelfWidthInMeters");
-    this->shelfHeightInMeters = persistentFileManagement.get("shelfHeightInMeters");
-    this->shelfDepthInMeters = persistentFileManagement.get("shelfDepthInMeters");
-
-    this->distanceFromFloorToInputInMeters = persistentFileManagement.get("distanceFromFloorToInputInMeters");
-    this->distanceFromFloorToOutputInMeters = persistentFileManagement.get("distanceFromFloorToOutputInMeters");
-
-    this->segmentsPerRow = persistentFileManagement.get("segmentsPerRow");
-
-    //ToDo: Hier einzelne Segmente laden
-    matrix = {rowsPerShelf, std::vector<std::shared_ptr<Segment>>{segmentsPerRow}}; // sets a matrix with a set size and Containers with default priority N which means no valid priority level
-
-    for (unsigned int row = 0; row < rowsPerShelf; row++) {
-        for (unsigned int column{0}; column < segmentsPerRow; column++) {
-            matrix.at(row).at(column) = std::make_shared<Segment>(Segment{shelfNumber, row, column});
-        }
-    }
-}
-
-
-
 
 Shelf::Shelf(const unsigned int shelfNumber, const unsigned long long int rowsPerShelf, const unsigned long long int segmentsPerRow,
              const double verticalMaxVelocityInMetersPerSecond, const double verticalAccelerationInMetersPerSquareSeconds, const double horizontalMaxVelocityInMetersPerSecond, const double horizontalAccelerationInMetersPerSquareSeconds,
@@ -66,6 +20,8 @@ Shelf::Shelf(const unsigned int shelfNumber, const unsigned long long int rowsPe
              const double distanceFromFloorToInputInMeters, const double distanceFromFloorToOutputInMeters, const double distanceBetweenSegmentsInMeters,
              const double segmentWidthInMeters, const double segmentHeightInMeters, const double segmentDepthInMeters, const double containerWidthInMeters, const double containerHeightInMeters,
              const double containerDepthInMeters){
+
+
 
     // initiate shelf
     //!!! Bezeichner überdenken !!!
@@ -75,9 +31,9 @@ Shelf::Shelf(const unsigned int shelfNumber, const unsigned long long int rowsPe
     // https://www.programiz.com/cpp-programming/vectors
     matrix = {rowsPerShelf, std::vector<std::shared_ptr<Segment>>{segmentsPerRow}}; // sets a matrix with a set size and Containers with default priority N which means no valid priority level
 
-    for (unsigned int row = 0; row < rowsPerShelf; row++) {
-        for (unsigned int column{0}; column < segmentsPerRow; column++) {
-            matrix.at(row).at(column) = std::make_shared<Segment>(Segment{shelfNumber, row, column, Priority::N});
+    for (auto row = 0; row < rowsPerShelf; row++) {
+        for (auto container = 0; container < segmentsPerRow; container++) {
+            matrix.at(row).at(container) = std::make_shared<Segment>(Segment{Priority::N});
         }
     }
 
@@ -112,29 +68,10 @@ Shelf::Shelf(const unsigned int shelfNumber, const unsigned long long int rowsPe
     this->segmentHeightInMeters = segmentHeightInMeters;
     this->segmentDepthInMeters = segmentDepthInMeters;
 
-     /*
     // container
     this->containerWidthInMeters = containerWidthInMeters;
     this->containerHeightInMeters = containerHeightInMeters;
     this->containerDepthInMeters = containerDepthInMeters;
-     */
-}
-
-
-// for loading from json-file
-//ToDo: Attribute als Parameter löschen, die in Matrix schon vorhanden sind und in shelf selbst nicht als Attribute gespeichert werden
-Shelf::Shelf(const unsigned int shelfNumber, const unsigned long long int rowsPerShelf, const unsigned long long int segmentsPerRow,
-                  const double verticalMaxVelocityInMetersPerSecond, const double verticalAccelerationInMetersPerSquareSeconds, const double horizontalMaxVelocityInMetersPerSecond, const double horizontalAccelerationInMetersPerSquareSeconds,
-                  const double shelfWidthInMeters, const double shelfHeightInMeters, const double shelfDepthInMeters,
-                  const double distanceFromFloorToInputInMeters, const double distanceFromFloorToOutputInMeters, const double distanceBetweenSegmentsInMeters,
-                  const double segmentWidthInMeters, const double segmentHeightInMeters, const double segmentDepthInMeters, const double containerWidthInMeters, const double containerHeightInMeters,
-                  const double containerDepthInMeters, const std::vector<std::vector<std::shared_ptr<Segment>>>& matrix):Shelf(shelfNumber, rowsPerShelf, segmentsPerRow,
-                                                                                                                               verticalMaxVelocityInMetersPerSecond, verticalAccelerationInMetersPerSquareSeconds, horizontalMaxVelocityInMetersPerSecond, horizontalAccelerationInMetersPerSquareSeconds,
-                                                                                                                               shelfWidthInMeters, shelfHeightInMeters, shelfDepthInMeters,
-                                                                                                                               distanceFromFloorToInputInMeters, distanceFromFloorToOutputInMeters, distanceBetweenSegmentsInMeters,
-                                                                                                                               segmentWidthInMeters, segmentHeightInMeters, segmentDepthInMeters, containerWidthInMeters, containerHeightInMeters,
-                                                                                                                               containerDepthInMeters){
-    this->matrix = matrix;
 }
 
 // getters and setters
@@ -146,15 +83,19 @@ unsigned int Shelf::getShelfNumber() const {
     return shelfNumber;
 }
 
+//!!! Setzt die Priorität fehlerhafterweise für die komplette Matrix auf einmal !!!
 void Shelf::setSegmentsPriority(const unsigned long long int row, const unsigned long long int column, const Priority& priority) {
     matrix.at(row).at(column)->setPriority(priority); // Zuweisung wird irgendwie nicht umgesetzt, obwohl debugging bis hier kommt!
+    //matrix[row][column]->setPriority(priority); // Zuweisung wird irgendwie nicht umgesetzt, obwohl debugging bis hier kommt!
 }
+
+
 
 
 // methods
 
-void Shelf::saveAsJSONFile() const{
-    PersistentFileManagement persistentFileManagement{"Shelf" + std::to_string(shelfNumber)};  //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
+void Shelf::saveAsJSONFile(){
+    PersistentFileManagement persistentFileManagement{"Inventory"};  //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
 
     std::cout << "Add data to JSON Object" << std::endl;
 
@@ -162,6 +103,7 @@ void Shelf::saveAsJSONFile() const{
     persistentFileManagement.addOrIfExistentUpdate("shelfNumber", shelfNumber);
     persistentFileManagement.addOrIfExistentUpdate("rowsPerShelf", rowsPerShelf);
     persistentFileManagement.addOrIfExistentUpdate("segmentsPerRow", segmentsPerRow);
+
 
     // measurements
     persistentFileManagement.addOrIfExistentUpdate("verticalMaxVelocityInMetersPerSecond", verticalMaxVelocityInMetersPerSecond);
@@ -180,14 +122,8 @@ void Shelf::saveAsJSONFile() const{
 
     persistentFileManagement.addOrIfExistentUpdate("segmentsPerRow", segmentsPerRow);
 
-    //ToDo: Hier save-Methode von Segment aufrufen (dabei über Kodierung Einzigartigkeit der Value-Keys garantieren oder alternativ jeweils eine eigene Klasse erstellen mit unikatem verschlüsseltem Namen, der über Methode erstellt und entschlüsselt werden kann)
-    //ToDo: Evtl. stattdessen Speichern einzelner Segmentente nur in dessen Constructor und Destructor aufrufen
-    for(unsigned long long i{0} ; i < rowsPerShelf; i++) {
-        for (unsigned long long j{0}; j < segmentsPerRow; j++) {
-            matrix.at(i).at(j)->saveAsJSONFile();
-        }
-    }
 
+    //ToDo: Hier save-Methode von Segment aufrufen (dabei über Kodierung Einzigartigkeit der Value-Keys garantieren oder alternativ jeweils eine eigene Klasse erstellen mit unikatem verschlüsseltem Namen, der über Methode erstellt und entschlüsselt werden kann)
 
     /*
     // container
@@ -386,15 +322,14 @@ void Shelf::printShelfSegments() {
 }
 
 std::string Shelf::toString() {
-	using ull = unsigned long long;
-	nlohmann::json data, mtx;
+	nlohmann::json data, matrix;
 	std::stringstream ss;
-	for(ull i = 0; i < this->rowsPerShelf; ++i){
-		for (unsigned int j = 0; j < this->segmentsPerRow; ++j){
-			mtx[i][j] = nlohmann::json::parse(this->matrix[i][j]->toString());
+	for(auto i = 0; i < this->matrix.size(); ++i){
+		for (auto j = this->matrix[i].size(); j <= this->matrix.size(); ++j){
+			matrix[i] = j;
 		}
 	}
-	data["Matrix"] = mtx;
+	data["Matrix"] = matrix;
 	data["rowsPerShelf"] = this->rowsPerShelf;
 	data["segmentsPerRow"] = this->segmentsPerRow;
 	data["verticalMaxVelocityInMetersPerSecond"] =
@@ -417,11 +352,9 @@ std::string Shelf::toString() {
 	data["segmentWidthInMeters"] = this->segmentWidthInMeters;
 	data["segmentHeightInMeters"] = this->segmentHeightInMeters;
 	data["segmentDepthInMeters"] = this->segmentDepthInMeters;
-	/*
-    data["containerWidthInMeters"] = this->containerWidthInMeters;
+	data["containerWidthInMeters"] = this->containerWidthInMeters;
 	data["containerHeightInMeters"] = this->containerHeightInMeters;
 	data["containerDepthInMeters"] = this->containerDepthInMeters;
-	 */
 
 	return data.dump();
 }
