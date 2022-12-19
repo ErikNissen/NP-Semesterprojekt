@@ -18,9 +18,9 @@ using namespace itemLib;
 class Container {
     // attributes
 private:
-    unsigned int id{};
+    unsigned int containerId{};
     Item item{};
-    unsigned int currentAmountOfItem;
+    unsigned int currentAmountOfItem{};
 
     Timer timer; // Tracks the time a Container is getting transported
 
@@ -32,6 +32,7 @@ private:
 
     // constructors
 public:
+    explicit Container(unsigned int id);
     explicit Container(const Item& item);
     explicit Container(const Item& item, unsigned int id, unsigned int currentAmount);
 
@@ -55,11 +56,14 @@ public:
 
     // methods
 private:
-    void saveAsJSONFile() const;
     [[nodiscard]] bool containsAmountToGet(unsigned int amount) const;
     bool containsPlaceForAmountToAdd(unsigned int amount);
 
 public:
+
+    //ToDO: evtl. hinterher private machen, falls die Methode nur von eigenem Constructor und Destructor aufgerufen wird
+    void saveAsJSONFile() const;
+
     bool containsItemsOfSameItemKind(const Item& item);
     [[nodiscard]] bool isEmpty() const;
 

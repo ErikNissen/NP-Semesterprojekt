@@ -8,15 +8,66 @@
 using namespace inventoryLib;
 
 // constructors
-Segment::Segment(){
-    priority = Priority::N;
-    //item = Item();
+Segment::Segment() = default;
+
+//ToDo: Die Contructors löschen, die nicht gebraucht werden
+Segment::Segment(unsigned int shelfNumber, unsigned int rowNumber, unsigned int columnNumber):Segment(encodeSegmentId(shelfNumber, rowNumber, columnNumber)) {
 }
 
-Segment::Segment(const Priority& priority) {
+Segment::Segment(unsigned int id) {
+    PersistentFileManagement persistentFileManagement{"Segment" + std::to_string(id)};
+
+    std::cout << "Load data from JSON Object" << std::endl;
+
+
+    this->segmentId = persistentFileManagement.get("segmentId");
+    this->priority = persistentFileManagement.get("priority");
+
+    this->container = Container{persistentFileManagement.get("containerId")};
+
+
+    // flags
+    this->segmentReservedForContainerInput = persistentFileManagement.get("segmentReservedForContainerInput");
+    this->segmentReservedForContainerOutput = persistentFileManagement.get("segmentReservedForContainerOutput");
+
+
+
+    //ToDo: Folgende Inhalte ergänzen!!!
+    /*
+    //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
+    //ToDo: Alternativ zur Lösung oben jeweils eine einzelne Datei anlegen, die mit der Kodierung benannt ist!
+    persistentFileManagement.addOrIfExistentUpdate("priority", priority);
+
+
+    // save container id for beeing able to pair segment and container in loading from json file
+    persistentFileManagement.addOrIfExistentUpdate("containerId", container.getId());
+
+
+    //if(!container.isEmpty()){
+    container.saveAsJSONFile();
+    //}
+
+     */
+    //ToDo: Hier Aufruf der Speicher-Methode des einzelnen Container einfügen!
+}
+
+
+
+Segment::Segment(unsigned int id, const Priority& priority) {
+    this->segmentId = id;
     this->priority = priority;
     //item = Item(priority);
 }
+
+// for loading from json file
+Segment::Segment(const unsigned int id, const Priority& priority, const Container& container) {
+    this->priority = priority;
+}
+
+Segment::Segment(unsigned int shelfNumber, unsigned int rowNumber, unsigned int columnNumber,
+                 const Priority &priority): Segment(encodeSegmentId(shelfNumber, rowNumber, columnNumber), priority){
+}
+
 
 
 // getters and setters
@@ -27,26 +78,30 @@ bool Segment::containsContainer() {
     return !container.isEmpty();
 }
 
-
+unsigned int Segment::getId() const {
+    return segmentId;
+}
 
 //ToDO: Hier überdenken, ob die Rückgabe es eine Referenz oder ein Nullpointer werden soll. Letzteres würde den Konstruktor komplizierter machen
-const Container &Segment::getContainer() const {
+[[maybe_unused]] const Container &Segment::getContainer() const {
     return container;
 }
 
 //ToDO: Tendenziell nur privat nutzen oder hinterher löschen und stattdessen eine addContainer-Methode erstellen
 void Segment::setContainer(const Container &newContainer) {
     container = newContainer;
+    saveAsJSONFile();
 }
 
 
-Priority Segment::getPriority() const {
+[[maybe_unused]] Priority Segment::getPriority() const {
     return priority;
 }
 
 void Segment::setPriority(const Priority& newPriority) {
     if(hasNoPriorityLevel()) {
         priority = newPriority;
+        saveAsJSONFile();
     }
     else{
         throw std::invalid_argument("A container with a valid priority level has been tried to reset mistakenly. Something went wrong.");
@@ -63,19 +118,24 @@ bool Segment::isSegmentReservedForContainerInput() const {
 
 void Segment::setSegmentReservedForContainerInput(bool newSegmentReservedForContainerInputState) {
     Segment::segmentReservedForContainerInput = newSegmentReservedForContainerInputState;
+    saveAsJSONFile();
 }
 
 void Segment::setSegmentMarkedForContainerOutput(bool newSegmentMarkedForContainerOutputState) {
     Segment::segmentReservedForContainerOutput = newSegmentMarkedForContainerOutputState;
+    saveAsJSONFile();
 }
 
 
 // methods
 
 void Segment::saveAsJSONFile(){
-    PersistentFileManagement persistentFileManagement{"Inventory"};  //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
+    PersistentFileManagement persistentFileManagement{"Segment" + std::to_string(segmentId)};  //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
 
     std::cout << "Add data to JSON Object" << std::endl;
+
+    persistentFileManagement.addOrIfExistentUpdate("segmentId", segmentId);
+
 
     //ToDo: Auskommentierte Attribute eingliedern, falls sie relevant sind und dafür in den Konstruktor aufnehmen (siehe Konstruktor von Shelf)!
     /*
@@ -94,20 +154,48 @@ void Segment::saveAsJSONFile(){
     //ToDo: Alternativ zur Lösung oben jeweils eine einzelne Datei anlegen, die mit der Kodierung benannt ist!
     persistentFileManagement.addOrIfExistentUpdate("priority", priority);
 
+
+    // save container id for beeing able to pair segment and container in loading from json file
+    persistentFileManagement.addOrIfExistentUpdate("containerId", container.getId());
+
+
+    //if(!container.isEmpty()){
+        container.saveAsJSONFile();
+    //}
+
     //ToDo: Hier Aufruf der Speicher-Methode des einzelnen Container einfügen!
 }
 
 
+unsigned int Segment::encodeSegmentId(const unsigned int shelfNumber, const unsigned int rowNumber, const unsigned int columnNumber){
+    return shelfNumber * 10000 + rowNumber * 100 + columnNumber; //two digits possible for every part in case of bigger shelved or more than 99 shelves the code has to be corrected
+}
+
+unsigned int Segment::getShelfNumberFromSegmentId(){
+    return segmentId / 10000;
+}
+
+unsigned int Segment::getRowNumberFromSegmentId(){
+    return segmentId / 100;
+}
+
+unsigned int Segment::getColumnNumberFromSegmentId(){
+    return segmentId % 100;
+}
+
 void Segment::deleteReservationFromSegmentToAddContainer() {
     setSegmentReservedForContainerInput(false);
+    saveAsJSONFile();
 }
 
 void Segment::deleteReservationFromSegmentToGetContainer() {
     setSegmentMarkedForContainerOutput(false);
+    saveAsJSONFile();
 }
 
 void Segment::reserveSegmentToAddContainer() {
     setSegmentReservedForContainerInput(true);
+    saveAsJSONFile();
 }
 
 void Segment::reserveSegmentToGetContainer() {
@@ -210,6 +298,12 @@ std::string Segment::toString() {
 			this->segmentReservedForContainerOutput;
 	return data.dump();
 }
+
+
+
+
+
+
 
 
 

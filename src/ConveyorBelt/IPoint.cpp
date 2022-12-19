@@ -6,7 +6,7 @@
 #include "Inventory.h"
 
 
-IPoint::IPoint(inventoryLib::Inventory &inventory) : inv{inventory}, conveyor{ConveyorBeltStore()} {}
+[[maybe_unused]] IPoint::IPoint(inventoryLib::Inventory &inventory) : inv{inventory}, conveyor{ConveyorBeltStore()} {}
 
 // Generate new Containers and fill them with Items
 std::vector<Container> IPoint::generateContainersForItems(const Item &item, unsigned int itemCount) {

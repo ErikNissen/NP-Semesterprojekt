@@ -25,7 +25,7 @@ namespace messagesLib {
     class TransferMessage;
 }
 
-class KPoint {
+class [[maybe_unused]] KPoint {
 public:
     explicit KPoint(inventoryLib::Inventory&, IPoint&);
     void addContainer(Container&);
