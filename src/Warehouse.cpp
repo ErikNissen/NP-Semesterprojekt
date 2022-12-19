@@ -31,6 +31,12 @@ void Warehouse::testing() {
     Container container{item};
     container.addAmount(container.getAmountOfPlacesForItem() - 1);
 
+    auto pfm = PersistentFileManagement("log");
+
+    using namespace std::chrono_literals;
+    std::chrono::duration<int> minTime = std::chrono::seconds(5s);
+    std::chrono::duration<int> maxTime = std::chrono::seconds(7s);
+    pfm.log(minTime, maxTime, inventory.toString());
 
     //ToDO: Fehlerkommentare in Englisch übersetzen
     // test reserving segment for container input at the fastest to reach segment
