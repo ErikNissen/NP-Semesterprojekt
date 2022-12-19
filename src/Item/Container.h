@@ -22,7 +22,7 @@ class Container {
 private:
     unsigned int containerId{};
     Item item{};
-    unsigned int currentAmountOfItem;
+    unsigned int currentAmountOfItem{};
 
     Timer timer; // Tracks the time a Container is getting transported
 
