@@ -26,9 +26,10 @@ target_include_directories(NP_Semesterprojekt
         PUBLIC src)
 
 target_link_libraries(NP_Semesterprojekt
+        nlohmann_json::nlohmann_json
+        PersistentFileManagement
         ConveyorBelt
         Inventory
         Messages
         Item
-        nlohmann_json::nlohmann_json
         )

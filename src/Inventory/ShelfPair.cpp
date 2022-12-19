@@ -4,6 +4,7 @@
 
 #include "ShelfPair.h"
 #include "../../_deps/json-src/single_include/nlohmann/json.hpp"
+#include "PersistentFileManagement.hpp"
 
 using namespace inventoryLib;
 using namespace messagesLib;
@@ -14,8 +15,10 @@ ShelfPair::ShelfPair(const unsigned int shelfPairNumber, const unsigned long lon
                      const double distanceBetweenShelvesOfPair, const double shelfWidthInMeters, const double shelfHeightInMeters, const double shelfDepthInMeters,
                      const double distanceFromFloorToInputInMeters, const double distanceFromFloorToOutputInMeters, const double distanceBetweenSegmentsInMeters,
                      const double segmentWidthInMeters, const double segmentHeightInMeters, const double segmentDepthInMeters, const double containerWidthInMeters, const double containerHeightInMeters,
-                     const double containerDepthInMeters){
-
+                     const double containerDepthInMeters) :
+                     inputTransferPoint(TransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f ))),
+                     outputTransferPoint(TransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f )))
+{
     // log data
     this-> shelfPairNumber = shelfPairNumber;
 
@@ -60,6 +63,19 @@ void ShelfPair::setSegmentsPriority(const unsigned int shelfNumber, const unsign
 }
 
 // methods
+
+void ShelfPair::saveAsJSONFile(){
+    PersistentFileManagement persistentFileManagement{"Inventory"};
+    std::cout << "Add data to JSON Object" << std::endl;
+
+    //ToDo: Hier Aufruf der Speicher-Methode der einzelnen Shelves einfügen!
+
+    //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
+    //ToDo: Alternativ zur Lösung oben jeweils eine einzelne Datei anlegen, die mit der Kodierung benannt ist!
+
+}
+
+
 //!!! Berücksichtigt noch nicht, dass Eingabe und Ausgabe unterschiedliche Höhen und damit unterschiedliche Strecken haben!!!
 std::optional<TimeSegmentMessage> ShelfPair::getFastestToReachSegmentBasedOnUse(const SegmentUse& containerUse, const Item& item) {
     auto timeSegmentMessageOfFastestWayToSegmentShelfLeft{
@@ -108,6 +124,15 @@ void ShelfPair::printAllShelfSegments() {
     shelfLeft.printShelfSegments();
     shelfRight.printShelfSegments();
 }
+
+TransferPoint &ShelfPair::getOutputTransferPoint() {
+    return outputTransferPoint;
+}
+
+TransferPoint &ShelfPair::getInputTransferPoint() {
+    return inputTransferPoint;
+}
+
 
 std::string ShelfPair::toString() {
 	nlohmann::json data;

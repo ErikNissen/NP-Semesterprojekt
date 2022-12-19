@@ -35,6 +35,16 @@ unsigned int Item::getMaxAmountPerContainer() const {
 }
 
 // methods
+void Item::saveAsJSONFile(){
+    PersistentFileManagement persistentFileManagement{"Inventory"};  //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
+
+    std::cout << "Add data to JSON Object" << std::endl;
+
+    persistentFileManagement.addOrIfExistentUpdate("itemID", itemID);
+    persistentFileManagement.addOrIfExistentUpdate("priority", priority);
+    persistentFileManagement.addOrIfExistentUpdate("maxAmountPerContainer", maxAmountPerContainer);
+}
+
 void Item::print() {
 
     std::cout << "item ID: " << itemID << std::endl;

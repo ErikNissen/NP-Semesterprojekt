@@ -8,6 +8,9 @@ add_library(Inventory
 target_include_directories(Inventory
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
+# ToDO: muss PersistentFileManagement tatsächlich noch hier gelinkt werden, wenn Item schon gelinkt ist, wo PersistentFileManagement reingelinkt ist?
 target_link_libraries(Inventory
         Item
+        PersistentFileManagement
         )
+
