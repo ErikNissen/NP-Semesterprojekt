@@ -1,6 +1,9 @@
 #include "ConveyorBeltStore.h"
+#include "TransferPoint.h"
 
 ConveyorBeltStore::ConveyorBeltStore() : ConveyorBelt() {}
+
+using namespace conveyorLib;
 
 // Transport a Container from the I-Point to a TransferPoint
 void ConveyorBeltStore::transportContainer(Container &_container, TransferPoint &_transferPoint) {

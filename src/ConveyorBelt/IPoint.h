@@ -13,23 +13,30 @@
 #ifndef NP_SEMESTERPROJEKT_IPOINT_H
 #define NP_SEMESTERPROJEKT_IPOINT_H
 
-#include "Inventory.h"
 #include "ConveyorBeltStore.h"
+
+namespace inventoryLib {
+    class Inventory;
+}
+namespace messagesLib {
+    class TransferMessage;
+    class TimeSegmentMessage;
+}
 
 class IPoint {
 public:
     explicit IPoint(inventoryLib::Inventory&);
     void storeContainerInInventory(Container&);
-    void sendTaskForStoringItems(TransferMessage&);
+    void sendTaskForStoringItems(messagesLib::TransferMessage&);
     void addContainer(Container&);
     bool processNextContainerInQueue();
 private:
     inventoryLib::Inventory& inv;
     ConveyorBeltStore conveyor;
-    std::vector<TransferMessage> tasks;
+    std::vector<messagesLib::TransferMessage> tasks;
     std::queue<Container> containersToCheck;
     unsigned int currentContainerId = 1;
-    std::optional<TimeSegmentMessage> checkForNonFullContainersInInventory(TransferMessage&);
+    std::optional<messagesLib::TimeSegmentMessage> checkForNonFullContainersInInventory(messagesLib::TransferMessage&);
     std::vector<Container> generateContainersForItems(const itemLib::Item&, unsigned int itemCount);
 };
 

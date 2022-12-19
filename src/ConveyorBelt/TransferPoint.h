@@ -12,22 +12,24 @@
 
 #include "windows.h"
 #include "../Item/Container.h"
+#include "ConveyorBeltRetrieve.h"
 
+namespace conveyorLib {
 
-class TransferPoint {
-public:
-    explicit TransferPoint(float _distanceToPackaging);
-    std::queue<Container> containers;
-    void addContainer(Container&);
-    Container& removeContainer();
-    void addContainerForRetrieving(Container&);
-    [[nodiscard]] float getDistance() const;
-private:
-    //ConveyorBeltRetrieve conveyor;
-    float length = 2.3;
-    float width = 0.7;
-    float distanceToPackaging; // distance to the K/I -Point
-};
-
+    class TransferPoint {
+    public:
+        explicit TransferPoint(ConveyorBeltRetrieve &_conveyor, float _distanceToPackaging);
+        std::queue<Container> containers;
+        void addContainer(Container &);
+        Container &removeContainer();
+        void addContainerForRetrieving(Container &);
+        [[nodiscard]] float getDistance() const;
+    private:
+        ConveyorBeltRetrieve &conveyor;
+        float length = 2.3;
+        float width = 0.7;
+        float distanceToPackaging; // distance to the K/I -Point
+    };
+}
 
 #endif //NP_SEMESTERPROJEKT_TRANSFERPOINT_H

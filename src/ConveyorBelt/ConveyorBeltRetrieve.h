@@ -7,15 +7,18 @@
 
 
 #include "ConveyorBelt.h"
-#include "TransferPoint.h"
-#include "KPoint.h"
+#include "Container.h"
 
-class ConveyorBeltRetrieve : public ConveyorBelt {
-public:
-    explicit ConveyorBeltRetrieve(KPoint&);
-    KPoint kPoint;
-    void transportContainer(Container&, float distance);
-};
+class KPoint;
 
+namespace conveyorLib{
 
+    class ConveyorBeltRetrieve : public ConveyorBelt {
+    public:
+        explicit ConveyorBeltRetrieve(KPoint&);
+        KPoint& kPoint;
+        void transportContainer(Container&, float distance);
+    };
+
+}
 #endif //NP_SEMESTERPROJEKT_CONVEYORBELTRETRIEVE_H

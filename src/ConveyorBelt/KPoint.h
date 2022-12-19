@@ -14,21 +14,28 @@
 #ifndef NP_SEMESTERPROJEKT_KPOINT_H
 #define NP_SEMESTERPROJEKT_KPOINT_H
 
-#include "Inventory.h"
-#include "IPoint.h"
+#include "Container.h"
 
+class IPoint;
+
+namespace inventoryLib {
+    class Inventory;
+}
+namespace messagesLib {
+    class TransferMessage;
+}
 
 class KPoint {
 public:
     explicit KPoint(inventoryLib::Inventory&, IPoint&);
     void addContainer(Container&);
     bool processNextContainerInQueue();
-    void sendTaskForRetrievingItems(TransferMessage&);
+    void sendTaskForRetrievingItems(messagesLib::TransferMessage&);
 private:
-    auto sendTaskToInventory(TransferMessage&);
+    auto sendTaskToInventory(messagesLib::TransferMessage&);
     std::queue<Container> containersToCheck;
     inventoryLib::Inventory& inv;
-    std::vector<TransferMessage> tasks;
+    std::vector<messagesLib::TransferMessage> tasks;
     IPoint& iPoint;
 };
 

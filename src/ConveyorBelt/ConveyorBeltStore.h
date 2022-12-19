@@ -6,13 +6,16 @@
 #define NP_SEMESTERPROJEKT_CONVEYORBELTSTORE_H
 
 #include "ConveyorBelt.h"
-#include "TransferPoint.h"
+#include "Container.h"
 
+namespace conveyorLib {
+    class TransferPoint;
+}
 
 class ConveyorBeltStore : public ConveyorBelt {
 public:
     ConveyorBeltStore();
-    void transportContainer(Container&, TransferPoint&);
+    void transportContainer(Container&, conveyorLib::TransferPoint&);
 };
 
 

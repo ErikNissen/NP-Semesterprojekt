@@ -81,7 +81,7 @@ namespace inventoryLib {
 
         // constructors
     public:
-        //Inventory() = default;
+        Inventory() = default;
 
         Inventory(unsigned int percentageOfPriorityA, unsigned int percentageOfPriorityB, unsigned int percentageOfPriorityC, double conveyorBeltVelocity, unsigned int numberOfShelfPairs, unsigned long long int rowsPerShelf,
                   unsigned long long int segmentsPerRow,
@@ -93,7 +93,7 @@ namespace inventoryLib {
                   double distanceBetweenSegmentsInMeters,
                   double segmentWidthInMeters, double segmentHeightInMeters, double segmentDepthInMeters,
                   double containerWidthInMeters, double containerHeightInMeters,
-                  double containerDepthInMeters);
+                  double containerDepthInMeters, conveyorLib::ConveyorBeltRetrieve& _conveyor);
 
         // getters and setters
     private:

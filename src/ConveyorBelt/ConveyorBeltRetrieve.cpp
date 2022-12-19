@@ -3,6 +3,9 @@
 //
 
 #include "ConveyorBeltRetrieve.h"
+#include "KPoint.h"
+
+using namespace conveyorLib;
 
 ConveyorBeltRetrieve::ConveyorBeltRetrieve(KPoint& _kPoint) : ConveyorBelt(), kPoint{_kPoint} {}
 

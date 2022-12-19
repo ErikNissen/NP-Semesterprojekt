@@ -22,7 +22,7 @@ private:
     IPoint iPoint;
     KPoint kPoint;
     ConveyorBeltStore conveyorStore;
-    ConveyorBeltRetrieve conveyorRetrieve;
+    conveyorLib::ConveyorBeltRetrieve conveyorRetrieve;
 };
 
 

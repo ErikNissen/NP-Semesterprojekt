@@ -3,6 +3,7 @@
 //
 
 #include "IPoint.h"
+#include "Inventory.h"
 
 
 IPoint::IPoint(inventoryLib::Inventory &inventory) : inv{inventory}, conveyor{ConveyorBeltStore()} {}

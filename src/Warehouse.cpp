@@ -5,16 +5,17 @@
 #include "Warehouse.h"
 
 // initialize all parts of the system
-Warehouse::Warehouse() : iPoint {inventory}, kPoint{inventory, iPoint}, conveyorRetrieve{kPoint}, inventory{
-                                   8, 90, 2, 2.6, 10, 5, 5,
-                                   0.8, 0.5, 3.5, 0.4,
-                                   1.2, 49.6, 28.0, 0.7,
-                                   1.5, 0.0, 0.1,
-                                   0.45, 0.45, 0.65, 0.4, 0.4,
-                                   0.6}
-                                   {
-                                       inventory.printShelfSegments();
-                                   }
+Warehouse::Warehouse() : inventory{inventoryLib::Inventory(
+        8, 90, 2, 2.6, 10, 5, 5,
+        0.8, 0.5, 3.5, 0.4,
+        1.2, 49.6, 28.0, 0.7,
+        1.5, 0.0, 0.1,
+        0.45, 0.45, 0.65, 0.4, 0.4,
+        0.6, conveyorRetrieve)},
+        iPoint {inventory}, kPoint{inventory, iPoint}, conveyorRetrieve{kPoint}
+        {
+            inventory.printShelfSegments();
+        }
 
 IPoint Warehouse::getIPoint() const {
     return iPoint;

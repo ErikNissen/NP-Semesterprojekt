@@ -8,12 +8,16 @@
 
 #include "Shelf.h"
 #include "SegmentUse.h"
-#include "../ConveyorBelt/TransferPoint.h"
 #include "../../_deps/json-src/single_include/nlohmann/json.hpp"
 #include "../PersistentFileManagement/PersistentFileManagement.hpp"
 #include <exception>
 #include <iostream>
+#include "TransferPoint.h"
 
+namespace conveyorLib {
+    class TransferPoint;
+    class ConveyorBeltRetrieve;
+}
 namespace inventoryLib {
     /*
     * The class ShelfPair is contained by the class Inventory. It represents one shelf pair of the inventory containing two shelves per pair.
@@ -36,10 +40,10 @@ namespace inventoryLib {
         double distanceBetweenShelvesOfPair;
 
         // TransferPoint to remove Containers from and put them into the Shelf
-        TransferPoint inputTransferPoint;
+        conveyorLib::TransferPoint inputTransferPoint;
 
         // TransferPoint to put Containers on to send them to KPoint
-        TransferPoint outputTransferPoint;
+        conveyorLib::TransferPoint outputTransferPoint;
 
         // constructors
     public:
@@ -54,7 +58,7 @@ namespace inventoryLib {
                   double distanceBetweenSegmentsInMeters,
                   double segmentWidthInMeters, double segmentHeightInMeters, double segmentDepthInMeters,
                   double containerWidthInMeters, double containerHeightInMeters,
-                  double containerDepthInMeters);
+                  double containerDepthInMeters, conveyorLib::ConveyorBeltRetrieve&);
 
         // getters and setters
     public:
@@ -62,8 +66,8 @@ namespace inventoryLib {
         [[nodiscard]] unsigned int getShelfPairNumber() const;
         [[nodiscard]] double getDistanceBetweenShelvesOfPair() const;
         double getShelfDepthInMeters();
-        [[nodiscard]] TransferPoint& getInputTransferPoint();
-        [[nodiscard]] TransferPoint& getOutputTransferPoint();
+        [[nodiscard]] conveyorLib::TransferPoint& getInputTransferPoint();
+        [[nodiscard]] conveyorLib::TransferPoint& getOutputTransferPoint();
 
         void setSegmentsPriority(unsigned int shelfNumber, unsigned long long int row,
                                  unsigned long long int column, const Priority &priority);

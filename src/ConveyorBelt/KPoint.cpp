@@ -3,6 +3,10 @@
 //
 
 #include "KPoint.h"
+#include "IPoint.h"
+#include "Inventory.h"
+
+using namespace messagesLib;
 
 KPoint::KPoint(inventoryLib::Inventory &inventory, IPoint& _iPoint) : inv{inventory}, iPoint{_iPoint} {}
 
