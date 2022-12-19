@@ -9,10 +9,20 @@ using namespace  itemLib;
 
 // constructors
 
+// for loading from json file
+Item::Item(const unsigned int itemId) {
+    PersistentFileManagement persistentFileManagement{"Item" + std::to_string(itemID)};
 
-Item::Item(const Priority& priority) { // used by container in inventory lib
-    this->priority = priority;
+    std::cout << "Load data from JSON Object" << std::endl;
+
+    this->itemID = persistentFileManagement.get("itemID");
+    this->priority = persistentFileManagement.get("priority");
+    this->maxAmountPerContainer = persistentFileManagement.get("maxAmountPerContainer");
 }
+
+/*Item::Item(const Priority& priority) { // used by container in inventory lib
+    this->priority = priority;
+}*/
 
 Item::Item(unsigned int itemId, Priority priority, unsigned int maxAmountPerContainer) {
     this->itemID = itemId;
@@ -35,8 +45,8 @@ unsigned int Item::getMaxAmountPerContainer() const {
 }
 
 // methods
-void Item::saveAsJSONFile(){
-    PersistentFileManagement persistentFileManagement{"Inventory"};  //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
+void Item::saveAsJSONFile() const {
+    PersistentFileManagement persistentFileManagement{"Item" + std::to_string(itemID)};
 
     std::cout << "Add data to JSON Object" << std::endl;
 
@@ -76,6 +86,8 @@ void Item::printPriority() {
             break;
     }
 }
+
+
 
 
 

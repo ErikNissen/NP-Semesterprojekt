@@ -22,7 +22,8 @@ namespace inventoryLib {
 
         // attributes
     private:
-        //!!! Bezeichnung der Regale für Speicherung des Logs evtl. überarbeiten, um absolute Nummerierung aller Regale zu erleichtern !!!
+
+//!!! Bezeichnung der Regale für Speicherung des Logs evtl. überarbeiten, um absolute Nummerierung aller Regale zu erleichtern !!!
         Shelf shelfLeft, shelfRight;
         int currentRow{0}, currentColumn{0};
 
@@ -34,6 +35,12 @@ namespace inventoryLib {
 
         // constructors
     public:
+
+        //ToDo: Constructors die nicht gebraucht werden, hinterher löschen
+        ShelfPair() = default;
+
+        explicit ShelfPair(unsigned int shelfPairNumber);
+
         //ShelfPair(unsigned long long int rows, unsigned long long int columns);
 
         ShelfPair(unsigned int shelfPairNumber, unsigned long long int rowsPerShelf, unsigned long long int segmentsPerRow,
@@ -47,6 +54,14 @@ namespace inventoryLib {
                   double containerWidthInMeters, double containerHeightInMeters,
                   double containerDepthInMeters);
 
+        //ToDo: Parameter löschen, die in tieferer Ebene mit geladen werden
+        ShelfPair(unsigned int shelfPairNumber, unsigned long long int rowsPerShelf, unsigned long long int segmentsPerRow,
+                             double verticalMaxVelocityInMetersPerSecond, double verticalAccelerationInMetersPerSquareSeconds, double horizontalMaxVelocityInMetersPerSecond, double horizontalAccelerationInMetersPerSquareSeconds,
+                             double distanceBetweenShelvesOfPair, double shelfWidthInMeters, double shelfHeightInMeters, double shelfDepthInMeters,
+                             double distanceFromFloorToInputInMeters, double distanceFromFloorToOutputInMeters, double distanceBetweenSegmentsInMeters,
+                             double segmentWidthInMeters, double segmentHeightInMeters, double segmentDepthInMeters, const double containerWidthInMeters, double containerHeightInMeters,
+                             double containerDepthInMeters, const Shelf& shelfLeft, const Shelf& shelfRight);
+
         // getters and setters
     public:
         Shelf& getShelfByShelfNumber(unsigned int shelfNumber);
@@ -59,8 +74,10 @@ namespace inventoryLib {
 
         // methods
     private:
-        void saveAsJSONFile();
+
     public:
+        void saveAsJSONFile();
+
         //!!! Für folgende Methoden nochmal überprüfen, wie Zerstückelung stattfindet, wenn nicht ganze Ladung in einen Container passt
         //!!! Für folgende Methoden aktuelle Position der Bedienhilfen berücksichtigen, falls diese gerade frei sind. Dies aber eher mit Überladung der Methode machen, weil die generelle Regalzeilung ja schon vor dem Warten an der Warteschlange gemacht wird.
         //!!! -> Wenn die Berechnungen soweit implementiert sind, dass auch die Wartezeiten in der Schlange im Voraus bekannt sind, Methoden noch einmal ergänzen !!!
