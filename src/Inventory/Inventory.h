@@ -82,7 +82,7 @@ namespace inventoryLib {
 
         // constructors
     public:
-        Inventory() = default;
+        explicit Inventory(conveyorLib::ConveyorBeltRetrieve&);
 
         Inventory(unsigned int percentageOfPriorityA, unsigned int percentageOfPriorityB, unsigned int percentageOfPriorityC, double conveyorBeltVelocity, unsigned int numberOfShelfPairs, unsigned long long int rowsPerShelf,
                   unsigned long long int segmentsPerRow,
@@ -95,21 +95,6 @@ namespace inventoryLib {
                   double segmentWidthInMeters, double segmentHeightInMeters, double segmentDepthInMeters,
                   double containerWidthInMeters, double containerHeightInMeters,
                   double containerDepthInMeters, conveyorLib::ConveyorBeltRetrieve& _conveyor);
-
-        //ToDo: Hier im Konstruktor ggf. die Größen löschen, die in shelfPairs dann schon beinhaltet sind!
-                Inventory(unsigned int percentageOfPriorityA, unsigned int percentageOfPriorityB, unsigned int percentageOfPriorityC, double conveyorBeltVelocity, unsigned int numberOfShelfPairs, unsigned long long int rowsPerShelf,
-                  unsigned long long int segmentsPerRow,
-                  double verticalMaxVelocityInMetersPerSecond, double verticalAccelerationInMetersPerSquareSeconds,
-                  double horizontalMaxVelocityInMetersPerSecond, double horizontalAccelerationInMetersPerSquareSeconds,
-                  double distanceBetweenShelfPairs, double shelfWidthInMeters, double shelfHeightInMeters,
-                  double shelfDepthInMeters,
-                  double distanceFromFloorToInputInMeters, double distanceFromFloorToOutputInMeters,
-                  double distanceBetweenSegmentsInMeters,
-                  double segmentWidthInMeters, double segmentHeightInMeters, double segmentDepthInMeters,
-                  double containerWidthInMeters, double containerHeightInMeters,
-                  double containerDepthInMeters, const std::vector<ShelfPair>& shelfPairs);
-
-
 
         // getters and setters
     private:

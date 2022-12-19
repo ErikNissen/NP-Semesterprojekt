@@ -12,7 +12,7 @@ using namespace messagesLib;
 // constructors
 
 // for loading from json file
-Inventory::Inventory() {
+Inventory::Inventory(conveyorLib::ConveyorBeltRetrieve& _conveyor) {
 
 
     PersistentFileManagement persistentFileManagement{"Inventory"};
@@ -28,7 +28,6 @@ Inventory::Inventory() {
     this->percentageOfPriorityB = persistentFileManagement.get("percentageOfPriorityB");
     this->percentageOfPriorityC = persistentFileManagement.get("percentageOfPriorityC");
 
-
     // inventory
     this->distanceBetweenShelves = persistentFileManagement.get("distanceBetweenShelves");
     this->conveyorBeltVelocity = persistentFileManagement.get("conveyorBeltVelocity");
@@ -36,10 +35,8 @@ Inventory::Inventory() {
     // reinitialize shelf pairs from loaded json file
     std::vector<ShelfPair> loadedShelfPairs{};
 
-
-
     for(unsigned int i{1}; i<= amountOfShelves/2; i++){
-        loadedShelfPairs.emplace_back(ShelfPair(i));
+        loadedShelfPairs.emplace_back(ShelfPair(i, _conveyor));
     }
 
     this->shelfPairs = loadedShelfPairs;
@@ -118,23 +115,6 @@ Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentage
     // ToDo: Vorher abfragen, ob es Daten bereits persistent gibt. Falls es sie gibt, daten von JSON laden, falls nicht, von Construktor beziehen und persistente Daten neu anlegen
     saveAsJSONFile();
 }
-
-// for loading from JSON-File
-Inventory::Inventory(unsigned int percentageOfPriorityA, unsigned int percentageOfPriorityB,
-                     unsigned int percentageOfPriorityC, double conveyorBeltVelocity, unsigned int numberOfShelfPairs,
-                     unsigned long long int rowsPerShelf, unsigned long long int segmentsPerRow,
-                     double verticalMaxVelocityInMetersPerSecond, double verticalAccelerationInMetersPerSquareSeconds,
-                     double horizontalMaxVelocityInMetersPerSecond,
-                     double horizontalAccelerationInMetersPerSquareSeconds, double distanceBetweenShelfPairs,
-                     double shelfWidthInMeters, double shelfHeightInMeters, double shelfDepthInMeters,
-                     double distanceFromFloorToInputInMeters, double distanceFromFloorToOutputInMeters,
-                     double distanceBetweenSegmentsInMeters, double segmentWidthInMeters, double segmentHeightInMeters,
-                     double segmentDepthInMeters, double containerWidthInMeters, double containerHeightInMeters,
-                     double containerDepthInMeters, const std::vector<ShelfPair>& shelfPairs):
-
-    Inventory(percentageOfPriorityA, percentageOfPriorityB, percentageOfPriorityC, conveyorBeltVelocity, numberOfShelfPairs, rowsPerShelf, segmentsPerRow, verticalMaxVelocityInMetersPerSecond, verticalAccelerationInMetersPerSquareSeconds, horizontalMaxVelocityInMetersPerSecond, horizontalAccelerationInMetersPerSquareSeconds, distanceBetweenShelfPairs, shelfWidthInMeters, shelfHeightInMeters, shelfDepthInMeters, distanceFromFloorToInputInMeters, distanceFromFloorToOutputInMeters, distanceBetweenSegmentsInMeters, segmentWidthInMeters, segmentHeightInMeters, segmentDepthInMeters, containerWidthInMeters, containerHeightInMeters, containerDepthInMeters){
-        this->shelfPairs = shelfPairs;
-    }
 
 
 // getters and setters

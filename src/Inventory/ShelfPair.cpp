@@ -1,7 +1,3 @@
-//
-// Created by Kim Simoski on 19.11.2022.
-//
-
 #include "ShelfPair.h"
 #include "ConveyorBeltRetrieve.h"
 
@@ -13,7 +9,10 @@ using namespace conveyorLib;
 // constructors
 
 
-ShelfPair::ShelfPair(const unsigned int shelfPairNumber){
+ShelfPair::ShelfPair(const unsigned int shelfPairNumber, ConveyorBeltRetrieve& _conveyor):
+        inputTransferPoint(_conveyor, 12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f )),
+        outputTransferPoint(_conveyor, 12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f ))
+{
     PersistentFileManagement persistentFileManagement{"ShelfPair" + std::to_string(shelfPairNumber)};
     std::cout << "Load data from JSON Object" << std::endl;
 
@@ -21,10 +20,6 @@ ShelfPair::ShelfPair(const unsigned int shelfPairNumber){
 
     this->shelfLeft = Shelf(shelfPairNumber * 2);
     this->shelfRight = Shelf(shelfPairNumber * 2 -1);
-
-    //ToDo: Hardcoded numbers durch Parameter ersetzen!!!
-    this->inputTransferPoint = TransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f ));
-    this->outputTransferPoint = TransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f ));
 }
 
 
@@ -63,12 +58,13 @@ ShelfPair::ShelfPair(const unsigned int shelfPairNumber, const unsigned long lon
                      const double distanceFromFloorToInputInMeters, const double distanceFromFloorToOutputInMeters,
                      const double distanceBetweenSegmentsInMeters, const double segmentWidthInMeters, double segmentHeightInMeters,
                      const double segmentDepthInMeters, const double containerWidthInMeters, double containerHeightInMeters,
-                     const double containerDepthInMeters, const Shelf &shelfLeft, const Shelf &shelfRight):ShelfPair(shelfPairNumber, rowsPerShelf, segmentsPerRow,
+                     const double containerDepthInMeters, const Shelf &shelfLeft, const Shelf &shelfRight, ConveyorBeltRetrieve& _conveyor) :
+                     ShelfPair(shelfPairNumber, rowsPerShelf, segmentsPerRow,
 verticalMaxVelocityInMetersPerSecond, verticalAccelerationInMetersPerSquareSeconds, horizontalMaxVelocityInMetersPerSecond, horizontalAccelerationInMetersPerSquareSeconds,
 distanceBetweenShelvesOfPair, shelfWidthInMeters, shelfHeightInMeters, shelfDepthInMeters,
 distanceFromFloorToInputInMeters, distanceFromFloorToOutputInMeters, distanceBetweenSegmentsInMeters,
 segmentWidthInMeters, segmentHeightInMeters, segmentDepthInMeters, containerWidthInMeters, containerHeightInMeters,
-containerDepthInMeters){
+containerDepthInMeters, _conveyor){
 
     this->shelfLeft = shelfLeft;
     this->shelfRight = shelfRight;

@@ -52,7 +52,7 @@ namespace inventoryLib {
         //ToDo: Constructors die nicht gebraucht werden, hinterher löschen
         ShelfPair() = default;
 
-        explicit ShelfPair(unsigned int shelfPairNumber);
+        explicit ShelfPair(unsigned int shelfPairNumber, conveyorLib::ConveyorBeltRetrieve& _conveyor);
 
         //ShelfPair(unsigned long long int rows, unsigned long long int columns);
 
@@ -73,7 +73,7 @@ namespace inventoryLib {
                              double distanceBetweenShelvesOfPair, double shelfWidthInMeters, double shelfHeightInMeters, double shelfDepthInMeters,
                              double distanceFromFloorToInputInMeters, double distanceFromFloorToOutputInMeters, double distanceBetweenSegmentsInMeters,
                              double segmentWidthInMeters, double segmentHeightInMeters, double segmentDepthInMeters, const double containerWidthInMeters, double containerHeightInMeters,
-                             double containerDepthInMeters, const Shelf& shelfLeft, const Shelf& shelfRight);
+                             double containerDepthInMeters, const Shelf& shelfLeft, const Shelf& shelfRight, conveyorLib::ConveyorBeltRetrieve&);
 
         // getters and setters
     public:
