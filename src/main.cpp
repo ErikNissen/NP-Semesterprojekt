@@ -4,6 +4,7 @@
 #include "ConveyorBeltStore.h"
 #include "ConveyorBeltRetrieve.h"
 #include "PersistentFileManagement/PersistentFileManagement.hpp"
+#include "Warehouse.h"
 
 int main (int argc, char *argv[]) {
     /*
@@ -34,6 +35,11 @@ int main (int argc, char *argv[]) {
 
     // -------------------------------------------------------------------------------
 */
+	Warehouse warehouse{};
+	//warehouse.getIPoint();
+	//warehouse.getKPoint();
+	//warehouse.testing();
+
     //!!! Für Debugging auf 5 * 5 Matrizen verändert. Projekt-Info ist 54*90
     auto inventory{inventoryLib::Inventory(8, 90, 2, 2.6, 10, 5, 5,
                                            0.8, 0.5, 3.5, 0.4,
@@ -47,7 +53,7 @@ int main (int argc, char *argv[]) {
 	using namespace std::chrono_literals;
 	std::chrono::duration<int> minTime = std::chrono::seconds(5s);
 	std::chrono::duration<int> maxTime = std::chrono::seconds(7s);
-
+	pfm.log(minTime, maxTime, inventory.toString());
 
     inventory.printShelfSegments();
 
@@ -59,7 +65,7 @@ int main (int argc, char *argv[]) {
     Item item{1, Priority::A, 5};
     Container container{item};
     container.addAmount(container.getAmountOfPlacesForItem() - 1);
-	pfm.log(minTime, maxTime, inventory.toString());
+
 
 //ToDO: Fehlerkommentare in Englisch übersetzen
     // test reserving segment for container input at the fastest to reach segment

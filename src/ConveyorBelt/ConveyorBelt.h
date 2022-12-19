@@ -7,7 +7,6 @@
 #define NP_SEMESTERPROJEKT_CONVEYORBELT_H
 
 #include <string>
-//#include "TransferPoint.h"
 
 
 class ConveyorBelt {

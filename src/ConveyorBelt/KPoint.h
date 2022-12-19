@@ -14,10 +14,7 @@
 #ifndef NP_SEMESTERPROJEKT_KPOINT_H
 #define NP_SEMESTERPROJEKT_KPOINT_H
 
-#include "Item.h"
-#include "Container.h"
 #include "Inventory.h"
-#include "ConveyorBeltRetrieve.h"
 #include "IPoint.h"
 
 

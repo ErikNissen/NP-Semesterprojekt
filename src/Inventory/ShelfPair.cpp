@@ -9,12 +9,32 @@ using namespace inventoryLib;
 using namespace messagesLib;
 
 // constructors
+
+
+ShelfPair::ShelfPair(const unsigned int shelfPairNumber){
+    PersistentFileManagement persistentFileManagement{"ShelfPair" + std::to_string(shelfPairNumber)};
+    std::cout << "Load data from JSON Object" << std::endl;
+
+    this->shelfPairNumber = persistentFileManagement.get("shelfPairNumber");
+
+    this->shelfLeft = Shelf(shelfPairNumber * 2);
+    this->shelfRight = Shelf(shelfPairNumber * 2 -1);
+
+    //ToDo: Hardcoded numbers durch Parameter ersetzen!!!
+    this->inputTransferPoint = TransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f ));
+    this->outputTransferPoint = TransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f ));
+}
+
+
+//For Loading from JSON
+
 ShelfPair::ShelfPair(const unsigned int shelfPairNumber, const unsigned long long int rowsPerShelf, const unsigned long long int segmentsPerRow,
                      const double verticalMaxVelocityInMetersPerSecond, const double verticalAccelerationInMetersPerSquareSeconds, const double horizontalMaxVelocityInMetersPerSecond, const double horizontalAccelerationInMetersPerSquareSeconds,
                      const double distanceBetweenShelvesOfPair, const double shelfWidthInMeters, const double shelfHeightInMeters, const double shelfDepthInMeters,
                      const double distanceFromFloorToInputInMeters, const double distanceFromFloorToOutputInMeters, const double distanceBetweenSegmentsInMeters,
                      const double segmentWidthInMeters, const double segmentHeightInMeters, const double segmentDepthInMeters, const double containerWidthInMeters, const double containerHeightInMeters,
                      const double containerDepthInMeters) :
+//ToDo: Harcoded numbers durch Parameter ersetzen!!!
                      inputTransferPoint(TransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f ))),
                      outputTransferPoint(TransferPoint(12.0f + (static_cast<float>(shelfPairNumber - 1) * 2.6f )))
 {
@@ -31,6 +51,27 @@ ShelfPair::ShelfPair(const unsigned int shelfPairNumber, const unsigned long lon
     shelfRight = Shelf{shelfPairNumber * 2, rowsPerShelf, segmentsPerRow, verticalMaxVelocityInMetersPerSecond, verticalAccelerationInMetersPerSquareSeconds, horizontalMaxVelocityInMetersPerSecond, horizontalAccelerationInMetersPerSquareSeconds,
     shelfWidthInMeters, shelfHeightInMeters, shelfDepthInMeters, distanceFromFloorToInputInMeters, distanceFromFloorToOutputInMeters, distanceBetweenSegmentsInMeters,
     segmentWidthInMeters, segmentHeightInMeters, segmentDepthInMeters, containerWidthInMeters, containerHeightInMeters, containerDepthInMeters};
+}
+
+// for loading from json
+ShelfPair::ShelfPair(const unsigned int shelfPairNumber, const unsigned long long int rowsPerShelf,
+                     const unsigned long long int segmentsPerRow, const double verticalMaxVelocityInMetersPerSecond,
+                     const double verticalAccelerationInMetersPerSquareSeconds, const double horizontalMaxVelocityInMetersPerSecond,
+                     const double horizontalAccelerationInMetersPerSquareSeconds, const double distanceBetweenShelvesOfPair,
+                     const double shelfWidthInMeters, double shelfHeightInMeters, const double shelfDepthInMeters,
+                     const double distanceFromFloorToInputInMeters, const double distanceFromFloorToOutputInMeters,
+                     const double distanceBetweenSegmentsInMeters, const double segmentWidthInMeters, double segmentHeightInMeters,
+                     const double segmentDepthInMeters, const double containerWidthInMeters, double containerHeightInMeters,
+                     const double containerDepthInMeters, const Shelf &shelfLeft, const Shelf &shelfRight):ShelfPair(shelfPairNumber, rowsPerShelf, segmentsPerRow,
+verticalMaxVelocityInMetersPerSecond, verticalAccelerationInMetersPerSquareSeconds, horizontalMaxVelocityInMetersPerSecond, horizontalAccelerationInMetersPerSquareSeconds,
+distanceBetweenShelvesOfPair, shelfWidthInMeters, shelfHeightInMeters, shelfDepthInMeters,
+distanceFromFloorToInputInMeters, distanceFromFloorToOutputInMeters, distanceBetweenSegmentsInMeters,
+segmentWidthInMeters, segmentHeightInMeters, segmentDepthInMeters, containerWidthInMeters, containerHeightInMeters,
+containerDepthInMeters){
+
+    this->shelfLeft = shelfLeft;
+    this->shelfRight = shelfRight;
+
 }
 
 // getters and setters
@@ -64,10 +105,15 @@ void ShelfPair::setSegmentsPriority(const unsigned int shelfNumber, const unsign
 // methods
 
 void ShelfPair::saveAsJSONFile(){
-    PersistentFileManagement persistentFileManagement{"Inventory"};
+    PersistentFileManagement persistentFileManagement{"ShelfPair" + std::to_string(shelfPairNumber)};
     std::cout << "Add data to JSON Object" << std::endl;
 
+    persistentFileManagement.addOrIfExistentUpdate("shelfPairNumber", shelfPairNumber);
+
     //ToDo: Hier Aufruf der Speicher-Methode der einzelnen Shelves einfügen!
+    shelfLeft.saveAsJSONFile();
+    shelfRight.saveAsJSONFile();
+
 
     //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
     //ToDo: Alternativ zur Lösung oben jeweils eine einzelne Datei anlegen, die mit der Kodierung benannt ist!
@@ -143,6 +189,8 @@ std::string ShelfPair::toString() {
 	data["distanceBetweenShelvesOfPair"] = this->distanceBetweenShelvesOfPair;
 	return data.dump();
 }
+
+
 
 
 

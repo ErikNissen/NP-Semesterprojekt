@@ -3,19 +3,47 @@
 //
 
 #include "Container.h"
+#include "../PersistentFileManagement/PersistentFileManagement.hpp"
 //
 // Created by Kim Simoski on 27.11.2022.
 //
 
 
 // constructors
+
+// for loading from json file
+Container::Container(const unsigned int id) {
+
+    //ToDo: Load from JSON-File!
+    PersistentFileManagement persistentFileManagement{"Container" + std::to_string(containerId)};
+
+    std::cout << "Load data from JSON Object" << std::endl;
+
+    // identification
+    this->containerId = persistentFileManagement.get("containerId");
+    this->item = Item(persistentFileManagement.get("itemId"));
+    this->currentAmountOfItem = persistentFileManagement.get("currentAmountOfItem");
+
+    /*
+    this->timer = Timer(persistentFileManagement.get("timerId"));
+
+    // measurements
+    this->length = persistentFileManagement.get("length");
+    this->width = Item(persistentFileManagement.get("width"));
+    this->height = persistentFileManagement.get("height");
+    */
+
+
+
+}
+
 Container::Container(const Item& item) {
     this->item = item;
     timer = Timer();
 }
 
 Container::Container(const Item& item, const unsigned int id, const unsigned int currentAmount) {
-    this->id = id;
+    this->containerId = id;
     this->item = item;
     this->currentAmountOfItem = currentAmount;
     timer = Timer();
@@ -24,7 +52,7 @@ Container::Container(const Item& item, const unsigned int id, const unsigned int
 
 // getters and setters
 unsigned int Container::getId() const {
-    return id;
+    return containerId;
 }
 
 Timer Container::getTimer() const {
@@ -70,11 +98,11 @@ void Container::appendItemType(const Item& externalItem) {
 // methods
 
 void Container::saveAsJSONFile() const{
-    PersistentFileManagement persistentFileManagement{"Inventory"};  //ToDo: Hier beachten, dass keine Dopplungen passieren dürfen. ergo Nummern wie z.B. Regalnummer und Segmentnummer in den Namen integrieren und beim Auslesen rausfiltern (vllt. dafür cypher und decypher als Methoden auslagern)
+    PersistentFileManagement persistentFileManagement{"Container" + std::to_string(containerId)};
 
     std::cout << "Add data to JSON Object" << std::endl;
 
-    persistentFileManagement.addOrIfExistentUpdate("id", id);
+    persistentFileManagement.addOrIfExistentUpdate("containerId", containerId);
 
     persistentFileManagement.addOrIfExistentUpdate("currentAmountOfItem", currentAmountOfItem);
 
@@ -83,9 +111,13 @@ void Container::saveAsJSONFile() const{
     persistentFileManagement.addOrIfExistentUpdate("width", width);
     persistentFileManagement.addOrIfExistentUpdate("height", height);
 
+    // save item id for beeing able to pair container and item in loading from json file
+    persistentFileManagement.addOrIfExistentUpdate("itemId", item.getItemId());
 
     //??ToDo: Hier Aufruf der Speicher-Methode des Countdowns einfügen??
     //ToDo: Hier Aufruf der Speicher-Methode des Items einfügen!
+    item.saveAsJSONFile();
+
 }
 
 //!!![MUTEX-NUTZUNG]!!!
@@ -148,7 +180,7 @@ std::string Container::toString() {
 	data["length"] = this->length;
 	data["width"] = this->width;
 	data["height"] = this->height;
-	data["id"] = this->id;
+	data["id"] = this->containerId;
 	data["timer"] = this->timer.getTimeInSeconds();
 	return data.dump();
 }

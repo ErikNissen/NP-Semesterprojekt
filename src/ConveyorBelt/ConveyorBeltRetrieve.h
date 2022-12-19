@@ -7,13 +7,14 @@
 
 
 #include "ConveyorBelt.h"
-#include "../Item/Container.h"
 #include "TransferPoint.h"
+#include "KPoint.h"
 
 class ConveyorBeltRetrieve : public ConveyorBelt {
 public:
-    ConveyorBeltRetrieve();
-    Container& transportContainer(TransferPoint&);
+    explicit ConveyorBeltRetrieve(KPoint&);
+    KPoint kPoint;
+    void transportContainer(Container&, float distance);
 };
 
 

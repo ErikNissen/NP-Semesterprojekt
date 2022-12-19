@@ -34,11 +34,12 @@ namespace inventoryLib {
 
         // attributes
     private:
-        // https://riptutorial.com/cplusplus/example/17463/matrices-using-vectors
+
+
+// https://riptutorial.com/cplusplus/example/17463/matrices-using-vectors
         // https://iamsorush.com/posts/shared-pointer-cpp/
         //!!! Evtl. von shared_pointer zu unique_pointer wechseln und dafür Move-Konstruktor für Container-Klasse schreiben
         std::vector<std::vector<std::shared_ptr<Segment>>> matrix;
-        //std::vector<std::vector<int>> matrix;
 
         //!!! Log-Data bzw. Daten zum Berechnen entweder nur hier initialisieren, oder in extra Klasse, die zum Verrechnen genutzt wird oder in Inventar oder zusammengesetzt jeweils ergänzend in umklammernder Klasse, mit jeweils objektorientierter Zuteilung !!!
         // log_data
@@ -79,19 +80,22 @@ namespace inventoryLib {
         double segmentWidthInMeters;
         double segmentHeightInMeters;
         double segmentDepthInMeters;
-
-        //!!! Container-Handhabe habe ich bisher aber nicht praktisch umgesetzt, weder mit Warentypen mit Priorisierung, noch mit Anzahlen oder Nutzung in den Regalfächern !!!
-        // container
-        double containerWidthInMeters;
-        double containerHeightInMeters;
-        double containerDepthInMeters;
-
+        /*
+              // container
+              double containerWidthInMeters;
+              double containerHeightInMeters;
+              double containerDepthInMeters;
+              */
 
 
         // constructors
     public:
+        Shelf() = default;
+        Shelf(unsigned int shelfNumber);
         //!!! Konstruktor ergänzen, der anhand einer JSON Rand-Werte und Inhalte der Tabellen setzt!!!
-        Shelf() = default; //!!! Maybe delete later if possible. Needed for Constructor initialisation in ShelfPair !!!
+        //Shelf() = default; //!!! Maybe delete later if possible. Needed for Constructor initialisation in ShelfPair !!!
+
+        //ToDo: Constructors löschen, die nicht benötigt werden
         //Shelf(unsigned long long int rows, unsigned long long int columns);
         Shelf(unsigned int shelfNumber, unsigned long long int rowsPerShelf, unsigned long long int segmentsPerRow,
               double verticalMaxVelocityInMetersPerSecond, double verticalAccelerationInMetersPerSquareSeconds,
@@ -102,6 +106,13 @@ namespace inventoryLib {
               double segmentWidthInMeters, double segmentHeightInMeters, double segmentDepthInMeters,
               double containerWidthInMeters, double containerHeightInMeters,
               double containerDepthInMeters);
+
+        Shelf(unsigned int shelfNumber, unsigned long long int rowsPerShelf, unsigned long long int segmentsPerRow,
+                          double verticalMaxVelocityInMetersPerSecond, double verticalAccelerationInMetersPerSquareSeconds, double horizontalMaxVelocityInMetersPerSecond, double horizontalAccelerationInMetersPerSquareSeconds,
+                          double shelfWidthInMeters, double shelfHeightInMeters, double shelfDepthInMeters,
+                          double distanceFromFloorToInputInMeters, double distanceFromFloorToOutputInMeters, double distanceBetweenSegmentsInMeters,
+                          double segmentWidthInMeters, double segmentHeightInMeters, double segmentDepthInMeters, double containerWidthInMeters, double containerHeightInMeters,
+                          double containerDepthInMeters, const std::vector<std::vector<std::shared_ptr<Segment>>>& matrix);
 
         // getters and setters
     public:
@@ -150,9 +161,9 @@ namespace inventoryLib {
 
         void printShelfSegments();
 
-	    std::string toString();
+        void saveAsJSONFile() const;
 
-        void saveAsJSONFile();
+	    std::string toString();
     };
 }
 
