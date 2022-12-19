@@ -1,6 +1,7 @@
 /*
  * This ConveyorBelt is used only for retrieving Containers from the TransferPoints.
 */
+/// THIS CLASS IS CURRENTLY NOT USED !!! ///
 
 #ifndef NP_SEMESTERPROJEKT_CONVEYORBELTRETRIEVE_H
 #define NP_SEMESTERPROJEKT_CONVEYORBELTRETRIEVE_H

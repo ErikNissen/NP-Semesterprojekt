@@ -21,8 +21,6 @@ private:
     inventoryLib::Inventory inventory;
     IPoint iPoint;
     KPoint kPoint;
-    ConveyorBeltStore conveyorStore;
-    conveyorLib::ConveyorBeltRetrieve conveyorRetrieve;
 };
 
 

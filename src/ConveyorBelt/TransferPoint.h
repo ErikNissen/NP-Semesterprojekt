@@ -22,8 +22,8 @@ namespace conveyorLib {
         std::queue<Container> containers;
         void addContainer(Container &);
         Container &removeContainer();
-        void addContainerForRetrieving(Container &);
         [[nodiscard]] float getDistance() const;
+        [[nodiscard]] bool checkForContainer() const;
     private:
         float length = 2.3;
         float width = 0.7;

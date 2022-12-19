@@ -24,8 +24,11 @@ namespace inventoryLib {
 namespace messagesLib {
     class TransferMessage;
 }
+namespace conveyorLib {
+    class TransferPoint;
+}
 
-class [[maybe_unused]] KPoint {
+class KPoint {
 public:
     explicit KPoint(inventoryLib::Inventory&, IPoint&);
     void addContainer(Container&);
@@ -33,9 +36,11 @@ public:
     void sendTaskForRetrievingItems(messagesLib::TransferMessage&);
 private:
     auto sendTaskToInventory(messagesLib::TransferMessage&);
+    void checkTransferPoints();
     std::queue<Container> containersToCheck;
     inventoryLib::Inventory& inv;
     std::vector<messagesLib::TransferMessage> tasks;
+    std::vector<std::reference_wrapper<conveyorLib::TransferPoint>> transferPoints{};
     IPoint& iPoint;
 };
 
