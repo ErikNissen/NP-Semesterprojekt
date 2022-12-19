@@ -150,7 +150,6 @@ namespace inventoryLib {
 
         void printShelfSegments();
 
-		// ToDo Erik Nissen
 	    std::string toString();
 
         void saveAsJSONFile();

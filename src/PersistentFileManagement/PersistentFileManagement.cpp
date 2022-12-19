@@ -176,6 +176,7 @@ void PersistentFileManagement::create(){
 			ifstream datafile( filesystem::current_path().string() + "\\" +
 			                   this->basePath + this->name + ".json");
 			this->data = json::parse(datafile);
+			datafile.close();
 		}
 	}
 }
@@ -214,38 +215,79 @@ void PersistentFileManagement::log(
 	stringstream ss;
 
 	// Open the file
-	std::ofstream file;
+	std::ofstream logfile;
 	string filename{filesystem::current_path().string() + "\\" +
 			this->logPath + this->name + ".log"};
+	if(!filesystem::exists(filesystem::current_path().string() + "\\" +
+	                      this->logPath)){
+		filesystem::create_directory(filesystem::current_path().string() + "\\" +
+		                             this->logPath);
+	}
 
 	// Check if the file exists
 	if (filesystem::exists(filename)) {
 		// Open the file in append mode
-		file.open(filename, std::ios::app);
+		logfile.open(filename, std::ios::app);
 	}else{
 		// Open the file in write mode
-		file.open(filename, std::ios::out);
+		logfile.open(filename);
 	}
 
 	json log, data;
 	data = json::parse(inventory);
-	log["Inventory"] = data;
+	//log["Inventory"] = data;
 	ss << minHrs.count() << ":" << minMins.count() << ":" << minSecs.count()
 	<< "." << minMs.count();
 	log["minTime"] = ss.str();
-	ss.clear();
+	ss.str("");
 	ss << maxHrs.count() << ":" << maxMins.count() << ":" << maxSecs.count()
 	   << "." << maxMs.count();
 	log["maxTime"] = ss.str();
-	ss.clear();
+	ss.str("");
 	ss << medHrs.count() << ":" << medMins.count() << ":" << medSecs.count()
 	   << "." << medMs.count();
 	log["medianTime"] = ss.str();
 
-	ss.clear();
-	cout << data.dump(1);
-	//file << inventoryJson.dump();
-	//file.close();
+	auto shelfPairs = data["shelfPairs"];
+	for(auto shelf: shelfPairs.items()){
+		using ull = unsigned long long;
+		ull itemsLeft = 0, itemsRight = 0;
+		auto shelfPairNumber = shelf.value()["shelfPairNumber"];
+		auto shelfLeft = shelf.value()["shelfLeft"]["Matrix"];
+		auto shelfRight = shelf.value()["shelfRight"]["Matrix"];
+		for(auto i: shelfLeft.items()){
+			//Matrix
+			for ( auto j: i.value().items() ) {
+				int c = j.value()
+				["Container"]["currentAmountOfItem"];
+				itemsLeft = itemsLeft + c;
+				log["shelfPair"][to_string(shelfPairNumber)
+				]["shelfLeft"]["Container"].push_back(j.value()["Container"]);
+			}
+		}
+		for(auto i: shelfRight.items()){
+			//Matrix
+			for ( auto j: i.value().items() ) {
+				int c = j.value()
+				["Container"]["currentAmountOfItem"];
+				itemsRight = itemsRight + c;
+				log["shelfPair"][to_string(shelfPairNumber)
+				]["shelfRight"]["Container"].push_back(j.value()["Container"]);
+			}
+		}
+
+		log["shelfPair"][to_string(shelfPairNumber)]["AmountOfItems"] =
+				itemsLeft + itemsRight;
+		log["shelfPair"][to_string(shelfPairNumber)
+		]["ShelfLeft"]["AmountOfItems"] = itemsLeft;
+		log["shelfPair"][to_string(shelfPairNumber)
+		]["ShelfRight"]["AmountOfItems"] = itemsRight;
+	}
+
+	logfile << "MinTime: " << log["minTime"].dump() << ", MaxTime: " <<
+	log["maxTime"].dump() << ", MedianTime: " << log["medianTime"].dump() <<
+	", Data: " << log["shelfPair"].dump();
+	logfile.close();
 }
 
 

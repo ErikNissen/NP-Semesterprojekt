@@ -322,14 +322,15 @@ void Shelf::printShelfSegments() {
 }
 
 std::string Shelf::toString() {
-	nlohmann::json data, matrix;
+	using ull = unsigned long long;
+	nlohmann::json data, mtx;
 	std::stringstream ss;
-	for(auto i = 0; i < this->matrix.size(); ++i){
-		for (auto j = this->matrix[i].size(); j <= this->matrix.size(); ++j){
-			matrix[i] = j;
+	for(ull i = 0; i < this->rowsPerShelf; ++i){
+		for (unsigned int j = 0; j < this->segmentsPerRow; ++j){
+			mtx[i][j] = nlohmann::json::parse(this->matrix[i][j]->toString());
 		}
 	}
-	data["Matrix"] = matrix;
+	data["Matrix"] = mtx;
 	data["rowsPerShelf"] = this->rowsPerShelf;
 	data["segmentsPerRow"] = this->segmentsPerRow;
 	data["verticalMaxVelocityInMetersPerSecond"] =

@@ -47,7 +47,7 @@ int main (int argc, char *argv[]) {
 	using namespace std::chrono_literals;
 	std::chrono::duration<int> minTime = std::chrono::seconds(5s);
 	std::chrono::duration<int> maxTime = std::chrono::seconds(7s);
-	pfm.log(minTime, maxTime, inventory.toString());
+
 
     inventory.printShelfSegments();
 
@@ -59,7 +59,7 @@ int main (int argc, char *argv[]) {
     Item item{1, Priority::A, 5};
     Container container{item};
     container.addAmount(container.getAmountOfPlacesForItem() - 1);
-
+	pfm.log(minTime, maxTime, inventory.toString());
 
 //ToDO: Fehlerkommentare in Englisch übersetzen
     // test reserving segment for container input at the fastest to reach segment
