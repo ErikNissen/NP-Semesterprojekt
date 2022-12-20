@@ -69,3 +69,5 @@ auto KPoint::sendTaskToInventory(TransferMessage &tm) {
     tasks.emplace_back(tm);
     sendTaskToInventory(tm);
 }
+
+

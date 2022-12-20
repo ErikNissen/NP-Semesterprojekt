@@ -10,6 +10,8 @@
 #include "IPoint.h"
 #include "KPoint.h"
 #include "ConveyorBeltRetrieve.h"
+#include <unistd.h>
+//#include <ntgdi.h>
 
 class Warehouse {
 public:

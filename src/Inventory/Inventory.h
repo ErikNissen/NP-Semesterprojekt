@@ -148,6 +148,7 @@ namespace inventoryLib {
         //!!! -> Wenn die Berechnungen soweit implementiert sind, dass auch die Wartezeiten in der Schlange im Voraus bekannt sind, Methoden noch einmal ergänzen !!!
         [[maybe_unused]] std::optional<TimeSegmentMessage> reserveContainerOutputFromInventoryToGetItems(const Item& item);
 
+		//ToDo
 	    [[maybe_unused]] std::optional<TimeSegmentMessage> reserveContainerOutputFromInventoryToAddItems(const Item &item);
 
 	    [[maybe_unused]] std::optional<TimeSegmentMessage> reserveContainerToAddToInventory(const Container& container);
@@ -156,6 +157,7 @@ namespace inventoryLib {
         void reserveSegmentToAddContainer(const SegmentDataMessage &goalSegment);
         void reserveSegmentToGetContainer(const SegmentDataMessage &goalSegment);
 
+		//ToDo
 	    [[maybe_unused]] void addContainer(const SegmentDataMessage& goalSegment, const Container& newContainer);
 
 	    [[maybe_unused]] Container takeContainer(const SegmentDataMessage& goalSegment);

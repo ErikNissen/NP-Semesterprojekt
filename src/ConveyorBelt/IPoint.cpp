@@ -2,6 +2,7 @@
 // Created by alexn on 11.12.2022.
 //
 
+
 #include "IPoint.h"
 
 
@@ -74,7 +75,7 @@ void IPoint::addContainer(Container &container) {
 /// TODO: let a thread call this method repeatedly in a while() or implement while() in this method (whatever makes more sense)
 /// when false is returned, there are currently no Containers in the queue. The while() should wait a bit before trying again (to reduce the load)
 // Process the next Container in line (check if there are fitting tasks for the kind of Item contained and try to fulfill them)
-bool IPoint::processNextContainerInQueue() {
+[[maybe_unused]] bool IPoint::processNextContainerInQueue() {
     if(!containersToCheck.empty()) {
         // Store the first Container from the queue
         Container container = containersToCheck.front();
@@ -108,4 +109,32 @@ bool IPoint::processNextContainerInQueue() {
     } else {
         return false;
     }
+}
+
+
+[[maybe_unused]] void IPoint::processTasks(){
+	if(!tasks.empty()) {
+
+		auto currentTask{ tasks.front() };
+
+		// Create container, add it to Inventory and get the fastet reachable
+		// segment
+		Container container = Container(currentTask.getItem(), 1, currentTask.getAmountToTransfer());
+		auto messageOfFastestToReachSegment{
+				inv.reserveContainerToAddToInventory( container )
+		};
+		tasks.pop_back();
+		int timeNeededForWayToSegmentInSecs{
+				static_cast<int>(messageOfFastestToReachSegment->getNeededTimeWithoutWaitingInQueueInSeconds())
+		};
+		sleep( timeNeededForWayToSegmentInSecs ); //way
+		// to segment
+		inv.addContainer(
+				messageOfFastestToReachSegment->getSegmentDataMessage(),
+				container
+		);
+		timeNeededForWayToSegmentInSecs
+				= messageOfFastestToReachSegment->getNeededTimeForShelfWayInSeconds();
+		sleep( timeNeededForWayToSegmentInSecs ); //way back from segment to input point
+	}
 }

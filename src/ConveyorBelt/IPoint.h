@@ -22,7 +22,10 @@ public:
     void storeContainerInInventory(Container&);
     void sendTaskForStoringItems(TransferMessage&);
     void addContainer(Container&);
-    bool processNextContainerInQueue();
+
+	[[maybe_unused]] bool processNextContainerInQueue();
+
+	[[maybe_unused]] void processTasks();
 private:
     inventoryLib::Inventory& inv;
     ConveyorBeltStore conveyor;

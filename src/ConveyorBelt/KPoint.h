@@ -27,9 +27,11 @@ public:
 	[[maybe_unused]] bool processNextContainerInQueue();
 
 	[[maybe_unused]] void sendTaskForRetrievingItems(TransferMessage&);
+
+
 private:
     auto sendTaskToInventory(TransferMessage&);
-    std::queue<Container> containersToCheck;
+    std::queue<Container> containersToCheck; //ToDo
     inventoryLib::Inventory& inv;
     std::vector<TransferMessage> tasks;
     IPoint& iPoint;

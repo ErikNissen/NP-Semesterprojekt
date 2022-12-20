@@ -3,14 +3,11 @@
 
 #include "Warehouse.h"
 
-class main {
-
-};
-
 void endlessThread(Warehouse&);
 
-void endlesThreadHandlerIPoint(Warehouse&);
-void endlesThreadHandlerKPoint(Warehouse&);
+[[noreturn]] void endlessThreadHandlerIPoint( Warehouse &warehouse );
+
+[[noreturn]] void endlessThreadHandlerKPoint( Warehouse &warehouse );
 
 
 

@@ -46,7 +46,8 @@ Container::Container(const Item& item, const unsigned int id, const unsigned int
     this->containerId = id;
     this->item = item;
     this->currentAmountOfItem = currentAmount;
-    timer = Timer();
+    this->timer = Timer();
+	saveAsJSONFile();
 }
 
 
@@ -98,22 +99,23 @@ void Container::appendItemType(const Item& externalItem) {
 // methods
 
 void Container::saveAsJSONFile() const{
-    PersistentFileManagement persistentFileManagement{"Container" + std::to_string(containerId)};
+    PersistentFileManagement persistentFileManagement{"Container" + std::to_string(this->containerId)};
 
     std::cout << "Add data to JSON Object" << std::endl;
 
-    persistentFileManagement.addOrIfExistentUpdate("containerId", containerId);
+    persistentFileManagement.addOrIfExistentUpdate("containerId",
+												   this->containerId);
 
-    persistentFileManagement.addOrIfExistentUpdate("currentAmountOfItem", currentAmountOfItem);
+    persistentFileManagement.addOrIfExistentUpdate("currentAmountOfItem", this->currentAmountOfItem);
 
     // measurements
-    persistentFileManagement.addOrIfExistentUpdate("length", length);
-    persistentFileManagement.addOrIfExistentUpdate("width", width);
-    persistentFileManagement.addOrIfExistentUpdate("height", height);
+    persistentFileManagement.addOrIfExistentUpdate("length", this->length);
+    persistentFileManagement.addOrIfExistentUpdate("width", this->width);
+    persistentFileManagement.addOrIfExistentUpdate("height", this->height);
 
     // save item id for beeing able to pair container and item in loading from json file
-    persistentFileManagement.addOrIfExistentUpdate("itemId", item.getItemId());
-
+    persistentFileManagement.addOrIfExistentUpdate("itemId", this->item.getItemId());
+	persistentFileManagement.save();
     //??ToDo: Hier Aufruf der Speicher-Methode des Countdowns einfügen??
     //ToDo: Hier Aufruf der Speicher-Methode des Items einfügen!
     // ToDo: this doesnt work!!

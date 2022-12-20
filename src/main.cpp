@@ -108,18 +108,21 @@ int main (int argc, char *argv[]) {
 }
 
 void endlessThread(Warehouse& warehouse){
-    std::jthread iHandler(endlesThreadHandlerIPoint, std::ref(warehouse));
-    std::jthread kHandler(endlesThreadHandlerKPoint, std::ref(warehouse));
+    std::jthread iHandler( endlessThreadHandlerIPoint, std::ref( warehouse));
+    std::jthread kHandler( endlessThreadHandlerKPoint, std::ref( warehouse));
 }
 
-void endlesThreadHandlerIPoint(Warehouse& warehouse) {
+[[noreturn]] void endlessThreadHandlerIPoint( Warehouse& warehouse) {
     while (true) {
         warehouse.getIPoint().processNextContainerInQueue();
+		warehouse.orderKPointToExecuteFirstTask(); //!!! for testing
+	    sleep(0);
     }
 }
 
-void endlesThreadHandlerKPoint(Warehouse& warehouse) {
+[[noreturn]] void endlessThreadHandlerKPoint( Warehouse& warehouse) {
     while (true) {
         warehouse.getKPoint().processNextContainerInQueue();
+	    sleep(0);
     }
 }
