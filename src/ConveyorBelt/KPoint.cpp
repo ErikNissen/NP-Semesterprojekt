@@ -71,3 +71,4 @@ auto KPoint::sendTaskToInventory(TransferMessage &tm) {
 }
 
 
+}

@@ -28,7 +28,19 @@ namespace inventoryLib {
 
 //!!! Bezeichnung der Regale für Speicherung des Logs evtl. überarbeiten, um absolute Nummerierung aller Regale zu erleichtern !!!
         Shelf shelfLeft, shelfRight;
-        int currentRow{0}, currentColumn{0};
+    public:
+	    const Shelf &getShelfLeft() const;
+
+	    const std::mutex &getM() const;
+
+	    int getCurrentRow() const;
+
+	    int getCurrentColumn() const;
+
+	    const Shelf &getShelfRight() const;
+
+    private:
+	    int currentRow{0}, currentColumn{0};
 
         // log data
         unsigned int shelfPairNumber; // beginning with 1
@@ -103,7 +115,6 @@ namespace inventoryLib {
 
         void printAllShelfSegments();
 
-		// ToDo Erik Nissen
 		std::string toString();
     };
 }

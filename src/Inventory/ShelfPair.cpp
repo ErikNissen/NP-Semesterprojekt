@@ -190,6 +190,26 @@ std::string ShelfPair::toString() {
 	return data.dump();
 }
 
+const Shelf &inventoryLib::ShelfPair::getShelfLeft() const {
+	return shelfLeft;
+}
+
+const Shelf &inventoryLib::ShelfPair::getShelfRight() const {
+	return shelfRight;
+}
+
+const std::mutex &inventoryLib::ShelfPair::getM() const {
+	return m;
+}
+
+int inventoryLib::ShelfPair::getCurrentRow() const {
+	return currentRow;
+}
+
+int inventoryLib::ShelfPair::getCurrentColumn() const {
+	return currentColumn;
+}
+
 
 
 

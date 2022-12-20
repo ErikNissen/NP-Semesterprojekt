@@ -25,8 +25,12 @@ namespace inventoryLib {
     private:
 
         std::vector<ShelfPair> shelfPairs;
+    public:
+	    void setShelfPairs( const std::vector<ShelfPair> &shelfPairs );
 
-        // log_data
+    private:
+
+	    // log_data
 
 
         // counts

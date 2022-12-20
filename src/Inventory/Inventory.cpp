@@ -168,7 +168,7 @@ void Inventory::saveAsJSONFile() const{
     pfm.addOrIfExistentUpdate( "conveyorBeltVelocity", conveyorBeltVelocity);
 
     //ToDo: Hier Aufruf der Speicher-Methode der einzelnen ShelfPairs einfügen! / Alternativ immer jeweils intern im Konstruktor aufrufen. Dann müssten aber z.B. bei Container, die nicht immer im gleichen Segment sind, die Zuordnung zum Segment kodiert werden als Name, Attribut oder Liste
-    for(ShelfPair shelfPair:shelfPairs){
+    for( auto shelfPair: shelfPairs){
         shelfPair.saveAsJSONFile();
     }
 }
@@ -416,6 +416,10 @@ std::string Inventory::toString() {
 	data["percentageOfPriorityC"] = this->percentageOfPriorityC;
 
 	return data.dump();
+}
+
+void Inventory::setShelfPairs( const std::vector<ShelfPair> &shelfPairs ) {
+	Inventory::shelfPairs = shelfPairs;
 }
 
 

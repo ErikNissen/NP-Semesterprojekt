@@ -123,6 +123,8 @@ void endlessThread(Warehouse& warehouse){
 [[noreturn]] void endlessThreadHandlerKPoint( Warehouse& warehouse) {
     while (true) {
         warehouse.getKPoint().processNextContainerInQueue();
+	    warehouse.sendTaskForStoringItems();
+		warehouse.sendTaskForRetrievingItems();
 	    sleep(0);
     }
 }

@@ -10,6 +10,7 @@
 #include <utility>
 #include <chrono>
 #include <string>
+#include <thread>
 #include "../../_deps/json-src/single_include/nlohmann/json.hpp"
 
 class PersistentFileManagement {
@@ -62,6 +63,13 @@ public:
 	int log(std::chrono::duration<int> minTime,
 	         std::chrono::duration<int> maxTime,
 			 const std::string& inventory);
+
+	void asyncLog(
+			PersistentFileManagement& pfm,
+			std::chrono::duration<int> minTime,
+			std::chrono::duration<int> maxTime,
+			const std::string& inventory,
+			int& flag);
 
 /// <BR><h3>Updates a value in a json object</h3>
 /// \param key The key of the value

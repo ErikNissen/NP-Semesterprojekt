@@ -278,6 +278,24 @@ int PersistentFileManagement::log(
 	return 666;
 }
 
+void PersistentFileManagement::asyncLog(
+		PersistentFileManagement& pfm,
+		std::chrono::duration<int> minTime,
+		std::chrono::duration<int> maxTime,
+        const std::string& inventory,
+		int& flag){
+	try{
+		flag = 1;
+		auto log = std::bind(&PersistentFileManagement::log, &pfm,
+		                     minTime, maxTime, &inventory);
+		std::jthread thread([&pfm, minTime, maxTime, &inventory]{
+			pfm.log(minTime, maxTime, inventory);
+		});
+	}catch(std::exception e){
+		flag = 2;
+	}
+	flag = 0;
+}
 
 //Getter
 
