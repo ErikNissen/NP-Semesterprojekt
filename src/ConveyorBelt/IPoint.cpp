@@ -113,7 +113,8 @@ void IPoint::addContainer(Container &container) {
 
 
 [[maybe_unused]] void IPoint::processTasks(){
-	if(!tasks.empty()) {
+	std::cout << this->tasks.size() << std::endl;
+	if(!tasks.empty()) { // ToDo tasks immer leer
 
 		auto currentTask{ tasks.front() };
 
